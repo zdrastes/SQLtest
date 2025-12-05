@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SQL Database Explorer | Главная</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="auth.js" defer></script>
     <style>
         :root {
             --primary: #4361ee;
@@ -45,7 +46,7 @@
         header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            padding: 2rem 0;
+            padding: 1.5rem 0;
             margin-bottom: 2rem;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
@@ -57,12 +58,12 @@
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 700;
         }
 
         .subtitle {
-            font-size: 1.2rem;
+            font-size: 1rem;
             opacity: 0.9;
             margin-top: 5px;
         }
@@ -74,7 +75,78 @@
         }
 
         .logo i {
-            font-size: 2.8rem;
+            font-size: 2.2rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #4cc9f0, #4361ee);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .user-role {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+
+        .btn-login {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-login:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-logout {
+            background-color: #f72585;
+            color: white;
+        }
+
+        .btn-logout:hover {
+            background-color: #d41a6f;
         }
 
         .hero {
@@ -83,17 +155,17 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 3rem 0;
+            padding: 2rem 0;
         }
 
         .hero-content {
             text-align: center;
             max-width: 800px;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
         }
 
         .hero h2 {
-            font-size: 2.2rem;
+            font-size: 2rem;
             color: var(--primary);
             margin-bottom: 1rem;
         }
@@ -107,7 +179,7 @@
         .options-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
+            gap: 25px;
             width: 100%;
             margin-bottom: 3rem;
         }
@@ -115,7 +187,7 @@
         .option-card {
             background: white;
             border-radius: var(--border-radius);
-            padding: 40px;
+            padding: 30px;
             box-shadow: var(--box-shadow);
             border-top: 5px solid var(--primary);
             transition: var(--transition);
@@ -124,10 +196,11 @@
             flex-direction: column;
             align-items: center;
             height: 100%;
+            position: relative;
         }
 
         .option-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
         }
 
@@ -136,15 +209,27 @@
         .option-card:nth-child(3) { border-top-color: #4cc9f0; }
         .option-card:nth-child(4) { border-top-color: #f72585; }
 
+        .auth-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #f72585;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
         .option-icon {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .option-card:nth-child(1) .option-icon { background: linear-gradient(135deg, #4361ee, #3a56d4); }
@@ -153,14 +238,14 @@
         .option-card:nth-child(4) .option-icon { background: linear-gradient(135deg, #f72585, #d41a6f); }
 
         .option-icon i {
-            font-size: 2.5rem;
+            font-size: 2rem;
             color: white;
         }
 
         .option-card h3 {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             color: var(--primary);
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .option-card:nth-child(1) h3 { color: #4361ee; }
@@ -170,24 +255,9 @@
 
         .option-card p {
             color: var(--gray);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             line-height: 1.6;
             flex-grow: 1;
-        }
-
-        .btn {
-            padding: 15px 40px;
-            border: none;
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.1rem;
-            text-decoration: none;
-            margin-top: auto;
         }
 
         .btn-primary {
@@ -197,7 +267,7 @@
 
         .btn-primary:hover {
             background-color: var(--primary-dark);
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
         }
 
@@ -208,7 +278,7 @@
 
         .btn-secondary:hover {
             background-color: #5a0a9c;
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(114, 9, 183, 0.3);
         }
 
@@ -219,7 +289,7 @@
 
         .btn-success:hover {
             background-color: #3aa8d4;
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(76, 201, 240, 0.3);
         }
 
@@ -230,8 +300,15 @@
 
         .btn-danger:hover {
             background-color: #d41a6f;
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(247, 37, 133, 0.3);
+        }
+
+        .btn-disabled {
+            background-color: var(--gray-light);
+            color: var(--gray);
+            cursor: not-allowed;
+            opacity: 0.7;
         }
 
         .features {
@@ -239,8 +316,8 @@
             justify-content: center;
             gap: 20px;
             flex-wrap: wrap;
-            margin-top: 3rem;
-            padding: 2rem;
+            margin-top: 2rem;
+            padding: 1.5rem;
             background: white;
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
@@ -250,20 +327,20 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 10px 20px;
+            padding: 8px 16px;
         }
 
         .feature i {
             color: var(--primary);
-            font-size: 1.2rem;
+            font-size: 1.1rem;
         }
 
         footer {
-            margin-top: 50px;
+            margin-top: 30px;
             text-align: center;
             color: var(--gray);
             font-size: 0.9rem;
-            padding: 20px 0;
+            padding: 15px 0;
             border-top: 1px solid var(--gray-light);
         }
 
@@ -271,15 +348,15 @@
             .header-content {
                 flex-direction: column;
                 text-align: center;
-                gap: 20px;
+                gap: 15px;
             }
             
             h1 {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
             
             .hero h2 {
-                font-size: 1.8rem;
+                font-size: 1.6rem;
             }
             
             .options-container {
@@ -288,7 +365,7 @@
             
             .option-card {
                 max-width: 100%;
-                padding: 30px 20px;
+                padding: 25px 15px;
             }
         }
     </style>
@@ -300,12 +377,30 @@
                 <div class="logo">
                     <i class="fas fa-database"></i>
                     <div>
-                        <h1>Практические задания по SQL</h1>
+                        <h1>SQL Database Explorer</h1>
                         <p class="subtitle">Интерактивная работа с базами данных</p>
                     </div>
                 </div>
-                <div class="db-info">
-                    <p><i class="fas fa-laptop-code"></i> 4 варианта баз данных</p>
+                
+                <div id="userSection" class="user-info" style="display: none;">
+                    <div class="user-avatar" id="userAvatar">?</div>
+                    <div class="user-details">
+                        <div class="user-name" id="userName">Пользователь</div>
+                        <div class="user-role" id="userRole">Гость</div>
+                    </div>
+                    <div class="auth-buttons">
+                        <button class="btn btn-logout" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Выйти
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="guestSection" class="auth-buttons">
+                    <a href="login.html" class="btn btn-login">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Войти
+                    </a>
                 </div>
             </div>
         </div>
@@ -314,8 +409,27 @@
     <main class="container">
         <section class="hero">
             <div class="hero-content">
-                <h2>Выберите вариант задания</h2>
-                <p>В каждом варианте 7 заданий  и 4 таблицы для составления запросов SQL</p>
+                <h2>Выберите вариант базы данных для изучения</h2>
+                <p id="authMessage">Для доступа к заданиям и ответам необходимо авторизоваться</p>
+                
+                <div class="features">
+                    <div class="feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Интерактивные запросы</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-table"></i>
+                        <span>Просмотр данных</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-lock"></i>
+                        <span>Защищенные ответы</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-play-circle"></i>
+                        <span>Выполнение SQL в браузере</span>
+                    </div>
+                </div>
             </div>
             
             <div class="options-container">
@@ -324,9 +438,8 @@
                         <i class="fas fa-box"></i>
                     </div>
                     <h3>Вариант 1</h3>
-                    <p>База данных товаров и складов.
-                    Включает 4 таблицы и 7 практических запросов.</p>
-                    <a href="variant1.html" class="btn btn-primary">
+                    <p>База данных товаров и складов. Изучайте работу с товарами, остатками на складах, типами товаров. Включает 4 таблицы и 7 практических запросов.</p>
+                    <a href="#" class="btn btn-primary" id="variant1Btn">
                         <i class="fas fa-play"></i>
                         Открыть вариант 1
                     </a>
@@ -337,9 +450,8 @@
                         <i class="fas fa-users"></i>
                     </div>
                     <h3>Вариант 2</h3>
-                    <p>База данных сотрудников и проектов.
-                    Включает 4 таблицы и 7 практических запросов.</p>
-                    <a href="variant2.html" class="btn btn-secondary">
+                    <p>База данных сотрудников и проектов. Изучайте работу с сотрудниками, проектами, отделами и назначениями. Включает 4 таблицы и 7 практических запросов.</p>
+                    <a href="#" class="btn btn-secondary" id="variant2Btn">
                         <i class="fas fa-play"></i>
                         Открыть вариант 2
                     </a>
@@ -350,9 +462,8 @@
                         <i class="fas fa-graduation-cap"></i>
                     </div>
                     <h3>Вариант 3</h3>
-                    <p>База данных университета.
-                    Включает 4 таблицы и 7 практических запросов.</p>
-                    <a href="variant3.html" class="btn btn-success">
+                    <p>База данных университета. Изучайте работу со студентами, курсами, оценками и преподавателями. Включает 4 таблицы и 7 практических запросов.</p>
+                    <a href="#" class="btn btn-success" id="variant3Btn">
                         <i class="fas fa-play"></i>
                         Открыть вариант 3
                     </a>
@@ -363,9 +474,8 @@
                         <i class="fas fa-shopping-cart"></i>
                     </div>
                     <h3>Вариант 4</h3>
-                    <p>База данных интернет-магазина.
-                    Включает 4 таблицы и 7 практических запросов.</p>
-                    <a href="variant4.html" class="btn btn-danger">
+                    <p>База данных интернет-магазина. Изучайте работу с заказами, клиентами, товарами и категориями. Включает 4 таблицы и 7 практических запросов.</p>
+                    <a href="#" class="btn btn-danger" id="variant4Btn">
                         <i class="fas fa-play"></i>
                         Открыть вариант 4
                     </a>
@@ -375,7 +485,76 @@
     </main>
 
     <footer class="container">
-        <p>SQL Database Explorer &copy; 2025 | Практическое изучение SQL и баз данных</p>
+        <p>SQL Database Explorer &copy; 2023 | Практическое изучение SQL и баз данных</p>
+        <p id="authStatus">Статус: не авторизован</p>
     </footer>
+
+    <script>
+        // Обработка загрузки страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAuthUI();
+            
+            // Добавляем обработчики для кнопок вариантов
+            setupVariantButtons();
+        });
+        
+        function updateAuthUI() {
+            const isAuthenticated = checkAuth();
+            const userSection = document.getElementById('userSection');
+            const guestSection = document.getElementById('guestSection');
+            const authMessage = document.getElementById('authMessage');
+            const authStatus = document.getElementById('authStatus');
+            
+            if (isAuthenticated) {
+                const user = getCurrentUser();
+                userSection.style.display = 'flex';
+                guestSection.style.display = 'none';
+                
+                // Обновляем информацию о пользователе
+                document.getElementById('userName').textContent = user.fullName;
+                document.getElementById('userRole').textContent = user.role === 'admin' ? 'Администратор' : 
+                                                                  user.role === 'teacher' ? 'Преподаватель' : 'Студент';
+                document.getElementById('userAvatar').textContent = user.fullName.charAt(0);
+                
+                authMessage.textContent = `Добро пожаловать, ${user.fullName}! Теперь у вас есть доступ ко всем заданиям и ответам.`;
+                authStatus.textContent = `Статус: авторизован как ${user.fullName}`;
+            } else {
+                userSection.style.display = 'none';
+                guestSection.style.display = 'flex';
+                authMessage.textContent = 'Для доступа к заданиям и ответам необходимо авторизоваться';
+                authStatus.textContent = 'Статус: не авторизован';
+            }
+        }
+        
+        function setupVariantButtons() {
+            const variantButtons = [
+                { id: 'variant1Btn', page: 'variant1.html' },
+                { id: 'variant2Btn', page: 'variant2.html' },
+                { id: 'variant3Btn', page: 'variant3.html' },
+                { id: 'variant4Btn', page: 'variant4.html' }
+            ];
+            
+            variantButtons.forEach(btn => {
+                const button = document.getElementById(btn.id);
+                const isAuthenticated = checkAuth();
+                
+                if (isAuthenticated) {
+                    button.href = btn.page;
+                    button.classList.remove('btn-disabled');
+                } else {
+                    button.href = 'login.html';
+                    button.classList.add('btn-disabled');
+                    button.innerHTML = '<i class="fas fa-lock"></i> Требуется вход';
+                    
+                    button.addEventListener('click', function(e) {
+                        if (!isAuthenticated) {
+                            e.preventDefault();
+                            window.location.href = 'login.html';
+                        }
+                    });
+                }
+            });
+        }
+    </script>
 </body>
 </html>
