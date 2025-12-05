@@ -131,6 +131,8 @@
             background-color: var(--gray-light);
             color: var(--dark);
             margin-top: 10px;
+            text-decoration: none;
+            text-align: center;
         }
 
         .btn-secondary:hover {
@@ -145,6 +147,8 @@
             margin-bottom: 20px;
             display: none;
             border-left: 4px solid #d32f2f;
+            align-items: center;
+            gap: 10px;
         }
 
         .success-message {
@@ -155,6 +159,8 @@
             margin-bottom: 20px;
             display: none;
             border-left: 4px solid #2e7d32;
+            align-items: center;
+            gap: 10px;
         }
 
         .users-hint {
@@ -169,6 +175,9 @@
             margin-bottom: 10px;
             color: var(--primary);
             font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .user-account {
@@ -180,6 +189,14 @@
 
         .user-account:last-child {
             border-bottom: none;
+        }
+
+        .role-badge {
+            background-color: var(--primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
         }
 
         @media (max-width: 768px) {
@@ -202,7 +219,7 @@
             </div>
             <p>Вход в систему</p>
             <p style="font-size: 0.9rem; color: var(--gray);">
-                Для доступа к заданиям и ответам требуется авторизация
+                Авторизация требуется только для просмотра ответов на задания
             </p>
         </div>
 
@@ -264,11 +281,18 @@
     </div>
 
     <script>
-        // Проверяем, авторизован ли пользователь
         document.addEventListener('DOMContentLoaded', function() {
-            if (checkAuth()) {
-                // Если уже авторизован, перенаправляем на главную
-                window.location.href = 'index.html';
+            // Если уже авторизован, показываем сообщение
+            if (window.checkAuth && window.checkAuth()) {
+                const user = window.getCurrentUser();
+                const successMessage = document.getElementById('successMessage');
+                const successText = document.getElementById('successText');
+                successText.textContent = `Вы уже авторизованы как ${user.fullName}. Вы будете перенаправлены на главную страницу.`;
+                successMessage.style.display = 'flex';
+                
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
             }
             
             // Обработка формы входа
@@ -283,44 +307,34 @@
                 const successMessage = document.getElementById('successMessage');
                 const successText = document.getElementById('successText');
                 
-                // Скрываем сообщения
                 errorMessage.style.display = 'none';
                 successMessage.style.display = 'none';
                 
-                // Показываем загрузку
                 const originalText = loginBtn.innerHTML;
                 loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Вход...';
                 loginBtn.disabled = true;
                 
                 try {
-                    // Ждем инициализации системы
-                    await new Promise(resolve => setTimeout(resolve, 100));
-                    
                     const result = await window.authSystem.login(username, password);
                     
                     if (result.success) {
-                        // Успешный вход
-                        successText.textContent = `Добро пожаловать, ${result.user.fullName}!`;
-                        successMessage.style.display = 'block';
+                        successText.textContent = `Успешный вход! Добро пожаловать, ${result.user.fullName}. Вы будете перенаправлены на главную страницу.`;
+                        successMessage.style.display = 'flex';
                         
-                        // Перенаправляем через 1 секунду
                         setTimeout(() => {
                             window.location.href = 'index.html';
-                        }, 1000);
+                        }, 1500);
                     } else {
-                        // Ошибка входа
                         errorText.textContent = result.message;
-                        errorMessage.style.display = 'block';
+                        errorMessage.style.display = 'flex';
                         
-                        // Возвращаем кнопку в исходное состояние
                         loginBtn.innerHTML = originalText;
                         loginBtn.disabled = false;
                     }
                 } catch (error) {
                     errorText.textContent = 'Ошибка при входе в систему. Попробуйте еще раз.';
-                    errorMessage.style.display = 'block';
+                    errorMessage.style.display = 'flex';
                     
-                    // Возвращаем кнопку в исходное состояние
                     loginBtn.innerHTML = originalText;
                     loginBtn.disabled = false;
                 }
