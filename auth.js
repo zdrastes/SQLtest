@@ -124,9 +124,13 @@ class AuthSystem {
     updatePageAuthUI() {
         const isAuthenticated = this.isAuthenticated();
         const user = this.currentUser;
-        const isHomePage = window.location.pathname.includes('index.html') || 
-                          window.location.pathname.endsWith('/') ||
-                          window.location.pathname === '';
+        const currentPath = window.location.pathname;
+        const isHomePage = currentPath.endsWith('index.html') || 
+                          currentPath.endsWith('/') ||
+                          currentPath === '' ||
+                          currentPath.includes('index.html');
+        
+        console.log('Current path:', currentPath, 'Is home page:', isHomePage); // Для отладки
         
         // Обновляем статус в заголовке
         const authStatusElements = document.querySelectorAll('.auth-status');
