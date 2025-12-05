@@ -130,8 +130,6 @@ class AuthSystem {
                           currentPath === '' ||
                           currentPath.includes('index.html');
         
-        console.log('Current path:', currentPath, 'Is home page:', isHomePage); // Для отладки
-        
         // Обновляем статус в заголовке
         const authStatusElements = document.querySelectorAll('.auth-status');
         authStatusElements.forEach(el => {
@@ -188,14 +186,11 @@ class AuthSystem {
                         </a>
                     `;
                 } else {
-                    // На страницах вариантов показываем кнопку на главную и кнопку входа
+                    // На страницах вариантов показываем ТОЛЬКО кнопку на главную (без кнопки "Войти")
                     container.innerHTML = `
                         <a href="index.html" class="btn btn-back">
                             <i class="fas fa-arrow-left"></i>
                             На главную
-                        </a>
-                        <a href="login.html" class="btn btn-login">
-                            <i class="fas fa-sign-in-alt"></i> Войти
                         </a>
                     `;
                 }
