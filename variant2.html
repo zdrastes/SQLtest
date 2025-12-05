@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Database Explorer | Вариант 2 - Сотрудники и проекты</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --success: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --border-radius: 10px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fb;
+            color: var(--dark);
+            line-height: 1.6;
+            padding-bottom: 50px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo i {
+            font-size: 2.8rem;
+        }
+
+        .back-btn {
+            padding: 10px 25px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .schema-diagram {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .schema-diagram h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .schema-diagram h2 i {
+            color: var(--secondary);
+        }
+
+        .tables-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .table-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            flex: 1;
+            min-width: 250px;
+            max-width: 320px;
+            box-shadow: var(--box-shadow);
+            border-top: 5px solid var(--primary);
+            transition: var(--transition);
+        }
+
+        .table-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .table-card h3 i {
+            color: var(--secondary);
+        }
+
+        .fields {
+            margin-top: 15px;
+        }
+
+        .field {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed var(--gray-light);
+        }
+
+        .field-name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .field-type {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .relationships {
+            margin-top: 30px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .table-data-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .table-data-section h2 {
+            color: var(--primary);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .table-data-section h2 i {
+            color: var(--secondary);
+        }
+
+        .table-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .table-tab {
+            padding: 10px 20px;
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .table-tab.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .table-tab:hover:not(.active) {
+            background-color: var(--gray-light);
+        }
+
+        .table-data-container {
+            overflow-x: auto;
+            border-radius: var(--border-radius);
+            box-shadow: 0 0 0 1px var(--gray-light);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #e9f7fe;
+        }
+
+        .row-count {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .queries-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-top: 10px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .queries-section h2 {
+            color: var(--primary);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .queries-section h2 i {
+            color: var(--secondary);
+        }
+
+        .query-item {
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .query-question {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .query-question i {
+            color: var(--primary);
+        }
+
+        .query-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-size: 0.9rem;
+            margin-right: 10px;
+        }
+
+        .query-input-area {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--gray-light);
+            border-radius: var(--border-radius);
+            font-family: monospace;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+            transition: var(--transition);
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .query-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--gray-light);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background-color: #d1d9e0;
+        }
+
+        .results-section {
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+
+        .results-section h3 {
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .error-message {
+            background-color: #ffe6e6;
+            color: #d32f2f;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-top: 15px;
+            border-left: 4px solid #d32f2f;
+        }
+
+        .success-message {
+            background-color: #e6f7ee;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-top: 15px;
+            border-left: 4px solid #2e7d32;
+        }
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.9rem;
+            padding-top: 20px;
+            border-top: 1px solid var(--gray-light);
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            .tables-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .table-card {
+                max-width: 100%;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .table-selector {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-database"></i>
+                    <div>
+                        <h1>SQL Database Explorer</h1>
+                        <p class="subtitle">Вариант 2 - База данных сотрудников и проектов</p>
+                    </div>
+                </div>
+                <a href="index.html" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    На главную
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="schema-diagram">
+            <h2><i class="fas fa-project-diagram"></i> Схема базы данных</h2>
+            <p>Таблицы связаны между собой через ключи: employees.id → employee_projects.employee_id, projects.id → employee_projects.project_id, departments.id → employees.department_id</p>
+            
+            <div class="tables-container">
+                <div class="table-card">
+                    <h3><i class="fas fa-users"></i> employees</h3>
+                    <p>Таблица сотрудников</p>
+                    <div class="fields">
+                        <div class="field">
+                            <span class="field-name">id</span>
+                            <span class="field-type">INT PRIMARY KEY</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">full_name</span>
+                            <span class="field-type">VARCHAR(100)</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">department_id</span>
+                            <span class="field-type">INT</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">position</span>
+                            <span class="field-type">VARCHAR(100)</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">salary</span>
+                            <span class="field-type">DECIMAL(10,2)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-card">
+                    <h3><i class="fas fa-project-diagram"></i> projects</h3>
+                    <p>Таблица проектов</p>
+                    <div class="fields">
+                        <div class="field">
+                            <span class="field-name">id</span>
+                            <span class="field-type">INT PRIMARY KEY</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">name</span>
+                            <span class="field-type">VARCHAR(100)</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">client</span>
+                            <span class="field-type">VARCHAR(100)</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">budget</span>
+                            <span class="field-type">DECIMAL(12,2)</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">status</span>
+                            <span class="field-type">VARCHAR(20)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-card">
+                    <h3><i class="fas fa-tasks"></i> employee_projects</h3>
+                    <p>Таблица назначений сотрудников на проекты</p>
+                    <div class="fields">
+                        <div class="field">
+                            <span class="field-name">employee_id</span>
+                            <span class="field-type">INT</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">project_id</span>
+                            <span class="field-type">INT</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">role</span>
+                            <span class="field-type">VARCHAR(50)</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">hours_worked</span>
+                            <span class="field-type">INT</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-card">
+                    <h3><i class="fas fa-building"></i> departments</h3>
+                    <p>Таблица отделов</p>
+                    <div class="fields">
+                        <div class="field">
+                            <span class="field-name">id</span>
+                            <span class="field-type">INT PRIMARY KEY</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">name</span>
+                            <span class="field-type">VARCHAR(100)</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">manager_id</span>
+                            <span class="field-type">INT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="relationships">
+                <p><i class="fas fa-link"></i> Связи: employees.department_id → departments.id | employee_projects.employee_id → employees.id | employee_projects.project_id → projects.id</p>
+            </div>
+        </section>
+
+        <!-- Секция: данные таблиц -->
+        <section class="table-data-section">
+            <h2><i class="fas fa-table"></i> Данные таблиц</h2>
+            
+            <div class="table-selector">
+                <div class="table-tab active" data-table="employees">
+                    <i class="fas fa-users"></i> employees
+                </div>
+                <div class="table-tab" data-table="projects">
+                    <i class="fas fa-project-diagram"></i> projects
+                </div>
+                <div class="table-tab" data-table="employee_projects">
+                    <i class="fas fa-tasks"></i> employee_projects
+                </div>
+                <div class="table-tab" data-table="departments">
+                    <i class="fas fa-building"></i> departments
+                </div>
+                <div class="table-tab" data-table="all">
+                    <i class="fas fa-list"></i> Все таблицы
+                </div>
+            </div>
+            
+            <div id="table-data-container">
+                <!-- Здесь будет отображаться содержимое выбранной таблицы -->
+            </div>
+        </section>
+
+        <section class="queries-section">
+            <h2><i class="fas fa-code"></i> SQL Запросы к базе данных</h2>
+            
+            <div class="query-item">
+                <div class="query-question">
+                    <span class="query-number">1</span>
+                    Вывести количество сотрудников в каждом отделе. Столбцы «отдел», «количество сотрудников».
+                </div>
+                <div class="query-input-area">
+                    <textarea id="query1">SELECT d.name as отдел, COUNT(e.id) as количество_сотрудников
+FROM departments d
+LEFT JOIN employees e ON d.id = e.department_id
+GROUP BY d.id, d.name;</textarea>
+                    <div class="query-actions">
+                        <button class="btn btn-secondary" onclick="resetQuery(1)">
+                            <i class="fas fa-redo"></i> Сбросить
+                        </button>
+                        <button class="btn btn-primary" onclick="executeQuery(1)">
+                            <i class="fas fa-play"></i> Выполнить запрос
+                        </button>
+                    </div>
+                    <div id="results1" class="results-section"></div>
+                </div>
+            </div>
+            
+            <div class="query-item">
+                <div class="query-question">
+                    <span class="query-number">2</span>
+                    Вывести всех сотрудников отделов «Отдел продаж» и «IT отдел». Вывести колонки «ФИО», «должность».
+                </div>
+                <div class="query-input-area">
+                    <textarea id="query2">SELECT e.full_name as ФИО, e.position as должность
+FROM employees e
+JOIN departments d ON e.department_id = d.id
+WHERE d.name IN ('Отдел продаж', 'IT отдел');</textarea>
+                    <div class="query-actions">
+                        <button class="btn btn-secondary" onclick="resetQuery(2)">
+                            <i class="fas fa-redo"></i> Сбросить
+                        </button>
+                        <button class="btn btn-primary" onclick="executeQuery(2)">
+                            <i class="fas fa-play"></i> Выполнить запрос
+                        </button>
+                    </div>
+                    <div id="results2" class="results-section"></div>
+                </div>
+            </div>
+            
+            <div class="query-item">
+                <div class="query-question">
+                    <span class="query-number">3</span>
+                    Изменить должность сотрудника «Сидоров Алексей Николаевич» на «Старший тестировщик» и повысить зарплату до 70000.
+                </div>
+                <div class="query-input-area">
+                    <textarea id="query3">UPDATE employees
+SET position = 'Старший тестировщик', salary = 70000.00
+WHERE full_name = 'Сидоров Алексей Николаевич';
+
+SELECT * FROM employees WHERE full_name = 'Сидоров Алексей Николаевич';</textarea>
+                    <div class="query-actions">
+                        <button class="btn btn-secondary" onclick="resetQuery(3)">
+                            <i class="fas fa-redo"></i> Сбросить
+                        </button>
+                        <button class="btn btn-primary" onclick="executeQuery(3)">
+                            <i class="fas fa-play"></i> Выполнить запрос
+                        </button>
+                    </div>
+                    <div id="results3" class="results-section"></div>
+                </div>
+            </div>
+            
+            <div class="query-item">
+                <div class="query-question">
+                    <span class="query-number">4</span>
+                    Очистить полностью таблицу «employee_projects».
+                </div>
+                <div class="query-input-area">
+                    <textarea id="query4">-- Два варианта:
+-- DELETE FROM employee_projects;
+TRUNCATE TABLE employee_projects;
+
+SELECT * FROM employee_projects;</textarea>
+                    <div class="query-actions">
+                        <button class="btn btn-secondary" onclick="resetQuery(4)">
+                            <i class="fas fa-redo"></i> Сбросить
+                        </button>
+                        <button class="btn btn-primary" onclick="executeQuery(4)">
+                            <i class="fas fa-play"></i> Выполнить запрос
+                        </button>
+                    </div>
+                    <div id="results4" class="results-section"></div>
+                </div>
+            </div>
+            
+            <div class="query-item">
+                <div class="query-question">
+                    <span class="query-number">5</span>
+                    Вывести все активные проекты с бюджетом более 300000.
+                </div>
+                <div class="query-input-area">
+                    <textarea id="query5">SELECT * 
+FROM projects 
+WHERE status = 'active' AND budget > 300000;</textarea>
+                    <div class="query-actions">
+                        <button class="btn btn-secondary" onclick="resetQuery(5)">
+                            <i class="fas fa-redo"></i> Сбросить
+                        </button>
+                        <button class="btn btn-primary" onclick="executeQuery(5)">
+                            <i class="fas fa-play"></i> Выполнить запрос
+                        </button>
+                    </div>
+                    <div id="results5" class="results-section"></div>
+                </div>
+            </div>
+            
+            <div class="query-item">
+                <div class="query-question">
+                    <span class="query-number">6</span>
+                    Наполнить таблицу «projects» новыми проектами, используя транзакцию.
+                </div>
+                <div class="query-input-area">
+                    <textarea id="query6">BEGIN TRANSACTION;
+INSERT INTO projects (id, name, client, budget, status) VALUES (5005, 'Оптимизация баз данных', 'Банк Восточный', 350000.00, 'active');
+INSERT INTO projects (id, name, client, budget, status) VALUES (5006, 'Разработка мобильной игры', 'ООО ГеймСтудия', 600000.00, 'planning');
+COMMIT TRANSACTION;
+
+SELECT * FROM projects;</textarea>
+                    <div class="query-actions">
+                        <button class="btn btn-secondary" onclick="resetQuery(6)">
+                            <i class="fas fa-redo"></i> Сбросить
+                        </button>
+                        <button class="btn btn-primary" onclick="executeQuery(6)">
+                            <i class="fas fa-play"></i> Выполнить запрос
+                        </button>
+                    </div>
+                    <div id="results6" class="results-section"></div>
+                </div>
+            </div>
+            
+            <div class="query-item">
+                <div class="query-question">
+                    <span class="query-number">7</span>
+                    Вывести общее количество отработанных часов по каждому проекту. Столбцы «проект», «общее количество часов».
+                </div>
+                <div class="query-input-area">
+                    <textarea id="query7">SELECT p.name as проект, SUM(ep.hours_worked) as общее_количество_часов
+FROM projects p
+LEFT JOIN employee_projects ep ON p.id = ep.project_id
+GROUP BY p.id, p.name;</textarea>
+                    <div class="query-actions">
+                        <button class="btn btn-secondary" onclick="resetQuery(7)">
+                            <i class="fas fa-redo"></i> Сбросить
+                        </button>
+                        <button class="btn btn-primary" onclick="executeQuery(7)">
+                            <i class="fas fa-play"></i> Выполнить запрос
+                        </button>
+                    </div>
+                    <div id="results7" class="results-section"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="container">
+        <p>SQL Database Explorer &copy; 2023 | Вариант 2 - База данных сотрудников и проектов</p>
+    </footer>
+
+    <script>
+        // Инициализация данных базы данных для варианта 2
+        const initDatabase = () => {
+            return {
+                employees: [
+                    {id: 101, full_name: 'Иванов Петр Сергеевич', department_id: 1, position: 'Менеджер', salary: 75000.00},
+                    {id: 102, full_name: 'Смирнова Анна Владимировна', department_id: 2, position: 'Разработчик', salary: 95000.00},
+                    {id: 103, full_name: 'Козлов Дмитрий Игоревич', department_id: 1, position: 'Аналитик', salary: 68000.00},
+                    {id: 104, full_name: 'Петрова Екатерина Александровна', department_id: 3, position: 'Дизайнер', salary: 82000.00},
+                    {id: 105, full_name: 'Сидоров Алексей Николаевич', department_id: 2, position: 'Тестировщик', salary: 60000.00},
+                    {id: 106, full_name: 'Федорова Мария Олеговна', department_id: 1, position: 'Менеджер', salary: 78000.00}
+                ],
+                projects: [
+                    {id: 5001, name: 'Разработка мобильного приложения', client: 'ООО Рога и копыта', budget: 500000.00, status: 'active'},
+                    {id: 5002, name: 'Редизайн корпоративного сайта', client: 'ИП Васильев', budget: 250000.00, status: 'completed'},
+                    {id: 5003, name: 'Внедрение CRM системы', client: 'ЗАО Технопром', budget: 750000.00, status: 'active'},
+                    {id: 5004, name: 'Разработка интернет-магазина', client: 'ООО Мебельстрой', budget: 400000.00, status: 'planning'}
+                ],
+                employee_projects: [
+                    {employee_id: 102, project_id: 5001, role: 'Ведущий разработчик', hours_worked: 120},
+                    {employee_id: 104, project_id: 5001, role: 'Дизайнер интерфейса', hours_worked: 80},
+                    {employee_id: 105, project_id: 5001, role: 'Тестировщик', hours_worked: 60},
+                    {employee_id: 102, project_id: 5003, role: 'Архитектор', hours_worked: 40},
+                    {employee_id: 103, project_id: 5003, role: 'Бизнес-аналитик', hours_worked: 75},
+                    {employee_id: 104, project_id: 5002, role: 'Дизайнер', hours_worked: 50}
+                ],
+                departments: [
+                    {id: 1, name: 'Отдел продаж', manager_id: 101},
+                    {id: 2, name: 'IT отдел', manager_id: 102},
+                    {id: 3, name: 'Отдел маркетинга', manager_id: 104}
+                ]
+            };
+        };
+
+        let database = initDatabase();
+        let currentTable = 'employees'; // По умолчанию показываем таблицу employees
+
+        // Функция для отображения содержимого таблицы
+        function renderTableData(tableName) {
+            const container = document.getElementById('table-data-container');
+            
+            if (tableName === 'all') {
+                // Показать все таблицы
+                let html = '';
+                
+                ['employees', 'projects', 'employee_projects', 'departments'].forEach(tblName => {
+                    const tableData = database[tblName];
+                    if (tableData.length === 0) {
+                        html += `<div style="margin-bottom: 30px;">`;
+                        html += `<h3 style="color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-table"></i> Таблица ${tblName}</h3>`;
+                        html += `<p>Таблица пуста</p>`;
+                        html += `</div>`;
+                        return;
+                    }
+                    
+                    const tableColumns = Object.keys(tableData[0] || {});
+                    
+                    html += `<div class="table-data-container" style="margin-bottom: 30px;">`;
+                    html += `<h3 style="color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-table"></i> Таблица ${tblName}</h3>`;
+                    html += `<table>`;
+                    html += `<thead><tr>`;
+                    
+                    // Заголовки таблицы
+                    tableColumns.forEach(column => {
+                        html += `<th>${column}</th>`;
+                    });
+                    html += `</tr></thead>`;
+                    
+                    // Данные таблицы
+                    html += `<tbody>`;
+                    tableData.forEach(row => {
+                        html += `<tr>`;
+                        tableColumns.forEach(column => {
+                            html += `<td>${row[column]}</td>`;
+                        });
+                        html += `</tr>`;
+                    });
+                    html += `</tbody>`;
+                    html += `</table>`;
+                    html += `<div class="row-count"><i class="fas fa-list"></i> Всего записей: ${tableData.length}</div>`;
+                    html += `</div>`;
+                });
+                
+                container.innerHTML = html;
+                return;
+            }
+            
+            const tableData = database[tableName];
+            
+            if (tableData.length === 0) {
+                container.innerHTML = `<p>Таблица пуста</p>`;
+                return;
+            }
+            
+            const tableColumns = Object.keys(tableData[0] || {});
+            
+            let html = `<div class="table-data-container">`;
+            html += `<table>`;
+            html += `<thead><tr>`;
+            
+            // Заголовки таблицы
+            tableColumns.forEach(column => {
+                html += `<th>${column}</th>`;
+            });
+            html += `</tr></thead>`;
+            
+            // Данные таблицы
+            html += `<tbody>`;
+            tableData.forEach(row => {
+                html += `<tr>`;
+                tableColumns.forEach(column => {
+                    html += `<td>${row[column]}</td>`;
+                });
+                html += `</tr>`;
+            });
+            html += `</tbody>`;
+            html += `</table>`;
+            html += `<div class="row-count"><i class="fas fa-list"></i> Всего записей: ${tableData.length}</div>`;
+            html += `</div>`;
+            
+            container.innerHTML = html;
+        }
+
+        // Функция для переключения вкладок таблиц
+        function switchTable(tableName) {
+            currentTable = tableName;
+            
+            // Обновляем активную вкладку
+            document.querySelectorAll('.table-tab').forEach(tab => {
+                if (tab.dataset.table === tableName) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            // Отображаем данные выбранной таблицы
+            renderTableData(tableName);
+        }
+
+        // Функция для сброса запроса к исходному виду
+        function resetQuery(queryNumber) {
+            const defaultQueries = {
+                1: `SELECT d.name as отдел, COUNT(e.id) as количество_сотрудников
+FROM departments d
+LEFT JOIN employees e ON d.id = e.department_id
+GROUP BY d.id, d.name;`,
+                2: `SELECT e.full_name as ФИО, e.position as должность
+FROM employees e
+JOIN departments d ON e.department_id = d.id
+WHERE d.name IN ('Отдел продаж', 'IT отдел');`,
+                3: `UPDATE employees
+SET position = 'Старший тестировщик', salary = 70000.00
+WHERE full_name = 'Сидоров Алексей Николаевич';
+
+SELECT * FROM employees WHERE full_name = 'Сидоров Алексей Николаевич';`,
+                4: `-- Два варианта:
+-- DELETE FROM employee_projects;
+TRUNCATE TABLE employee_projects;
+
+SELECT * FROM employee_projects;`,
+                5: `SELECT * 
+FROM projects 
+WHERE status = 'active' AND budget > 300000;`,
+                6: `BEGIN TRANSACTION;
+INSERT INTO projects (id, name, client, budget, status) VALUES (5005, 'Оптимизация баз данных', 'Банк Восточный', 350000.00, 'active');
+INSERT INTO projects (id, name, client, budget, status) VALUES (5006, 'Разработка мобильной игры', 'ООО ГеймСтудия', 600000.00, 'planning');
+COMMIT TRANSACTION;
+
+SELECT * FROM projects;`,
+                7: `SELECT p.name as проект, SUM(ep.hours_worked) as общее_количество_часов
+FROM projects p
+LEFT JOIN employee_projects ep ON p.id = ep.project_id
+GROUP BY p.id, p.name;`
+            };
+            
+            document.getElementById(`query${queryNumber}`).value = defaultQueries[queryNumber];
+            document.getElementById(`results${queryNumber}`).innerHTML = '';
+        }
+
+        // Функция для выполнения SQL-запроса
+        function executeQuery(queryNumber) {
+            const query = document.getElementById(`query${queryNumber}`).value;
+            const resultsDiv = document.getElementById(`results${queryNumber}`);
+            
+            // Очищаем предыдущие результаты
+            resultsDiv.innerHTML = '<div class="success-message"><i class="fas fa-spinner fa-spin"></i> Выполнение запроса...</div>';
+            
+            // Имитация выполнения запроса с задержкой
+            setTimeout(() => {
+                try {
+                    const result = simulateSQLExecution(query, queryNumber);
+                    displayResults(resultsDiv, result);
+                    
+                    // Обновляем отображение таблиц, так как данные могли измениться
+                    renderTableData(currentTable);
+                } catch (error) {
+                    resultsDiv.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-circle"></i> Ошибка: ${error.message}</div>`;
+                }
+            }, 500);
+        }
+
+        // Функция для имитации выполнения SQL-запроса
+        function simulateSQLExecution(query, queryNumber) {
+            // Упрощенная имитация SQL-запросов
+            const queries = query.split(';').filter(q => q.trim() !== '');
+            let result = [];
+            let dataChanged = false;
+            
+            for (let q of queries) {
+                q = q.trim();
+                
+                // Убираем комментарии
+                q = q.replace(/--.*$/gm, '');
+                
+                if (q.toUpperCase().startsWith('SELECT')) {
+                    // Обработка SELECT запросов
+                    if (q.includes('COUNT(e.id)') && q.includes('FROM departments d')) {
+                        // Запрос 1
+                        const deptCounts = [];
+                        for (let dept of database.departments) {
+                            const count = database.employees.filter(emp => emp.department_id === dept.id).length;
+                            deptCounts.push({
+                                отдел: dept.name,
+                                количество_сотрудников: count
+                            });
+                        }
+                        result.push({
+                            columns: ['отдел', 'количество_сотрудников'],
+                            data: deptCounts
+                        });
+                    } else if (q.includes("d.name IN ('Отдел продаж', 'IT отдел')")) {
+                        // Запрос 2
+                        const filteredEmployees = [];
+                        for (let emp of database.employees) {
+                            const dept = database.departments.find(d => d.id === emp.department_id);
+                            if (dept && (dept.name === 'Отдел продаж' || dept.name === 'IT отдел')) {
+                                filteredEmployees.push({
+                                    ФИО: emp.full_name,
+                                    должность: emp.position
+                                });
+                            }
+                        }
+                        result.push({
+                            columns: ['ФИО', 'должность'],
+                            data: filteredEmployees
+                        });
+                    } else if (q.includes('FROM employees WHERE full_name =')) {
+                        // Запрос 3 (после UPDATE)
+                        const sidorov = database.employees.find(emp => emp.full_name === 'Сидоров Алексей Николаевич');
+                        if (sidorov) {
+                            result.push({
+                                columns: ['id', 'full_name', 'department_id', 'position', 'salary'],
+                                data: [sidorov]
+                            });
+                        }
+                    } else if (q.includes('FROM employee_projects') && !q.includes('JOIN')) {
+                        // Запрос 4
+                        result.push({
+                            columns: ['employee_id', 'project_id', 'role', 'hours_worked'],
+                            data: [...database.employee_projects]
+                        });
+                    } else if (q.includes('status = \'active\' AND budget > 300000')) {
+                        // Запрос 5
+                        const activeProjects = database.projects.filter(p => p.status === 'active' && p.budget > 300000);
+                        result.push({
+                            columns: ['id', 'name', 'client', 'budget', 'status'],
+                            data: activeProjects
+                        });
+                    } else if (q.includes('FROM projects') && !q.includes('JOIN')) {
+                        // Запрос 6 (после INSERT)
+                        result.push({
+                            columns: ['id', 'name', 'client', 'budget', 'status'],
+                            data: [...database.projects]
+                        });
+                    } else if (q.includes('SUM(ep.hours_worked)') && q.includes('FROM projects p')) {
+                        // Запрос 7
+                        const projectHours = [];
+                        for (let project of database.projects) {
+                            const hours = database.employee_projects
+                                .filter(ep => ep.project_id === project.id)
+                                .reduce((sum, ep) => sum + ep.hours_worked, 0);
+                            projectHours.push({
+                                проект: project.name,
+                                общее_количество_часов: hours
+                            });
+                        }
+                        result.push({
+                            columns: ['проект', 'общее_количество_часов'],
+                            data: projectHours
+                        });
+                    }
+                } else if (q.toUpperCase().startsWith('UPDATE')) {
+                    // Обработка UPDATE запросов
+                    dataChanged = true;
+                    if (q.includes("position = 'Старший тестировщик'")) {
+                        // Запрос 3
+                        const index = database.employees.findIndex(emp => emp.full_name === 'Сидоров Алексей Николаевич');
+                        if (index !== -1) {
+                            database.employees[index].position = 'Старший тестировщик';
+                            database.employees[index].salary = 70000.00;
+                        }
+                    }
+                } else if (q.toUpperCase().startsWith('TRUNCATE') || q.toUpperCase().startsWith('DELETE')) {
+                    // Обработка TRUNCATE/DELETE запросов
+                    dataChanged = true;
+                    if (q.includes('employee_projects')) {
+                        // Запрос 4
+                        database.employee_projects = [];
+                    }
+                } else if (q.toUpperCase().includes('BEGIN TRANSACTION') || q.toUpperCase().includes('INSERT INTO')) {
+                    // Обработка INSERT запросов
+                    dataChanged = true;
+                    if (q.includes('INSERT INTO projects')) {
+                        // Запрос 6
+                        const insertRegex = /INSERT INTO projects \(id, name, client, budget, status\) VALUES \((\d+), '([^']+)', '([^']+)', ([\d.]+), '([^']+)'\)/g;
+                        let match;
+                        while ((match = insertRegex.exec(q)) !== null) {
+                            database.projects.push({
+                                id: parseInt(match[1]),
+                                name: match[2],
+                                client: match[3],
+                                budget: parseFloat(match[4]),
+                                status: match[5]
+                            });
+                        }
+                    }
+                }
+            }
+            
+            return { results: result, dataChanged };
+        }
+
+        // Функция для отображения результатов
+        function displayResults(resultsDiv, result) {
+            if (result.results.length === 0) {
+                resultsDiv.innerHTML = '<div class="success-message"><i class="fas fa-check-circle"></i> Запрос выполнен успешно. Нет данных для отображения.</div>';
+                return;
+            }
+            
+            let html = '';
+            
+            // Отображаем все результаты запроса (могут быть несколько, если в скрипте несколько SELECT)
+            result.results.forEach((resultSet, index) => {
+                if (resultSet.data.length === 0) {
+                    html += `<div class="success-message"><i class="fas fa-check-circle"></i> Запрос выполнен успешно. Нет данных для отображения.</div>`;
+                    return;
+                }
+                
+                html += `<h3>Результат ${result.results.length > 1 ? index + 1 : ''}</h3>`;
+                html += `<div class="table-data-container">`;
+                html += `<table>`;
+                html += `<thead><tr>`;
+                
+                // Заголовки таблицы
+                resultSet.columns.forEach(column => {
+                    html += `<th>${column}</th>`;
+                });
+                html += `</tr></thead>`;
+                
+                // Данные таблицы
+                html += `<tbody>`;
+                resultSet.data.forEach(row => {
+                    html += `<tr>`;
+                    resultSet.columns.forEach(column => {
+                        html += `<td>${row[column] !== undefined ? row[column] : ''}</td>`;
+                    });
+                    html += `</tr>`;
+                });
+                html += `</tbody>`;
+                html += `</table>`;
+                html += `<div class="row-count"><i class="fas fa-list"></i> Найдено записей: ${resultSet.data.length}</div>`;
+                html += `</div>`;
+            });
+            
+            // Добавляем сообщение, если данные были изменены
+            if (result.dataChanged) {
+                html += `<div class="success-message"><i class="fas fa-sync-alt"></i> Данные в таблицах обновлены. Проверьте вкладку "Данные таблиц".</div>`;
+            }
+            
+            resultsDiv.innerHTML = html;
+        }
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Инициализируем отображение данных таблицы employees
+            renderTableData('employees');
+            
+            // Добавляем обработчики кликов на вкладки таблиц
+            document.querySelectorAll('.table-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    switchTable(this.dataset.table);
+                });
+            });
+            
+            // Добавляем возможность выполнения запросов по нажатию Ctrl+Enter
+            const textareas = document.querySelectorAll('textarea');
+            textareas.forEach((textarea, index) => {
+                textarea.addEventListener('keydown', function(e) {
+                    if (e.ctrlKey && e.key === 'Enter') {
+                        executeQuery(index + 1);
+                    }
+                });
+            });
+            
+            // Показываем начальные данные в первой таблице
+            executeQuery(1);
+        });
+    </script>
+</body>
+</html>
