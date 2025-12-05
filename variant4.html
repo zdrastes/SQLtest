@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SQL Database Explorer | Вариант 4 - Интернет-магазин</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="auth.js" defer></script>
     <style>
         :root {
-            --primary: #f72585;
-            --primary-dark: #d41a6f;
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
             --secondary: #7209b7;
             --light: #f8f9fa;
             --dark: #212529;
@@ -42,7 +43,7 @@
         header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            padding: 2rem 0;
+            padding: 1.5rem 0;
             margin-bottom: 2rem;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
@@ -54,12 +55,12 @@
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 700;
         }
 
         .subtitle {
-            font-size: 1.2rem;
+            font-size: 1rem;
             opacity: 0.9;
             margin-top: 5px;
         }
@@ -71,13 +72,33 @@
         }
 
         .logo i {
-            font-size: 2.8rem;
+            font-size: 2rem;
         }
 
-        .back-btn {
-            padding: 10px 25px;
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
+        .auth-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .auth-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .auth-status {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
             border: none;
             border-radius: var(--border-radius);
             font-weight: 600;
@@ -86,11 +107,64 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            font-size: 0.9rem;
             text-decoration: none;
         }
 
-        .back-btn:hover {
+        .btn-back {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-back:hover {
             background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-logout {
+            background-color: #f72585;
+            color: white;
+        }
+
+        .btn-logout:hover {
+            background-color: #d41a6f;
+        }
+
+        .user-info-mini {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+        }
+
+        .user-avatar-mini {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #4cc9f0, #4361ee);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .user-name-mini {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .answer-access-message {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: var(--box-shadow);
+            border-left: 4px solid var(--primary);
+            display: none;
         }
 
         .schema-diagram {
@@ -257,7 +331,7 @@
         }
 
         tr:hover {
-            background-color: #ffe6f2;
+            background-color: #e9f7fe;
         }
 
         .row-count {
@@ -334,11 +408,12 @@
             padding: 15px;
             border: 2px solid var(--gray-light);
             border-radius: var(--border-radius);
-            font-family: monospace;
+            font-family: 'Courier New', monospace;
             font-size: 1rem;
             resize: vertical;
             min-height: 100px;
             transition: var(--transition);
+            background-color: white;
         }
 
         textarea:focus {
@@ -359,7 +434,17 @@
             .header-content {
                 flex-direction: column;
                 text-align: center;
-                gap: 20px;
+                gap: 15px;
+            }
+            
+            .auth-section {
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+            }
+            
+            .auth-info {
+                align-items: center;
             }
             
             .tables-container {
@@ -372,7 +457,7 @@
             }
             
             h1 {
-                font-size: 2rem;
+                font-size: 1.6rem;
             }
             
             .table-selector {
@@ -389,21 +474,31 @@
                     <i class="fas fa-database"></i>
                     <div>
                         <h1>SQL Database Explorer</h1>
-                        <p class="subtitle">Вариант 4 - База данных интернет-магазина</p>                       
+                        <p class="subtitle">Вариант 4 - База данных интернет-магазина</p>
                     </div>
                 </div>
-                <a href="index.html" class="back-btn">
-                    <i class="fas fa-arrow-left"></i>
-                    На главную
-                </a>
+                
+                <div class="auth-section">
+                    <div class="auth-info">
+                        <div class="auth-status">
+                            <!-- Будет заполнено через auth.js -->
+                        </div>
+                    </div>
+                    <div class="auth-buttons">
+                        <!-- Кнопки будут заполнены через auth.js -->
+                    </div>
+                </div>
             </div>
         </div>
     </header>
 
     <main class="container">
+        <div class="answer-access-message" id="answerAccessMessage">
+            <!-- Сообщение скрыто для неавторизованных -->
+        </div>
+
         <section class="schema-diagram">
             <h2><i class="fas fa-project-diagram"></i> Схема базы данных</h2>
-            
             
             <div class="tables-container">
                 <div class="table-card">
@@ -508,7 +603,7 @@
             </div>
             
             <div class="relationships">
-                <p><i class="fas fa-link"></i> Таблицы связаны между собой через ключи: orders.customer_id → customers.id, products.category_id → categories.id</p>
+                <p><i class="fas fa-link"></i> Таблицы связаны между собой через ключи: customers.id → orders.customer_id, products.id → order_items.product_id, orders.id → order_items.order_id, categories.id → products.category_id</p>
             </div>
         </section>
 
@@ -541,6 +636,10 @@
 
         <section class="queries-section">
             <h2><i class="fas fa-code"></i> SQL Запросы к базе данных</h2>
+            
+            <div class="answer-access-message" id="queryAccessMessage">
+                <!-- Сообщение скрыто для неавторизованных -->
+            </div>
             
             <div class="query-item">
                 <div class="query-question">
@@ -633,9 +732,7 @@ SET status = 'доставлен', total_amount = total_amount + 500.00
 WHERE id = 1001;
 
 SELECT * FROM orders WHERE id = 1001;`,
-            4: `-- Два варианта:
--- DELETE FROM categories;
-TRUNCATE TABLE categories;
+            4: `TRUNCATE TABLE categories;
 
 SELECT * FROM categories;`,
             5: `SELECT product_name as товар, price as цена, stock_quantity as количество_на_складе
@@ -712,19 +809,10 @@ GROUP BY status;`
             const container = document.getElementById('table-data-container');
             
             if (tableName === 'all') {
-                // Показать все таблицы
                 let html = '';
                 
                 ['customers', 'orders', 'products', 'categories'].forEach(tblName => {
                     const tableData = database[tblName];
-                    if (tableData.length === 0) {
-                        html += `<div style="margin-bottom: 30px;">`;
-                        html += `<h3 style="color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-table"></i> Таблица ${tblName}</h3>`;
-                        html += `<p>Таблица пуста</p>`;
-                        html += `</div>`;
-                        return;
-                    }
-                    
                     const tableColumns = Object.keys(tableData[0] || {});
                     
                     html += `<div class="table-data-container" style="margin-bottom: 30px;">`;
@@ -732,13 +820,11 @@ GROUP BY status;`
                     html += `<table>`;
                     html += `<thead><tr>`;
                     
-                    // Заголовки таблицы
                     tableColumns.forEach(column => {
                         html += `<th>${column}</th>`;
                     });
                     html += `</tr></thead>`;
                     
-                    // Данные таблицы
                     html += `<tbody>`;
                     tableData.forEach(row => {
                         html += `<tr>`;
@@ -758,25 +844,17 @@ GROUP BY status;`
             }
             
             const tableData = database[tableName];
-            
-            if (tableData.length === 0) {
-                container.innerHTML = `<p>Таблица пуста</p>`;
-                return;
-            }
-            
             const tableColumns = Object.keys(tableData[0] || {});
             
             let html = `<div class="table-data-container">`;
             html += `<table>`;
             html += `<thead><tr>`;
             
-            // Заголовки таблицы
             tableColumns.forEach(column => {
                 html += `<th>${column}</th>`;
             });
             html += `</tr></thead>`;
             
-            // Данные таблицы
             html += `<tbody>`;
             tableData.forEach(row => {
                 html += `<tr>`;
@@ -797,7 +875,6 @@ GROUP BY status;`
         function switchTable(tableName) {
             currentTable = tableName;
             
-            // Обновляем активную вкладку
             document.querySelectorAll('.table-tab').forEach(tab => {
                 if (tab.dataset.table === tableName) {
                     tab.classList.add('active');
@@ -806,7 +883,6 @@ GROUP BY status;`
                 }
             });
             
-            // Отображаем данные выбранной таблицы
             renderTableData(tableName);
         }
 
@@ -821,6 +897,13 @@ GROUP BY status;`
                     switchTable(this.dataset.table);
                 });
             });
+            
+            // Обновляем UI через 100мс после загрузки страницы
+            setTimeout(() => {
+                if (window.authSystem && window.authSystem.updatePageAuthUI) {
+                    window.authSystem.updatePageAuthUI();
+                }
+            }, 100);
         });
     </script>
 </body>
