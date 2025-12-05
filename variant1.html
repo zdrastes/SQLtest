@@ -413,64 +413,12 @@
             resize: vertical;
             min-height: 100px;
             transition: var(--transition);
+            background-color: white;
         }
 
         textarea:focus {
             outline: none;
             border-color: var(--primary);
-        }
-
-        .query-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-        }
-
-        .btn-secondary {
-            background-color: var(--gray-light);
-            color: var(--dark);
-        }
-
-        .btn-secondary:hover {
-            background-color: #d1d9e0;
-        }
-
-        .results-section {
-            margin-top: 20px;
-            overflow-x: auto;
-        }
-
-        .results-section h3 {
-            margin-bottom: 15px;
-            color: var(--dark);
-        }
-
-        .error-message {
-            background-color: #ffe6e6;
-            color: #d32f2f;
-            padding: 15px;
-            border-radius: var(--border-radius);
-            margin-top: 15px;
-            border-left: 4px solid #d32f2f;
-            font-family: monospace;
-        }
-
-        .success-message {
-            background-color: #e6f7ee;
-            color: #2e7d32;
-            padding: 15px;
-            border-radius: var(--border-radius);
-            margin-top: 15px;
-            border-left: 4px solid #2e7d32;
         }
 
         footer {
@@ -675,16 +623,7 @@
                     Вывести количество артикулов (уникальных единиц товара) бренда Xiaomi. Столбцы «бренд», «количество».
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query1" placeholder=""></textarea>
-                    <div class="query-actions">
-                        <button class="btn btn-secondary" onclick="resetQuery(1)">
-                            <i class="fas fa-redo"></i> Сбросить
-                        </button>
-                        <button class="btn btn-primary" onclick="executeQuery(1)">
-                            <i class="fas fa-play"></i> Выполнить запрос
-                        </button>
-                    </div>
-                    <div id="results1" class="results-section"></div>
+                    <textarea id="query1"></textarea>
                 </div>
             </div>
             
@@ -694,16 +633,7 @@
                     Вывести все товары брендов Xiaomi и Adidas. Вывести колонки имя_товара, бренд_товара.
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query2" placeholder=""></textarea>
-                    <div class="query-actions">
-                        <button class="btn btn-secondary" onclick="resetQuery(2)">
-                            <i class="fas fa-redo"></i> Сбросить
-                        </button>
-                        <button class="btn btn-primary" onclick="executeQuery(2)">
-                            <i class="fas fa-play"></i> Выполнить запрос
-                        </button>
-                    </div>
-                    <div id="results2" class="results-section"></div>
+                    <textarea id="query2"></textarea>
                 </div>
             </div>
             
@@ -713,16 +643,7 @@
                     Заменить имя товара «Наушники беспроводные Xiaomi Airdots 2» на «Наушники беспроводные Huawei Airdots» и бренд на «Huawei».
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query3" placeholder=""></textarea>
-                    <div class="query-actions">
-                        <button class="btn btn-secondary" onclick="resetQuery(3)">
-                            <i class="fas fa-redo"></i> Сбросить
-                        </button>
-                        <button class="btn btn-primary" onclick="executeQuery(3)">
-                            <i class="fas fa-play"></i> Выполнить запрос
-                        </button>
-                    </div>
-                    <div id="results3" class="results-section"></div>
+                    <textarea id="query3"></textarea>
                 </div>
             </div>
             
@@ -732,16 +653,7 @@
                     Очистить полностью таблицу «warehouses».
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query4" placeholder=""></textarea>
-                    <div class="query-actions">
-                        <button class="btn btn-secondary" onclick="resetQuery(4)">
-                            <i class="fas fa-redo"></i> Сбросить
-                        </button>
-                        <button class="btn btn-primary" onclick="executeQuery(4)">
-                            <i class="fas fa-play"></i> Выполнить запрос
-                        </button>
-                    </div>
-                    <div id="results4" class="results-section"></div>
+                    <textarea id="query4"></textarea>
                 </div>
             </div>
             
@@ -751,16 +663,7 @@
                     Вывести все товары, которые лежат на складах: Варшавка, Пушкино. Вывести колонки имя_склада, имя_товара, кол-во_товара.
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query5" placeholder=""></textarea>
-                    <div class="query-actions">
-                        <button class="btn btn-secondary" onclick="resetQuery(5)">
-                            <i class="fas fa-redo"></i> Сбросить
-                        </button>
-                        <button class="btn btn-primary" onclick="executeQuery(5)">
-                            <i class="fas fa-play"></i> Выполнить запрос
-                        </button>
-                    </div>
-                    <div id="results5" class="results-section"></div>
+                    <textarea id="query5"></textarea>
                 </div>
             </div>
             
@@ -770,16 +673,7 @@
                     Наполнить таблицу «warehouses» данными, используя транзакцию.
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query6" placeholder=""></textarea>
-                    <div class="query-actions">
-                        <button class="btn btn-secondary" onclick="resetQuery(6)">
-                            <i class="fas fa-redo"></i> Сбросить
-                        </button>
-                        <button class="btn btn-primary" onclick="executeQuery(6)">
-                            <i class="fas fa-play"></i> Выполнить запрос
-                        </button>
-                    </div>
-                    <div id="results6" class="results-section"></div>
+                    <textarea id="query6"></textarea>
                 </div>
             </div>
             
@@ -789,36 +683,7 @@
                     Вывести количество товаров на всех складах с типами «Обувь» и «Аксессуары для телефонов». Столбцы «тип товара» и «количество».
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query7" placeholder=""></textarea>
-                    <div class="query-actions">
-                        <button class="btn btn-secondary" onclick="resetQuery(7)">
-                            <i class="fas fa-redo"></i> Сбросить
-                        </button>
-                        <button class="btn btn-primary" onclick="executeQuery(7)">
-                            <i class="fas fa-play"></i> Выполнить запрос
-                        </button>
-                    </div>
-                    <div id="results7" class="results-section"></div>
-                </div>
-            </div>
-            
-            <!-- Дополнительная секция для свободных запросов -->
-            <div class="query-item" style="border-left-color: #f72585;">
-                <div class="query-question">
-                    <span class="query-number" style="background-color: #f72585;">∞</span>
-                    <strong>Свободный SQL запрос</strong> - используйте любой SQL синтаксис
-                </div>
-                <div class="query-input-area">
-                    <textarea id="freeQuery" placeholder="Введите любой SQL запрос (SELECT, INSERT, UPDATE, DELETE, JOIN и т.д.)" style="min-height: 150px;"></textarea>
-                    <div class="query-actions">
-                        <button class="btn btn-secondary" onclick="resetFreeQuery()">
-                            <i class="fas fa-redo"></i> Очистить
-                        </button>
-                        <button class="btn btn-primary" onclick="executeFreeQuery()">
-                            <i class="fas fa-play"></i> Выполнить запрос
-                        </button>
-                    </div>
-                    <div id="freeResults" class="results-section"></div>
+                    <textarea id="query7"></textarea>
                 </div>
             </div>
         </section>
@@ -870,28 +735,21 @@ GROUP BY t.name;`
 
         // Глобальная функция для обновления полей запросов
         window.updateQueryFields = function(isAuthenticated) {
-            if (isAuthenticated) {
-                // Заполняем поля ответами
-                for (let i = 1; i <= 7; i++) {
-                    const textarea = document.getElementById(`query${i}`);
-                    if (textarea && defaultQueries[i]) {
-                        textarea.value = defaultQueries[i];
-                        textarea.placeholder = '';
-                    }
-                }
-            } else {
-                // Для неавторизованных - просто пустые поля без placeholder
-                for (let i = 1; i <= 7; i++) {
-                    const textarea = document.getElementById(`query${i}`);
-                    if (textarea) {
+            for (let i = 1; i <= 7; i++) {
+                const textarea = document.getElementById(`query${i}`);
+                if (textarea) {
+                    if (isAuthenticated) {
+                        // Для авторизованных: заполняем ответом
+                        textarea.value = defaultQueries[i] || '';
+                    } else {
+                        // Для неавторизованных: оставляем пустым (пользователь может ввести свой запрос)
                         textarea.value = '';
-                        textarea.placeholder = ''; // Пустой placeholder
                     }
                 }
             }
         };
 
-        // Расширенная инициализация данных базы данных
+        // Данные для отображения таблиц
         const initDatabase = () => {
             return {
                 goods: [
@@ -1014,663 +872,6 @@ GROUP BY t.name;`
             renderTableData(tableName);
         }
 
-        // Функция для сброса запроса к исходному виду
-        function resetQuery(queryNumber) {
-            const isAuthenticated = window.checkAuth ? window.checkAuth() : false;
-            
-            if (isAuthenticated && defaultQueries[queryNumber]) {
-                document.getElementById(`query${queryNumber}`).value = defaultQueries[queryNumber];
-            } else {
-                document.getElementById(`query${queryNumber}`).value = '';
-                document.getElementById(`query${queryNumber}`).placeholder = '';
-            }
-            document.getElementById(`results${queryNumber}`).innerHTML = '';
-        }
-
-        // Функция для сброса свободного запроса
-        function resetFreeQuery() {
-            document.getElementById('freeQuery').value = '';
-            document.getElementById('freeResults').innerHTML = '';
-        }
-
-        // Функция для выполнения SQL-запроса
-        function executeQuery(queryNumber) {
-            const query = document.getElementById(`query${queryNumber}`).value;
-            const resultsDiv = document.getElementById(`results${queryNumber}`);
-            
-            if (!query.trim()) {
-                resultsDiv.innerHTML = '<div class="error-message"><i class="fas fa-exclamation-circle"></i> Запрос пуст. Введите SQL запрос.</div>';
-                return;
-            }
-            
-            resultsDiv.innerHTML = '<div class="success-message"><i class="fas fa-spinner fa-spin"></i> Выполнение запроса...</div>';
-            
-            setTimeout(() => {
-                try {
-                    const result = parseAndExecuteSQL(query);
-                    displayResults(resultsDiv, result);
-                    
-                    renderTableData(currentTable);
-                } catch (error) {
-                    resultsDiv.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-circle"></i> Ошибка SQL: ${error.message}</div>`;
-                }
-            }, 300);
-        }
-
-        // Функция для выполнения свободного запроса
-        function executeFreeQuery() {
-            const query = document.getElementById('freeQuery').value;
-            const resultsDiv = document.getElementById('freeResults');
-            
-            if (!query.trim()) {
-                resultsDiv.innerHTML = '<div class="error-message"><i class="fas fa-exclamation-circle"></i> Запрос пуст. Введите SQL запрос.</div>';
-                return;
-            }
-            
-            resultsDiv.innerHTML = '<div class="success-message"><i class="fas fa-spinner fa-spin"></i> Выполнение запроса...</div>';
-            
-            setTimeout(() => {
-                try {
-                    const result = parseAndExecuteSQL(query);
-                    displayResults(resultsDiv, result);
-                    
-                    renderTableData(currentTable);
-                } catch (error) {
-                    resultsDiv.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-circle"></i> Ошибка SQL: ${error.message}</div>`;
-                }
-            }, 300);
-        }
-
-        // Продвинутый парсер SQL запросов
-        function parseAndExecuteSQL(sql) {
-            const statements = splitSQLStatements(sql);
-            let allResults = [];
-            let dataChanged = false;
-            
-            for (let statement of statements) {
-                const trimmedStatement = statement.trim();
-                if (!trimmedStatement) continue;
-                
-                try {
-                    const result = executeSingleSQLStatement(trimmedStatement);
-                    if (result) {
-                        allResults.push(result);
-                        if (result.dataChanged) {
-                            dataChanged = true;
-                        }
-                    }
-                } catch (error) {
-                    throw new Error(error.message);
-                }
-            }
-            
-            return { results: allResults, dataChanged };
-        }
-
-        // Разделение SQL на отдельные выражения
-        function splitSQLStatements(sql) {
-            const statements = [];
-            let current = '';
-            let inString = false;
-            let stringChar = '';
-            let inComment = false;
-            let commentType = ''; // '--' или '/*'
-            
-            for (let i = 0; i < sql.length; i++) {
-                const char = sql[i];
-                const nextChar = i + 1 < sql.length ? sql[i + 1] : '';
-                
-                // Обработка комментариев
-                if (!inString && !inComment) {
-                    if (char === '-' && nextChar === '-') {
-                        inComment = true;
-                        commentType = '--';
-                        i++;
-                        continue;
-                    } else if (char === '/' && nextChar === '*') {
-                        inComment = true;
-                        commentType = '/*';
-                        i++;
-                        continue;
-                    }
-                }
-                
-                // Завершение комментариев
-                if (inComment) {
-                    if (commentType === '--' && (char === '\n' || i === sql.length - 1)) {
-                        inComment = false;
-                    } else if (commentType === '/*' && char === '*' && nextChar === '/') {
-                        inComment = false;
-                        i++;
-                    }
-                    continue;
-                }
-                
-                // Обработка строк
-                if (!inComment && (char === "'" || char === '"')) {
-                    if (!inString) {
-                        inString = true;
-                        stringChar = char;
-                    } else if (char === stringChar) {
-                        // Проверка на экранирование
-                        if (i > 0 && sql[i - 1] === '\\') {
-                            // Экранированная кавычка - игнорируем
-                        } else {
-                            inString = false;
-                        }
-                    }
-                }
-                
-                // Разделение по точке с запятой (только вне строк)
-                if (char === ';' && !inString) {
-                    if (current.trim()) {
-                        statements.push(current.trim());
-                    }
-                    current = '';
-                } else {
-                    current += char;
-                }
-            }
-            
-            // Добавляем последнее выражение (если нет точки с запятой в конце)
-            if (current.trim()) {
-                statements.push(current.trim());
-            }
-            
-            return statements;
-        }
-
-        // Выполнение одного SQL выражения
-        function executeSingleSQLStatement(statement) {
-            // Очищаем комментарии
-            const cleanedStatement = statement.replace(/--.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '').trim();
-            if (!cleanedStatement) return null;
-            
-            const upperStatement = cleanedStatement.toUpperCase();
-            
-            // Определяем тип запроса
-            if (upperStatement.startsWith('SELECT')) {
-                return executeSelect(cleanedStatement);
-            } else if (upperStatement.startsWith('INSERT')) {
-                return executeInsert(cleanedStatement);
-            } else if (upperStatement.startsWith('UPDATE')) {
-                return executeUpdate(cleanedStatement);
-            } else if (upperStatement.startsWith('DELETE')) {
-                return executeDelete(cleanedStatement);
-            } else if (upperStatement.startsWith('TRUNCATE')) {
-                return executeTruncate(cleanedStatement);
-            } else if (upperStatement.includes('BEGIN TRANSACTION') || 
-                      upperStatement.includes('START TRANSACTION') || 
-                      upperStatement.includes('BEGIN WORK')) {
-                return { success: true, dataChanged: false };
-            } else if (upperStatement.includes('COMMIT') || 
-                      upperStatement.includes('END TRANSACTION')) {
-                return { success: true, dataChanged: false };
-            } else {
-                throw new Error('Неподдерживаемый SQL оператор');
-            }
-        }
-
-        // Выполнение SELECT запроса
-        function executeSelect(statement) {
-            // Убираем лишние пробелы и приводим к верхнему регистру для сравнения
-            const upperStatement = statement.toUpperCase();
-            
-            // 1. Простой SELECT * FROM table
-            const selectAllMatch = statement.match(/SELECT\s+\*\s+FROM\s+(\w+)/i);
-            if (selectAllMatch) {
-                const tableName = selectAllMatch[1].toLowerCase();
-                if (database[tableName]) {
-                    return {
-                        columns: Object.keys(database[tableName][0] || {}),
-                        data: [...database[tableName]],
-                        dataChanged: false
-                    };
-                } else {
-                    throw new Error(`Таблица '${tableName}' не существует`);
-                }
-            }
-            
-            // 2. SELECT column1, column2 FROM table
-            const selectColumnsMatch = statement.match(/SELECT\s+(.+?)\s+FROM\s+(\w+)/i);
-            if (selectColumnsMatch) {
-                const columnsStr = selectColumnsMatch[1];
-                const tableName = selectColumnsMatch[2].toLowerCase();
-                
-                if (!database[tableName]) {
-                    throw new Error(`Таблица '${tableName}' не существует`);
-                }
-                
-                // Извлекаем имена колонок (игнорируем AS)
-                const columns = columnsStr.split(',').map(col => {
-                    const colName = col.trim().split(/\s+as\s+/i)[0].trim();
-                    return colName;
-                });
-                
-                const data = database[tableName].map(row => {
-                    const newRow = {};
-                    columns.forEach(col => {
-                        if (col === '*') {
-                            Object.keys(row).forEach(key => newRow[key] = row[key]);
-                        } else if (row[col] !== undefined) {
-                            newRow[col] = row[col];
-                        }
-                    });
-                    return newRow;
-                });
-                
-                return {
-                    columns: columns.map(col => col === '*' ? '*' : col),
-                    data: data,
-                    dataChanged: false
-                };
-            }
-            
-            // 3. SELECT с WHERE
-            const selectWhereMatch = statement.match(/SELECT\s+(.+?)\s+FROM\s+(\w+)\s+WHERE\s+(.+)/i);
-            if (selectWhereMatch) {
-                const columnsStr = selectWhereMatch[1];
-                const tableName = selectWhereMatch[2].toLowerCase();
-                const whereClause = selectWhereMatch[3];
-                
-                if (!database[tableName]) {
-                    throw new Error(`Таблица '${tableName}' не существует`);
-                }
-                
-                // Извлекаем имена колонок
-                const columns = columnsStr.split(',').map(col => {
-                    const colName = col.trim().split(/\s+as\s+/i)[0].trim();
-                    return colName;
-                });
-                
-                // Фильтруем данные по WHERE условию
-                const filteredData = database[tableName].filter(row => {
-                    return evaluateWhereClause(row, whereClause, tableName);
-                });
-                
-                const data = filteredData.map(row => {
-                    const newRow = {};
-                    columns.forEach(col => {
-                        if (col === '*') {
-                            Object.keys(row).forEach(key => newRow[key] = row[key]);
-                        } else if (row[col] !== undefined) {
-                            newRow[col] = row[col];
-                        }
-                    });
-                    return newRow;
-                });
-                
-                return {
-                    columns: columns.map(col => col === '*' ? '*' : col),
-                    data: data,
-                    dataChanged: false
-                };
-            }
-            
-            // 4. Проверяем специфические запросы из заданий
-            return executeKnownQuery(statement);
-        }
-
-        // Оценка WHERE условия (ИСПРАВЛЕННАЯ ВЕРСИЯ)
-        function evaluateWhereClause(row, whereClause, tableName) {
-            // Приводим whereClause к верхнему регистру для сравнения
-            const upperWhere = whereClause.toUpperCase();
-            
-            // 1. Простое равенство: brand = 'Xiaomi'
-            const simpleEqMatch = whereClause.match(/(\w+)\s*=\s*'([^']+)'/i);
-            if (simpleEqMatch) {
-                const column = simpleEqMatch[1];
-                const value = simpleEqMatch[2];
-                return row[column] === value;
-            }
-            
-            // 2. IN оператор: brand IN ('Xiaomi', 'Adidas')
-            const inMatch = whereClause.match(/(\w+)\s+IN\s+\(([^)]+)\)/i);
-            if (inMatch) {
-                const column = inMatch[1];
-                const valuesStr = inMatch[2];
-                const values = valuesStr.split(',').map(v => v.trim().replace(/'/g, '').replace(/"/g, ''));
-                return values.includes(row[column]);
-            }
-            
-            // 3. Числовые сравнения: quantity > 5
-            const numCompMatch = whereClause.match(/(\w+)\s*([<>]=?)\s*(\d+)/i);
-            if (numCompMatch) {
-                const column = numCompMatch[1];
-                const operator = numCompMatch[2];
-                const value = parseInt(numCompMatch[3]);
-                const rowValue = Number(row[column]);
-                
-                if (isNaN(rowValue)) return false;
-                
-                switch (operator) {
-                    case '>': return rowValue > value;
-                    case '<': return rowValue < value;
-                    case '>=': return rowValue >= value;
-                    case '<=': return rowValue <= value;
-                    case '=': return rowValue === value;
-                }
-            }
-            
-            // 4. AND оператор
-            if (upperWhere.includes(' AND ')) {
-                const parts = whereClause.split(/\s+AND\s+/i);
-                return parts.every(part => evaluateWhereClause(row, part, tableName));
-            }
-            
-            // 5. OR оператор
-            if (upperWhere.includes(' OR ')) {
-                const parts = whereClause.split(/\s+OR\s+/i);
-                return parts.some(part => evaluateWhereClause(row, part, tableName));
-            }
-            
-            return false;
-        }
-
-        // Выполнение известных запросов из заданий
-        function executeKnownQuery(statement) {
-            const upperStatement = statement.toUpperCase();
-            
-            if (upperStatement.includes("BRAND = 'XIAOMI'") && upperStatement.includes('COUNT(DISTINCT ID)')) {
-                const xiaomiCount = database.goods.filter(g => g.brand === 'Xiaomi').length;
-                return {
-                    columns: ['brand', 'количество'],
-                    data: [{brand: 'Xiaomi', количество: xiaomiCount}],
-                    dataChanged: false
-                };
-            } else if (upperStatement.includes("BRAND IN ('XIAOMI', 'ADIDAS')")) {
-                const filteredGoods = database.goods.filter(g => g.brand === 'Xiaomi' || g.brand === 'Adidas');
-                return {
-                    columns: ['name', 'brand'],
-                    data: filteredGoods.map(g => ({name: g.name, brand: g.brand})),
-                    dataChanged: false
-                };
-            } else if (upperStatement.includes("WHERE BRAND = 'HUAWEI'")) {
-                const huaweiGoods = database.goods.filter(g => g.brand === 'Huawei');
-                return {
-                    columns: ['id', 'name', 'type_id', 'brand'],
-                    data: huaweiGoods,
-                    dataChanged: false
-                };
-            } else if (upperStatement.includes('FROM WAREHOUSES') && !upperStatement.includes('JOIN')) {
-                return {
-                    columns: ['id', 'name', 'address'],
-                    data: [...database.warehouses],
-                    dataChanged: false
-                };
-            } else if (upperStatement.includes('FROM GOODS') && !upperStatement.includes('JOIN')) {
-                return {
-                    columns: ['id', 'name', 'type_id', 'brand'],
-                    data: [...database.goods],
-                    dataChanged: false
-                };
-            } else if (upperStatement.includes('FROM STOCK') && !upperStatement.includes('JOIN')) {
-                return {
-                    columns: ['goods_id', 'warehouse_id', 'quantity'],
-                    data: [...database.stock],
-                    dataChanged: false
-                };
-            } else if (upperStatement.includes('FROM TYPES') && !upperStatement.includes('JOIN')) {
-                return {
-                    columns: ['id', 'name'],
-                    data: [...database.types],
-                    dataChanged: false
-                };
-            }
-            
-            throw new Error('Неподдерживаемый синтаксис SQL запроса');
-        }
-
-        // Выполнение INSERT запроса
-        function executeInsert(statement) {
-            const insertMatch = statement.match(/INSERT\s+INTO\s+(\w+)\s*\(([^)]+)\)\s+VALUES\s*\(([^)]+)\)/i);
-            if (insertMatch) {
-                const tableName = insertMatch[1].toLowerCase();
-                const columns = insertMatch[2].split(',').map(col => col.trim());
-                const values = parseValues(insertMatch[3]);
-                
-                if (!database[tableName]) {
-                    throw new Error(`Таблица '${tableName}' не существует`);
-                }
-                
-                const newRow = {};
-                columns.forEach((col, index) => {
-                    newRow[col] = values[index];
-                });
-                
-                database[tableName].push(newRow);
-                
-                return {
-                    success: true,
-                    dataChanged: true,
-                    message: `Вставлено 1 запись в таблицу ${tableName}`
-                };
-            }
-            
-            throw new Error('Неподдерживаемый синтаксис INSERT');
-        }
-
-        // Выполнение UPDATE запроса (ИСПРАВЛЕННАЯ ВЕРСИЯ)
-        function executeUpdate(statement) {
-            const updateMatch = statement.match(/UPDATE\s+(\w+)\s+SET\s+(.+?)(?:\s+WHERE\s+(.+))?/i);
-            if (updateMatch) {
-                const tableName = updateMatch[1].toLowerCase();
-                const setClause = updateMatch[2];
-                const whereClause = updateMatch[3];
-                
-                if (!database[tableName]) {
-                    throw new Error(`Таблица '${tableName}' не существует`);
-                }
-                
-                // Парсинг SET
-                const setPairs = setClause.split(',').map(pair => {
-                    const [col, val] = pair.split('=').map(s => s.trim());
-                    return { column: col, value: parseValue(val) };
-                });
-                
-                let updatedCount = 0;
-                
-                database[tableName] = database[tableName].map(row => {
-                    let shouldUpdate = true;
-                    
-                    if (whereClause) {
-                        shouldUpdate = evaluateWhereClause(row, whereClause, tableName);
-                    }
-                    
-                    if (shouldUpdate) {
-                        updatedCount++;
-                        const newRow = { ...row };
-                        setPairs.forEach(({ column, value }) => {
-                            newRow[column] = value;
-                        });
-                        return newRow;
-                    }
-                    
-                    return row;
-                });
-                
-                return {
-                    success: true,
-                    dataChanged: updatedCount > 0,
-                    message: `Обновлено ${updatedCount} записей в таблице ${tableName}`
-                };
-            }
-            
-            throw new Error('Неподдерживаемый синтаксис UPDATE');
-        }
-
-        // Выполнение DELETE запроса
-        function executeDelete(statement) {
-            const deleteMatch = statement.match(/DELETE\s+FROM\s+(\w+)(?:\s+WHERE\s+(.+))?/i);
-            if (deleteMatch) {
-                const tableName = deleteMatch[1].toLowerCase();
-                const whereClause = deleteMatch[2];
-                
-                if (!database[tableName]) {
-                    throw new Error(`Таблица '${tableName}' не существует`);
-                }
-                
-                let deletedCount = 0;
-                
-                if (whereClause) {
-                    const newData = [];
-                    database[tableName].forEach(row => {
-                        if (evaluateWhereClause(row, whereClause, tableName)) {
-                            deletedCount++;
-                        } else {
-                            newData.push(row);
-                        }
-                    });
-                    database[tableName] = newData;
-                } else {
-                    deletedCount = database[tableName].length;
-                    database[tableName] = [];
-                }
-                
-                return {
-                    success: true,
-                    dataChanged: deletedCount > 0,
-                    message: `Удалено ${deletedCount} записей из таблицы ${tableName}`
-                };
-            }
-            
-            throw new Error('Неподдерживаемый синтаксис DELETE');
-        }
-
-        // Выполнение TRUNCATE запроса
-        function executeTruncate(statement) {
-            const truncateMatch = statement.match(/TRUNCATE\s+TABLE\s+(\w+)/i);
-            if (truncateMatch) {
-                const tableName = truncateMatch[1].toLowerCase();
-                
-                if (!database[tableName]) {
-                    throw new Error(`Таблица '${tableName}' не существует`);
-                }
-                
-                const rowCount = database[tableName].length;
-                database[tableName] = [];
-                
-                return {
-                    success: true,
-                    dataChanged: true,
-                    message: `Таблица ${tableName} очищена (удалено ${rowCount} записей)`
-                };
-            }
-            
-            throw new Error('Неподдерживаемый синтаксис TRUNCATE');
-        }
-
-        // Парсинг значений
-        function parseValues(valuesStr) {
-            const values = [];
-            let current = '';
-            let inString = false;
-            let stringChar = '';
-            
-            for (let i = 0; i < valuesStr.length; i++) {
-                const char = valuesStr[i];
-                
-                if ((char === "'" || char === '"') && (i === 0 || valuesStr[i - 1] !== '\\')) {
-                    if (!inString) {
-                        inString = true;
-                        stringChar = char;
-                    } else if (char === stringChar) {
-                        inString = false;
-                    }
-                }
-                
-                if (char === ',' && !inString) {
-                    values.push(parseValue(current.trim()));
-                    current = '';
-                } else {
-                    current += char;
-                }
-            }
-            
-            if (current.trim()) {
-                values.push(parseValue(current.trim()));
-            }
-            
-            return values;
-        }
-
-        // Парсинг одного значения
-        function parseValue(valueStr) {
-            if (!valueStr) return null;
-            
-            if (valueStr.startsWith("'") && valueStr.endsWith("'")) {
-                return valueStr.slice(1, -1);
-            } else if (valueStr.startsWith('"') && valueStr.endsWith('"')) {
-                return valueStr.slice(1, -1);
-            } else if (!isNaN(valueStr)) {
-                return Number(valueStr);
-            } else if (valueStr.toUpperCase() === 'NULL') {
-                return null;
-            } else {
-                return valueStr;
-            }
-        }
-
-        // Функция для отображения результатов
-        function displayResults(resultsDiv, result) {
-            if (!result.results || result.results.length === 0) {
-                if (result.message) {
-                    resultsDiv.innerHTML = `<div class="success-message"><i class="fas fa-check-circle"></i> ${result.message}</div>`;
-                } else {
-                    resultsDiv.innerHTML = '<div class="success-message"><i class="fas fa-check-circle"></i> Запрос выполнен успешно.</div>';
-                }
-                return;
-            }
-            
-            let html = '';
-            
-            result.results.forEach((resultSet, index) => {
-                if (resultSet.error) {
-                    html += `<div class="error-message"><i class="fas fa-exclamation-circle"></i> ${resultSet.error}</div>`;
-                    return;
-                }
-                
-                if (resultSet.message) {
-                    html += `<div class="success-message"><i class="fas fa-check-circle"></i> ${resultSet.message}</div>`;
-                    return;
-                }
-                
-                if (!resultSet.data || resultSet.data.length === 0) {
-                    html += `<div class="success-message"><i class="fas fa-check-circle"></i> Запрос выполнен успешно. Нет данных для отображения.</div>`;
-                    return;
-                }
-                
-                html += `<h3>Результат ${result.results.length > 1 ? index + 1 : ''}</h3>`;
-                html += `<div class="table-data-container">`;
-                html += `<table>`;
-                html += `<thead><tr>`;
-                
-                resultSet.columns.forEach(column => {
-                    html += `<th>${column}</th>`;
-                });
-                html += `</tr></thead>`;
-                
-                html += `<tbody>`;
-                resultSet.data.forEach(row => {
-                    html += `<tr>`;
-                    resultSet.columns.forEach(column => {
-                        html += `<td>${row[column] !== undefined ? row[column] : ''}</td>`;
-                    });
-                    html += `</tr>`;
-                });
-                html += `</tbody>`;
-                html += `</table>`;
-                html += `<div class="row-count"><i class="fas fa-list"></i> Найдено записей: ${resultSet.data.length}</div>`;
-                html += `</div>`;
-            });
-            
-            if (result.dataChanged) {
-                html += `<div class="success-message"><i class="fas fa-sync-alt"></i> Данные в таблицах обновлены. Проверьте вкладку "Данные таблиц".</div>`;
-            }
-            
-            resultsDiv.innerHTML = html;
-        }
-
         // Инициализация при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
             // Инициализируем отображение данных таблицы goods
@@ -1680,23 +881,6 @@ GROUP BY t.name;`
             document.querySelectorAll('.table-tab').forEach(tab => {
                 tab.addEventListener('click', function() {
                     switchTable(this.dataset.table);
-                });
-            });
-            
-            // Добавляем возможность выполнения запросов по нажатию Ctrl+Enter
-            const textareas = document.querySelectorAll('textarea');
-            textareas.forEach((textarea, index) => {
-                textarea.addEventListener('keydown', function(e) {
-                    if (e.ctrlKey && e.key === 'Enter') {
-                        if (this.id === 'freeQuery') {
-                            executeFreeQuery();
-                        } else {
-                            const queryNumber = parseInt(this.id.replace('query', ''));
-                            if (!isNaN(queryNumber)) {
-                                executeQuery(queryNumber);
-                            }
-                        }
-                    }
                 });
             });
             
