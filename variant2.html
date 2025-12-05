@@ -347,70 +347,6 @@
             border-color: var(--primary);
         }
 
-        .query-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-        }
-
-        .btn-secondary {
-            background-color: var(--gray-light);
-            color: var(--dark);
-        }
-
-        .btn-secondary:hover {
-            background-color: #d1d9e0;
-        }
-
-        .results-section {
-            margin-top: 20px;
-            overflow-x: auto;
-        }
-
-        .results-section h3 {
-            margin-bottom: 15px;
-            color: var(--dark);
-        }
-
-        .error-message {
-            background-color: #ffe6e6;
-            color: #d32f2f;
-            padding: 15px;
-            border-radius: var(--border-radius);
-            margin-top: 15px;
-            border-left: 4px solid #d32f2f;
-        }
-
-        .success-message {
-            background-color: #e6f7ee;
-            color: #2e7d32;
-            padding: 15px;
-            border-radius: var(--border-radius);
-            margin-top: 15px;
-            border-left: 4px solid #2e7d32;
-        }
-
         footer {
             margin-top: 50px;
             text-align: center;
@@ -609,19 +545,7 @@
                     Вывести количество сотрудников в каждом отделе. Столбцы «отдел», «количество сотрудников».
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query1">SELECT d.name as отдел, COUNT(e.id) as количество_сотрудников
-FROM departments d
-LEFT JOIN employees e ON d.id = e.department_id
-GROUP BY d.id, d.name;</textarea>
-                    <div class="query-actions">
-                        <button class="btn btn-secondary" onclick="resetQuery(1)">
-                            <i class="fas fa-redo"></i> Сбросить
-                        </button>
-                        <button class="btn btn-primary" onclick="executeQuery(1)">
-                            <i class="fas fa-play"></i> Выполнить запрос
-                        </button>
-                    </div>
-                    <div id="results1" class="results-section"></div>
+                    <textarea id="query1"></textarea>
                 </div>
             </div>
             
@@ -631,19 +555,7 @@ GROUP BY d.id, d.name;</textarea>
                     Вывести всех сотрудников отделов «Отдел продаж» и «IT отдел». Вывести колонки «ФИО», «должность».
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query2">SELECT e.full_name as ФИО, e.position as должность
-FROM employees e
-JOIN departments d ON e.department_id = d.id
-WHERE d.name IN ('Отдел продаж', 'IT отдел');</textarea>
-                    <div class="query-actions">
-                        <button class="btn btn-secondary" onclick="resetQuery(2)">
-                            <i class="fas fa-redo"></i> Сбросить
-                        </button>
-                        <button class="btn btn-primary" onclick="executeQuery(2)">
-                            <i class="fas fa-play"></i> Выполнить запрос
-                        </button>
-                    </div>
-                    <div id="results2" class="results-section"></div>
+                    <textarea id="query2"></textarea>
                 </div>
             </div>
             
@@ -653,20 +565,7 @@ WHERE d.name IN ('Отдел продаж', 'IT отдел');</textarea>
                     Изменить должность сотрудника «Сидоров Алексей Николаевич» на «Старший тестировщик» и повысить зарплату до 70000.
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query3">UPDATE employees
-SET position = 'Старший тестировщик', salary = 70000.00
-WHERE full_name = 'Сидоров Алексей Николаевич';
-
-SELECT * FROM employees WHERE full_name = 'Сидоров Алексей Николаевич';</textarea>
-                    <div class="query-actions">
-                        <button class="btn btn-secondary" onclick="resetQuery(3)">
-                            <i class="fas fa-redo"></i> Сбросить
-                        </button>
-                        <button class="btn btn-primary" onclick="executeQuery(3)">
-                            <i class="fas fa-play"></i> Выполнить запрос
-                        </button>
-                    </div>
-                    <div id="results3" class="results-section"></div>
+                    <textarea id="query3"></textarea>
                 </div>
             </div>
             
@@ -676,20 +575,7 @@ SELECT * FROM employees WHERE full_name = 'Сидоров Алексей Ник�
                     Очистить полностью таблицу «employee_projects».
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query4">-- Два варианта:
--- DELETE FROM employee_projects;
-TRUNCATE TABLE employee_projects;
-
-SELECT * FROM employee_projects;</textarea>
-                    <div class="query-actions">
-                        <button class="btn btn-secondary" onclick="resetQuery(4)">
-                            <i class="fas fa-redo"></i> Сбросить
-                        </button>
-                        <button class="btn btn-primary" onclick="executeQuery(4)">
-                            <i class="fas fa-play"></i> Выполнить запрос
-                        </button>
-                    </div>
-                    <div id="results4" class="results-section"></div>
+                    <textarea id="query4"></textarea>
                 </div>
             </div>
             
@@ -699,18 +585,7 @@ SELECT * FROM employee_projects;</textarea>
                     Вывести все активные проекты с бюджетом более 300000.
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query5">SELECT * 
-FROM projects 
-WHERE status = 'active' AND budget > 300000;</textarea>
-                    <div class="query-actions">
-                        <button class="btn btn-secondary" onclick="resetQuery(5)">
-                            <i class="fas fa-redo"></i> Сбросить
-                        </button>
-                        <button class="btn btn-primary" onclick="executeQuery(5)">
-                            <i class="fas fa-play"></i> Выполнить запрос
-                        </button>
-                    </div>
-                    <div id="results5" class="results-section"></div>
+                    <textarea id="query5"></textarea>
                 </div>
             </div>
             
@@ -720,21 +595,7 @@ WHERE status = 'active' AND budget > 300000;</textarea>
                     Наполнить таблицу «projects» новыми проектами, используя транзакцию.
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query6">BEGIN TRANSACTION;
-INSERT INTO projects (id, name, client, budget, status) VALUES (5005, 'Оптимизация баз данных', 'Банк Восточный', 350000.00, 'active');
-INSERT INTO projects (id, name, client, budget, status) VALUES (5006, 'Разработка мобильной игры', 'ООО ГеймСтудия', 600000.00, 'planning');
-COMMIT TRANSACTION;
-
-SELECT * FROM projects;</textarea>
-                    <div class="query-actions">
-                        <button class="btn btn-secondary" onclick="resetQuery(6)">
-                            <i class="fas fa-redo"></i> Сбросить
-                        </button>
-                        <button class="btn btn-primary" onclick="executeQuery(6)">
-                            <i class="fas fa-play"></i> Выполнить запрос
-                        </button>
-                    </div>
-                    <div id="results6" class="results-section"></div>
+                    <textarea id="query6"></textarea>
                 </div>
             </div>
             
@@ -744,19 +605,7 @@ SELECT * FROM projects;</textarea>
                     Вывести общее количество отработанных часов по каждому проекту. Столбцы «проект», «общее количество часов».
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query7">SELECT p.name as проект, SUM(ep.hours_worked) as общее_количество_часов
-FROM projects p
-LEFT JOIN employee_projects ep ON p.id = ep.project_id
-GROUP BY p.id, p.name;</textarea>
-                    <div class="query-actions">
-                        <button class="btn btn-secondary" onclick="resetQuery(7)">
-                            <i class="fas fa-redo"></i> Сбросить
-                        </button>
-                        <button class="btn btn-primary" onclick="executeQuery(7)">
-                            <i class="fas fa-play"></i> Выполнить запрос
-                        </button>
-                    </div>
-                    <div id="results7" class="results-section"></div>
+                    <textarea id="query7"></textarea>
                 </div>
             </div>
         </section>
@@ -767,7 +616,58 @@ GROUP BY p.id, p.name;</textarea>
     </footer>
 
     <script>
-        // Инициализация данных базы данных для варианта 2
+        // Ответы на задания для авторизованных пользователей
+        const defaultQueries = {
+            1: `SELECT d.name as отдел, COUNT(e.id) as количество_сотрудников
+FROM departments d
+LEFT JOIN employees e ON d.id = e.department_id
+GROUP BY d.id, d.name;`,
+            2: `SELECT e.full_name as ФИО, e.position as должность
+FROM employees e
+JOIN departments d ON e.department_id = d.id
+WHERE d.name IN ('Отдел продаж', 'IT отдел');`,
+            3: `UPDATE employees
+SET position = 'Старший тестировщик', salary = 70000.00
+WHERE full_name = 'Сидоров Алексей Николаевич';
+
+SELECT * FROM employees WHERE full_name = 'Сидоров Алексей Николаевич';`,
+            4: `-- Два варианта:
+-- DELETE FROM employee_projects;
+TRUNCATE TABLE employee_projects;
+
+SELECT * FROM employee_projects;`,
+            5: `SELECT * 
+FROM projects 
+WHERE status = 'active' AND budget > 300000;`,
+            6: `BEGIN TRANSACTION;
+INSERT INTO projects (id, name, client, budget, status) VALUES (5005, 'Оптимизация баз данных', 'Банк Восточный', 350000.00, 'active');
+INSERT INTO projects (id, name, client, budget, status) VALUES (5006, 'Разработка мобильной игры', 'ООО ГеймСтудия', 600000.00, 'planning');
+COMMIT TRANSACTION;
+
+SELECT * FROM projects;`,
+            7: `SELECT p.name as проект, SUM(ep.hours_worked) as общее_количество_часов
+FROM projects p
+LEFT JOIN employee_projects ep ON p.id = ep.project_id
+GROUP BY p.id, p.name;`
+        };
+
+        // Глобальная функция для обновления полей запросов
+        window.updateQueryFields = function(isAuthenticated) {
+            for (let i = 1; i <= 7; i++) {
+                const textarea = document.getElementById(`query${i}`);
+                if (textarea) {
+                    if (isAuthenticated) {
+                        // Для авторизованных: заполняем ответом
+                        textarea.value = defaultQueries[i] || '';
+                    } else {
+                        // Для неавторизованных: оставляем пустым (пользователь может ввести свой запрос)
+                        textarea.value = '';
+                    }
+                }
+            }
+        };
+
+        // Данные для отображения таблиц
         const initDatabase = () => {
             return {
                 employees: [
@@ -906,249 +806,6 @@ GROUP BY p.id, p.name;</textarea>
             renderTableData(tableName);
         }
 
-        // Функция для сброса запроса к исходному виду
-        function resetQuery(queryNumber) {
-            const defaultQueries = {
-                1: `SELECT d.name as отдел, COUNT(e.id) as количество_сотрудников
-FROM departments d
-LEFT JOIN employees e ON d.id = e.department_id
-GROUP BY d.id, d.name;`,
-                2: `SELECT e.full_name as ФИО, e.position as должность
-FROM employees e
-JOIN departments d ON e.department_id = d.id
-WHERE d.name IN ('Отдел продаж', 'IT отдел');`,
-                3: `UPDATE employees
-SET position = 'Старший тестировщик', salary = 70000.00
-WHERE full_name = 'Сидоров Алексей Николаевич';
-
-SELECT * FROM employees WHERE full_name = 'Сидоров Алексей Николаевич';`,
-                4: `-- Два варианта:
--- DELETE FROM employee_projects;
-TRUNCATE TABLE employee_projects;
-
-SELECT * FROM employee_projects;`,
-                5: `SELECT * 
-FROM projects 
-WHERE status = 'active' AND budget > 300000;`,
-                6: `BEGIN TRANSACTION;
-INSERT INTO projects (id, name, client, budget, status) VALUES (5005, 'Оптимизация баз данных', 'Банк Восточный', 350000.00, 'active');
-INSERT INTO projects (id, name, client, budget, status) VALUES (5006, 'Разработка мобильной игры', 'ООО ГеймСтудия', 600000.00, 'planning');
-COMMIT TRANSACTION;
-
-SELECT * FROM projects;`,
-                7: `SELECT p.name as проект, SUM(ep.hours_worked) as общее_количество_часов
-FROM projects p
-LEFT JOIN employee_projects ep ON p.id = ep.project_id
-GROUP BY p.id, p.name;`
-            };
-            
-            document.getElementById(`query${queryNumber}`).value = defaultQueries[queryNumber];
-            document.getElementById(`results${queryNumber}`).innerHTML = '';
-        }
-
-        // Функция для выполнения SQL-запроса
-        function executeQuery(queryNumber) {
-            const query = document.getElementById(`query${queryNumber}`).value;
-            const resultsDiv = document.getElementById(`results${queryNumber}`);
-            
-            // Очищаем предыдущие результаты
-            resultsDiv.innerHTML = '<div class="success-message"><i class="fas fa-spinner fa-spin"></i> Выполнение запроса...</div>';
-            
-            // Имитация выполнения запроса с задержкой
-            setTimeout(() => {
-                try {
-                    const result = simulateSQLExecution(query, queryNumber);
-                    displayResults(resultsDiv, result);
-                    
-                    // Обновляем отображение таблиц, так как данные могли измениться
-                    renderTableData(currentTable);
-                } catch (error) {
-                    resultsDiv.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-circle"></i> Ошибка: ${error.message}</div>`;
-                }
-            }, 500);
-        }
-
-        // Функция для имитации выполнения SQL-запроса
-        function simulateSQLExecution(query, queryNumber) {
-            // Упрощенная имитация SQL-запросов
-            const queries = query.split(';').filter(q => q.trim() !== '');
-            let result = [];
-            let dataChanged = false;
-            
-            for (let q of queries) {
-                q = q.trim();
-                
-                // Убираем комментарии
-                q = q.replace(/--.*$/gm, '');
-                
-                if (q.toUpperCase().startsWith('SELECT')) {
-                    // Обработка SELECT запросов
-                    if (q.includes('COUNT(e.id)') && q.includes('FROM departments d')) {
-                        // Запрос 1
-                        const deptCounts = [];
-                        for (let dept of database.departments) {
-                            const count = database.employees.filter(emp => emp.department_id === dept.id).length;
-                            deptCounts.push({
-                                отдел: dept.name,
-                                количество_сотрудников: count
-                            });
-                        }
-                        result.push({
-                            columns: ['отдел', 'количество_сотрудников'],
-                            data: deptCounts
-                        });
-                    } else if (q.includes("d.name IN ('Отдел продаж', 'IT отдел')")) {
-                        // Запрос 2
-                        const filteredEmployees = [];
-                        for (let emp of database.employees) {
-                            const dept = database.departments.find(d => d.id === emp.department_id);
-                            if (dept && (dept.name === 'Отдел продаж' || dept.name === 'IT отдел')) {
-                                filteredEmployees.push({
-                                    ФИО: emp.full_name,
-                                    должность: emp.position
-                                });
-                            }
-                        }
-                        result.push({
-                            columns: ['ФИО', 'должность'],
-                            data: filteredEmployees
-                        });
-                    } else if (q.includes('FROM employees WHERE full_name =')) {
-                        // Запрос 3 (после UPDATE)
-                        const sidorov = database.employees.find(emp => emp.full_name === 'Сидоров Алексей Николаевич');
-                        if (sidorov) {
-                            result.push({
-                                columns: ['id', 'full_name', 'department_id', 'position', 'salary'],
-                                data: [sidorov]
-                            });
-                        }
-                    } else if (q.includes('FROM employee_projects') && !q.includes('JOIN')) {
-                        // Запрос 4
-                        result.push({
-                            columns: ['employee_id', 'project_id', 'role', 'hours_worked'],
-                            data: [...database.employee_projects]
-                        });
-                    } else if (q.includes('status = \'active\' AND budget > 300000')) {
-                        // Запрос 5
-                        const activeProjects = database.projects.filter(p => p.status === 'active' && p.budget > 300000);
-                        result.push({
-                            columns: ['id', 'name', 'client', 'budget', 'status'],
-                            data: activeProjects
-                        });
-                    } else if (q.includes('FROM projects') && !q.includes('JOIN')) {
-                        // Запрос 6 (после INSERT)
-                        result.push({
-                            columns: ['id', 'name', 'client', 'budget', 'status'],
-                            data: [...database.projects]
-                        });
-                    } else if (q.includes('SUM(ep.hours_worked)') && q.includes('FROM projects p')) {
-                        // Запрос 7
-                        const projectHours = [];
-                        for (let project of database.projects) {
-                            const hours = database.employee_projects
-                                .filter(ep => ep.project_id === project.id)
-                                .reduce((sum, ep) => sum + ep.hours_worked, 0);
-                            projectHours.push({
-                                проект: project.name,
-                                общее_количество_часов: hours
-                            });
-                        }
-                        result.push({
-                            columns: ['проект', 'общее_количество_часов'],
-                            data: projectHours
-                        });
-                    }
-                } else if (q.toUpperCase().startsWith('UPDATE')) {
-                    // Обработка UPDATE запросов
-                    dataChanged = true;
-                    if (q.includes("position = 'Старший тестировщик'")) {
-                        // Запрос 3
-                        const index = database.employees.findIndex(emp => emp.full_name === 'Сидоров Алексей Николаевич');
-                        if (index !== -1) {
-                            database.employees[index].position = 'Старший тестировщик';
-                            database.employees[index].salary = 70000.00;
-                        }
-                    }
-                } else if (q.toUpperCase().startsWith('TRUNCATE') || q.toUpperCase().startsWith('DELETE')) {
-                    // Обработка TRUNCATE/DELETE запросов
-                    dataChanged = true;
-                    if (q.includes('employee_projects')) {
-                        // Запрос 4
-                        database.employee_projects = [];
-                    }
-                } else if (q.toUpperCase().includes('BEGIN TRANSACTION') || q.toUpperCase().includes('INSERT INTO')) {
-                    // Обработка INSERT запросов
-                    dataChanged = true;
-                    if (q.includes('INSERT INTO projects')) {
-                        // Запрос 6
-                        const insertRegex = /INSERT INTO projects \(id, name, client, budget, status\) VALUES \((\d+), '([^']+)', '([^']+)', ([\d.]+), '([^']+)'\)/g;
-                        let match;
-                        while ((match = insertRegex.exec(q)) !== null) {
-                            database.projects.push({
-                                id: parseInt(match[1]),
-                                name: match[2],
-                                client: match[3],
-                                budget: parseFloat(match[4]),
-                                status: match[5]
-                            });
-                        }
-                    }
-                }
-            }
-            
-            return { results: result, dataChanged };
-        }
-
-        // Функция для отображения результатов
-        function displayResults(resultsDiv, result) {
-            if (result.results.length === 0) {
-                resultsDiv.innerHTML = '<div class="success-message"><i class="fas fa-check-circle"></i> Запрос выполнен успешно. Нет данных для отображения.</div>';
-                return;
-            }
-            
-            let html = '';
-            
-            // Отображаем все результаты запроса (могут быть несколько, если в скрипте несколько SELECT)
-            result.results.forEach((resultSet, index) => {
-                if (resultSet.data.length === 0) {
-                    html += `<div class="success-message"><i class="fas fa-check-circle"></i> Запрос выполнен успешно. Нет данных для отображения.</div>`;
-                    return;
-                }
-                
-                html += `<h3>Результат ${result.results.length > 1 ? index + 1 : ''}</h3>`;
-                html += `<div class="table-data-container">`;
-                html += `<table>`;
-                html += `<thead><tr>`;
-                
-                // Заголовки таблицы
-                resultSet.columns.forEach(column => {
-                    html += `<th>${column}</th>`;
-                });
-                html += `</tr></thead>`;
-                
-                // Данные таблицы
-                html += `<tbody>`;
-                resultSet.data.forEach(row => {
-                    html += `<tr>`;
-                    resultSet.columns.forEach(column => {
-                        html += `<td>${row[column] !== undefined ? row[column] : ''}</td>`;
-                    });
-                    html += `</tr>`;
-                });
-                html += `</tbody>`;
-                html += `</table>`;
-                html += `<div class="row-count"><i class="fas fa-list"></i> Найдено записей: ${resultSet.data.length}</div>`;
-                html += `</div>`;
-            });
-            
-            // Добавляем сообщение, если данные были изменены
-            if (result.dataChanged) {
-                html += `<div class="success-message"><i class="fas fa-sync-alt"></i> Данные в таблицах обновлены. Проверьте вкладку "Данные таблиц".</div>`;
-            }
-            
-            resultsDiv.innerHTML = html;
-        }
-
         // Инициализация при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
             // Инициализируем отображение данных таблицы employees
@@ -1160,19 +817,6 @@ GROUP BY p.id, p.name;`
                     switchTable(this.dataset.table);
                 });
             });
-            
-            // Добавляем возможность выполнения запросов по нажатию Ctrl+Enter
-            const textareas = document.querySelectorAll('textarea');
-            textareas.forEach((textarea, index) => {
-                textarea.addEventListener('keydown', function(e) {
-                    if (e.ctrlKey && e.key === 'Enter') {
-                        executeQuery(index + 1);
-                    }
-                });
-            });
-            
-            // Показываем начальные данные в первой таблице
-            executeQuery(1);
         });
     </script>
 </body>
