@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SQL Table Explorer | Работа с базой данных</title>
+    <title>SQL Database Explorer | Главная</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -31,7 +31,9 @@
             background-color: #f5f7fb;
             color: var(--dark);
             line-height: 1.6;
-            padding-bottom: 50px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .container {
@@ -75,267 +77,91 @@
             font-size: 2.8rem;
         }
 
-        .schema-diagram {
-            background-color: white;
-            border-radius: var(--border-radius);
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: var(--box-shadow);
-        }
-
-        .schema-diagram h2 {
-            color: var(--primary);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .schema-diagram h2 i {
-            color: var(--secondary);
-        }
-
-        .tables-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-        }
-
-        .table-card {
-            background-color: white;
-            border-radius: var(--border-radius);
-            padding: 20px;
+        .hero {
             flex: 1;
-            min-width: 250px;
-            max-width: 320px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem 0;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            margin-bottom: 3rem;
+        }
+
+        .hero h2 {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        .options-container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .option-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
             box-shadow: var(--box-shadow);
             border-top: 5px solid var(--primary);
             transition: var(--transition);
-        }
-
-        .table-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-        }
-
-        .table-card h3 {
-            color: var(--primary);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .table-card h3 i {
-            color: var(--secondary);
-        }
-
-        .fields {
-            margin-top: 15px;
-        }
-
-        .field {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px dashed var(--gray-light);
-        }
-
-        .field-name {
-            font-weight: 600;
-            color: var(--dark);
-        }
-
-        .field-type {
-            color: var(--gray);
-            font-size: 0.9rem;
-        }
-
-        .relationships {
-            margin-top: 30px;
             text-align: center;
-            font-weight: 600;
-            color: var(--secondary);
-        }
-
-        .table-data-section {
-            background-color: white;
-            border-radius: var(--border-radius);
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: var(--box-shadow);
-        }
-
-        .table-data-section h2 {
-            color: var(--primary);
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .table-data-section h2 i {
-            color: var(--secondary);
-        }
-
-        .table-selector {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 25px;
-        }
-
-        .table-tab {
-            padding: 10px 20px;
-            background-color: var(--light);
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: var(--transition);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .table-tab.active {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .table-tab:hover:not(.active) {
-            background-color: var(--gray-light);
-        }
-
-        .table-data-container {
-            overflow-x: auto;
-            border-radius: var(--border-radius);
-            box-shadow: 0 0 0 1px var(--gray-light);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 600px;
-        }
-
-        th {
-            background-color: var(--primary);
-            color: white;
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-            position: sticky;
-            top: 0;
-        }
-
-        td {
-            padding: 15px;
-            border-bottom: 1px solid var(--gray-light);
-        }
-
-        tr:nth-child(even) {
-            background-color: #f8f9fa;
-        }
-
-        tr:hover {
-            background-color: #e9f7fe;
-        }
-
-        .row-count {
-            margin-top: 15px;
-            font-size: 0.9rem;
-            color: var(--gray);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .queries-section {
-            background-color: white;
-            border-radius: var(--border-radius);
-            padding: 25px;
-            margin-top: 10px;
-            box-shadow: var(--box-shadow);
-        }
-
-        .queries-section h2 {
-            color: var(--primary);
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .queries-section h2 i {
-            color: var(--secondary);
-        }
-
-        .query-item {
-            background-color: var(--light);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin-bottom: 25px;
-            border-left: 4px solid var(--primary);
-        }
-
-        .query-question {
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: var(--dark);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .query-question i {
-            color: var(--primary);
-        }
-
-        .query-number {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background-color: var(--primary);
-            color: white;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            font-size: 0.9rem;
-            margin-right: 10px;
-        }
-
-        .query-input-area {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-        }
-
-        textarea {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid var(--gray-light);
-            border-radius: var(--border-radius);
-            font-family: monospace;
-            font-size: 1rem;
-            resize: vertical;
-            min-height: 100px;
-            transition: var(--transition);
-        }
-
-        textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .query-actions {
-            display: flex;
-            justify-content: space-between;
             align-items: center;
+        }
+
+        .option-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .option-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .option-icon i {
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .option-card h3 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .option-card p {
+            color: var(--gray);
+            margin-bottom: 25px;
+            line-height: 1.6;
         }
 
         .btn {
-            padding: 10px 20px;
+            padding: 15px 40px;
             border: none;
             border-radius: var(--border-radius);
             font-weight: 600;
@@ -343,7 +169,10 @@
             transition: var(--transition);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            font-size: 1.1rem;
+            text-decoration: none;
+            margin-top: auto;
         }
 
         .btn-primary {
@@ -353,43 +182,63 @@
 
         .btn-primary:hover {
             background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
         }
 
         .btn-secondary {
-            background-color: var(--gray-light);
-            color: var(--dark);
+            background-color: var(--secondary);
+            color: white;
         }
 
         .btn-secondary:hover {
-            background-color: #d1d9e0;
+            background-color: #5a0a9c;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(114, 9, 183, 0.3);
         }
 
-        .results-section {
-            margin-top: 20px;
-            overflow-x: auto;
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
         }
 
-        .results-section h3 {
-            margin-bottom: 15px;
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+        }
+
+        .feature i {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .back-btn {
+            margin-top: 2rem;
+            padding: 10px 25px;
+            background-color: var(--gray-light);
             color: var(--dark);
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
         }
 
-        .error-message {
-            background-color: #ffe6e6;
-            color: #d32f2f;
-            padding: 15px;
-            border-radius: var(--border-radius);
-            margin-top: 15px;
-            border-left: 4px solid #d32f2f;
-        }
-
-        .success-message {
-            background-color: #e6f7ee;
-            color: #2e7d32;
-            padding: 15px;
-            border-radius: var(--border-radius);
-            margin-top: 15px;
-            border-left: 4px solid #2e7d32;
+        .back-btn:hover {
+            background-color: #d1d9e0;
         }
 
         footer {
@@ -397,7 +246,7 @@
             text-align: center;
             color: var(--gray);
             font-size: 0.9rem;
-            padding-top: 20px;
+            padding: 20px 0;
             border-top: 1px solid var(--gray-light);
         }
 
@@ -408,21 +257,22 @@
                 gap: 20px;
             }
             
-            .tables-container {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .table-card {
-                max-width: 100%;
-            }
-            
             h1 {
                 font-size: 2rem;
             }
             
-            .table-selector {
-                justify-content: center;
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            .options-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .option-card {
+                max-width: 100%;
+                padding: 30px 20px;
             }
         }
     </style>
@@ -434,700 +284,73 @@
                 <div class="logo">
                     <i class="fas fa-database"></i>
                     <div>
-                        <h1>SQL Table Explorer</h1>
-                        <p class="subtitle">Интерактивная работа с базой данных товаров и складов</p>
+                        <h1>SQL Database Explorer</h1>
+                        <p class="subtitle">Интерактивная работа с базами данных</p>
                     </div>
                 </div>
                 <div class="db-info">
-                    <p><i class="fas fa-table"></i> 4 таблицы | <i class="fas fa-list"></i> 7 запросов</p>
+                    <p><i class="fas fa-laptop-code"></i> 2 варианта баз данных</p>
                 </div>
             </div>
         </div>
     </header>
 
     <main class="container">
-        <section class="schema-diagram">
-            <h2><i class="fas fa-project-diagram"></i> Схема базы данных</h2>
-            <p>Таблицы связаны между собой через ключи: goods.id → stock.goods_id, warehouses.id → stock.warehouse_id, types.id → goods.type_id</p>
-            
-            <div class="tables-container">
-                <div class="table-card">
-                    <h3><i class="fas fa-box"></i> goods</h3>
-                    <p>Таблица товаров</p>
-                    <div class="fields">
-                        <div class="field">
-                            <span class="field-name">id</span>
-                            <span class="field-type">INT PRIMARY KEY</span>
-                        </div>
-                        <div class="field">
-                            <span class="field-name">name</span>
-                            <span class="field-type">VARCHAR(100)</span>
-                        </div>
-                        <div class="field">
-                            <span class="field-name">type_id</span>
-                            <span class="field-type">INT</span>
-                        </div>
-                        <div class="field">
-                            <span class="field-name">brand</span>
-                            <span class="field-type">VARCHAR(100)</span>
-                        </div>
+        <section class="hero">
+            <div class="hero-content">
+                <h2>Выберите вариант базы данных для изучения</h2>
+                <p>Изучайте SQL на практике с реальными примерами. Выполняйте запросы, исследуйте данные и наблюдайте результаты в реальном времени.</p>
+                
+                <div class="features">
+                    <div class="feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Интерактивные запросы</span>
                     </div>
+                    <div class="feature">
+                        <i class="fas fa-table"></i>
+                        <span>Просмотр данных</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-project-diagram"></i>
+                        <span>Схемы баз данных</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-play-circle"></i>
+                        <span>Выполнение SQL в браузере</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="options-container">
+                <div class="option-card">
+                    <div class="option-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <h3>Вариант 1</h3>
+                    <p>База данных товаров и складов. Изучайте работу с товарами, остатками на складах, типами товаров. Включает 4 таблицы и 7 практических запросов.</p>
+                    <a href="variant1.html" class="btn btn-primary">
+                        <i class="fas fa-play"></i>
+                        Открыть вариант 1
+                    </a>
                 </div>
                 
-                <div class="table-card">
-                    <h3><i class="fas fa-warehouse"></i> stock</h3>
-                    <p>Таблица остатков на складах</p>
-                    <div class="fields">
-                        <div class="field">
-                            <span class="field-name">goods_id</span>
-                            <span class="field-type">INT</span>
-                        </div>
-                        <div class="field">
-                            <span class="field-name">warehouse_id</span>
-                            <span class="field-type">INT</span>
-                        </div>
-                        <div class="field">
-                            <span class="field-name">quantity</span>
-                            <span class="field-type">INT</span>
-                        </div>
+                <div class="option-card">
+                    <div class="option-icon">
+                        <i class="fas fa-users"></i>
                     </div>
-                </div>
-                
-                <div class="table-card">
-                    <h3><i class="fas fa-building"></i> warehouses</h3>
-                    <p>Таблица складов</p>
-                    <div class="fields">
-                        <div class="field">
-                            <span class="field-name">id</span>
-                            <span class="field-type">INT PRIMARY KEY</span>
-                        </div>
-                        <div class="field">
-                            <span class="field-name">name</span>
-                            <span class="field-type">VARCHAR(100)</span>
-                        </div>
-                        <div class="field">
-                            <span class="field-name">address</span>
-                            <span class="field-type">VARCHAR(100)</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="table-card">
-                    <h3><i class="fas fa-tags"></i> types</h3>
-                    <p>Таблица типов товаров</p>
-                    <div class="fields">
-                        <div class="field">
-                            <span class="field-name">id</span>
-                            <span class="field-type">INT PRIMARY KEY</span>
-                        </div>
-                        <div class="field">
-                            <span class="field-name">name</span>
-                            <span class="field-type">VARCHAR(100)</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="relationships">
-                <p><i class="fas fa-link"></i> Связи: goods.type_id → types.id | stock.goods_id → goods.id | stock.warehouse_id → warehouses.id</p>
-            </div>
-        </section>
-
-        <!-- Новая секция: данные таблиц -->
-        <section class="table-data-section">
-            <h2><i class="fas fa-table"></i> Данные таблиц</h2>
-            
-            <div class="table-selector">
-                <div class="table-tab active" data-table="goods">
-                    <i class="fas fa-box"></i> goods
-                </div>
-                <div class="table-tab" data-table="stock">
-                    <i class="fas fa-warehouse"></i> stock
-                </div>
-                <div class="table-tab" data-table="warehouses">
-                    <i class="fas fa-building"></i> warehouses
-                </div>
-                <div class="table-tab" data-table="types">
-                    <i class="fas fa-tags"></i> types
-                </div>
-                <div class="table-tab" data-table="all">
-                    <i class="fas fa-list"></i> Все таблицы
-                </div>
-            </div>
-            
-            <div id="table-data-container">
-                <!-- Здесь будет отображаться содержимое выбранной таблицы -->
-            </div>
-        </section>
-
-        <section class="queries-section">
-            <h2><i class="fas fa-code"></i> SQL Запросы к базе данных</h2>
-            
-            <div class="query-item">
-                <div class="query-question">
-                    <span class="query-number">1</span>
-                    Вывести количество артикулов (уникальных единиц товара) бренда Xiaomi. Столбцы «бренд», «количество».
-                </div>
-                <div class="query-input-area">
-                    <textarea id="query1">SELECT brand, COUNT(DISTINCT id) as количество
-FROM goods
-WHERE brand = 'Xiaomi'
-GROUP BY brand;</textarea>
-                    <div class="query-actions">
-                        <button class="btn btn-secondary" onclick="resetQuery(1)">
-                            <i class="fas fa-redo"></i> Сбросить
-                        </button>
-                        <button class="btn btn-primary" onclick="executeQuery(1)">
-                            <i class="fas fa-play"></i> Выполнить запрос
-                        </button>
-                    </div>
-                    <div id="results1" class="results-section"></div>
-                </div>
-            </div>
-            
-            <div class="query-item">
-                <div class="query-question">
-                    <span class="query-number">2</span>
-                    Вывести все товары брендов Xiaomi и Adidas. Вывести колонки имя_товара, бренд_товара.
-                </div>
-                <div class="query-input-area">
-                    <textarea id="query2">SELECT name, brand
-FROM goods
-WHERE brand IN ('Xiaomi', 'Adidas');</textarea>
-                    <div class="query-actions">
-                        <button class="btn btn-secondary" onclick="resetQuery(2)">
-                            <i class="fas fa-redo"></i> Сбросить
-                        </button>
-                        <button class="btn btn-primary" onclick="executeQuery(2)">
-                            <i class="fas fa-play"></i> Выполнить запрос
-                        </button>
-                    </div>
-                    <div id="results2" class="results-section"></div>
-                </div>
-            </div>
-            
-            <div class="query-item">
-                <div class="query-question">
-                    <span class="query-number">3</span>
-                    Заменить имя товара «Наушники беспроводные Xiaomi Airdots 2» на «Наушники беспроводные Huawei Airdots» и бренд на «Huawei».
-                </div>
-                <div class="query-input-area">
-                    <textarea id="query3">UPDATE goods
-SET name = 'Наушники беспроводные Huawei Airdots', brand = 'Huawei'
-WHERE name = 'Наушники беспроводные Xiaomi Airdots 2';
-
-SELECT * FROM goods WHERE brand = 'Huawei';</textarea>
-                    <div class="query-actions">
-                        <button class="btn btn-secondary" onclick="resetQuery(3)">
-                            <i class="fas fa-redo"></i> Сбросить
-                        </button>
-                        <button class="btn btn-primary" onclick="executeQuery(3)">
-                            <i class="fas fa-play"></i> Выполнить запрос
-                        </button>
-                    </div>
-                    <div id="results3" class="results-section"></div>
-                </div>
-            </div>
-            
-            <div class="query-item">
-                <div class="query-question">
-                    <span class="query-number">4</span>
-                    Очистить полностью таблицу «warehouses».
-                </div>
-                <div class="query-input-area">
-                    <textarea id="query4">-- Два варианта:
--- DELETE FROM warehouses;
-TRUNCATE TABLE warehouses;
-
-SELECT * FROM warehouses;</textarea>
-                    <div class="query-actions">
-                        <button class="btn btn-secondary" onclick="resetQuery(4)">
-                            <i class="fas fa-redo"></i> Сбросить
-                        </button>
-                        <button class="btn btn-primary" onclick="executeQuery(4)">
-                            <i class="fas fa-play"></i> Выполнить запрос
-                        </button>
-                    </div>
-                    <div id="results4" class="results-section"></div>
-                </div>
-            </div>
-            
-            <div class="query-item">
-                <div class="query-question">
-                    <span class="query-number">5</span>
-                    Вывести все товары, которые лежат на складах: Варшавка, Пушкино. Вывести колонки имя_склада, имя_товара, кол-во_товара.
-                </div>
-                <div class="query-input-area">
-                    <textarea id="query5">SELECT w.name, g.name, s.quantity
-FROM warehouses w
-JOIN stock s ON w.id = s.warehouse_id
-JOIN goods g ON s.goods_id = g.id
-WHERE w.name IN ('Варшавка', 'Пушкино');</textarea>
-                    <div class="query-actions">
-                        <button class="btn btn-secondary" onclick="resetQuery(5)">
-                            <i class="fas fa-redo"></i> Сбросить
-                        </button>
-                        <button class="btn btn-primary" onclick="executeQuery(5)">
-                            <i class="fas fa-play"></i> Выполнить запрос
-                        </button>
-                    </div>
-                    <div id="results5" class="results-section"></div>
-                </div>
-            </div>
-            
-            <div class="query-item">
-                <div class="query-question">
-                    <span class="query-number">6</span>
-                    Наполнить таблицу «warehouses» данными, используя транзакцию.
-                </div>
-                <div class="query-input-area">
-                    <textarea id="query6">BEGIN TRANSACTION;
-INSERT INTO warehouses (id, name) VALUES (1765, 'Варшавский');
-INSERT INTO warehouses (id, name) VALUES (2908, 'Новобарашковский');
-INSERT INTO warehouses (id, name) VALUES (3786, 'Сити');
-COMMIT TRANSACTION;
-
-SELECT * FROM warehouses;</textarea>
-                    <div class="query-actions">
-                        <button class="btn btn-secondary" onclick="resetQuery(6)">
-                            <i class="fas fa-redo"></i> Сбросить
-                        </button>
-                        <button class="btn btn-primary" onclick="executeQuery(6)">
-                            <i class="fas fa-play"></i> Выполнить запрос
-                        </button>
-                    </div>
-                    <div id="results6" class="results-section"></div>
-                </div>
-            </div>
-            
-            <div class="query-item">
-                <div class="query-question">
-                    <span class="query-number">7</span>
-                    Вывести количество товаров на всех складах с типами «Обувь» и «Аксессуары для телефонов». Столбцы «тип товара» и «количество».
-                </div>
-                <div class="query-input-area">
-                    <textarea id="query7">SELECT t.name, SUM(s.quantity) as количество
-FROM stock s
-JOIN goods g ON s.goods_id = g.id
-JOIN types t ON g.type_id = t.id
-WHERE t.name IN ('Обувь', 'Аксессуары для телефонов')
-GROUP BY t.name;</textarea>
-                    <div class="query-actions">
-                        <button class="btn btn-secondary" onclick="resetQuery(7)">
-                            <i class="fas fa-redo"></i> Сбросить
-                        </button>
-                        <button class="btn btn-primary" onclick="executeQuery(7)">
-                            <i class="fas fa-play"></i> Выполнить запрос
-                        </button>
-                    </div>
-                    <div id="results7" class="results-section"></div>
+                    <h3>Вариант 2</h3>
+                    <p>База данных сотрудников и проектов. Изучайте работу с сотрудниками, проектами, отделами и назначениями. Включает 4 таблицы и 7 практических запросов.</p>
+                    <a href="variant2.html" class="btn btn-secondary">
+                        <i class="fas fa-play"></i>
+                        Открыть вариант 2
+                    </a>
                 </div>
             </div>
         </section>
     </main>
 
     <footer class="container">
-        <p>SQL Table Explorer &copy; 2023 | Демонстрация работы с базой данных товаров и складов</p>
+        <p>SQL Database Explorer &copy; 2023 | Практическое изучение SQL и баз данных</p>
     </footer>
-
-    <script>
-        // Инициализация данных базы данных
-        const initDatabase = () => {
-            return {
-                goods: [
-                    {id: 746589, name: '15.6 Ноутбук Xiaomi RedmiBook Pro 15 2022', type_id: 1, brand: 'Xiaomi'},
-                    {id: 917364, name: 'Складная подставка для ноутбука охлаждающая', type_id: 2, brand: 'Lemleo'},
-                    {id: 887012, name: 'МФУ Лазерное Brother DCPL2540DW', type_id: 3, brand: 'Brother'},
-                    {id: 772041, name: 'Кроссовки adidas', type_id: 4, brand: 'Adidas'},
-                    {id: 923478, name: 'Косметичка Toplash', type_id: 5, brand: 'Toplash'},
-                    {id: 134789, name: 'Сухой корм для щенков миниатюрных пород до 10 мес', type_id: 6, brand: 'Royal canin'},
-                    {id: 299293, name: 'Наушники беспроводные Xiaomi Airdots 2', type_id: 7, brand: 'Xiaomi'}
-                ],
-                stock: [
-                    {goods_id: 746589, warehouse_id: 1238, quantity: 1},
-                    {goods_id: 917364, warehouse_id: 1311, quantity: 8},
-                    {goods_id: 887012, warehouse_id: 1384, quantity: 7},
-                    {goods_id: 887012, warehouse_id: 1299, quantity: 2},
-                    {goods_id: 887012, warehouse_id: 1311, quantity: 5},
-                    {goods_id: 299293, warehouse_id: 1299, quantity: 9}
-                ],
-                warehouses: [
-                    {id: 1238, name: 'Варшавка', address: 'Варшавское шоссе, 125с13'},
-                    {id: 1299, name: 'Барашкино', address: 'Открытое шоссе, 6Ас2'},
-                    {id: 1311, name: 'Тестовский', address: 'Пресненская набережная, 10с1'},
-                    {id: 1384, name: 'Пушкино', address: 'Крыловская улица, 3'}
-                ],
-                types: [
-                    {id: 1, name: 'Ноутбуки'},
-                    {id: 2, name: 'Аксессуары для ноутбуков'},
-                    {id: 3, name: 'Принтеры'},
-                    {id: 4, name: 'Обувь'},
-                    {id: 5, name: 'Косметика'},
-                    {id: 6, name: 'Корм для собак'},
-                    {id: 7, name: 'Аксессуары для телефонов'}
-                ]
-            };
-        };
-
-        let database = initDatabase();
-        let currentTable = 'goods'; // По умолчанию показываем таблицу goods
-
-        // Функция для отображения содержимого таблицы
-        function renderTableData(tableName) {
-            const container = document.getElementById('table-data-container');
-            
-            if (tableName === 'all') {
-                // Показать все таблицы
-                let html = '';
-                
-                ['goods', 'stock', 'warehouses', 'types'].forEach(tblName => {
-                    const tableData = database[tblName];
-                    const tableColumns = Object.keys(tableData[0] || {});
-                    
-                    html += `<div class="table-data-container" style="margin-bottom: 30px;">`;
-                    html += `<h3 style="color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-table"></i> Таблица ${tblName}</h3>`;
-                    html += `<table>`;
-                    html += `<thead><tr>`;
-                    
-                    // Заголовки таблицы
-                    tableColumns.forEach(column => {
-                        html += `<th>${column}</th>`;
-                    });
-                    html += `</tr></thead>`;
-                    
-                    // Данные таблицы
-                    html += `<tbody>`;
-                    tableData.forEach(row => {
-                        html += `<tr>`;
-                        tableColumns.forEach(column => {
-                            html += `<td>${row[column]}</td>`;
-                        });
-                        html += `</tr>`;
-                    });
-                    html += `</tbody>`;
-                    html += `</table>`;
-                    html += `<div class="row-count"><i class="fas fa-list"></i> Всего записей: ${tableData.length}</div>`;
-                    html += `</div>`;
-                });
-                
-                container.innerHTML = html;
-                return;
-            }
-            
-            const tableData = database[tableName];
-            const tableColumns = Object.keys(tableData[0] || {});
-            
-            let html = `<div class="table-data-container">`;
-            html += `<table>`;
-            html += `<thead><tr>`;
-            
-            // Заголовки таблицы
-            tableColumns.forEach(column => {
-                html += `<th>${column}</th>`;
-            });
-            html += `</tr></thead>`;
-            
-            // Данные таблицы
-            html += `<tbody>`;
-            tableData.forEach(row => {
-                html += `<tr>`;
-                tableColumns.forEach(column => {
-                    html += `<td>${row[column]}</td>`;
-                });
-                html += `</tr>`;
-            });
-            html += `</tbody>`;
-            html += `</table>`;
-            html += `<div class="row-count"><i class="fas fa-list"></i> Всего записей: ${tableData.length}</div>`;
-            html += `</div>`;
-            
-            container.innerHTML = html;
-        }
-
-        // Функция для переключения вкладок таблиц
-        function switchTable(tableName) {
-            currentTable = tableName;
-            
-            // Обновляем активную вкладку
-            document.querySelectorAll('.table-tab').forEach(tab => {
-                if (tab.dataset.table === tableName) {
-                    tab.classList.add('active');
-                } else {
-                    tab.classList.remove('active');
-                }
-            });
-            
-            // Отображаем данные выбранной таблицы
-            renderTableData(tableName);
-        }
-
-        // Функция для сброса запроса к исходному виду
-        function resetQuery(queryNumber) {
-            const defaultQueries = {
-                1: `SELECT brand, COUNT(DISTINCT id) as количество
-FROM goods
-WHERE brand = 'Xiaomi'
-GROUP BY brand;`,
-                2: `SELECT name, brand
-FROM goods
-WHERE brand IN ('Xiaomi', 'Adidas');`,
-                3: `UPDATE goods
-SET name = 'Наушники беспроводные Huawei Airdots', brand = 'Huawei'
-WHERE name = 'Наушники беспроводные Xiaomi Airdots 2';
-
-SELECT * FROM goods WHERE brand = 'Huawei';`,
-                4: `-- Два варианта:
--- DELETE FROM warehouses;
-TRUNCATE TABLE warehouses;
-
-SELECT * FROM warehouses;`,
-                5: `SELECT w.name, g.name, s.quantity
-FROM warehouses w
-JOIN stock s ON w.id = s.warehouse_id
-JOIN goods g ON s.goods_id = g.id
-WHERE w.name IN ('Варшавка', 'Пушкино');`,
-                6: `BEGIN TRANSACTION;
-INSERT INTO warehouses (id, name) VALUES (1765, 'Варшавский');
-INSERT INTO warehouses (id, name) VALUES (2908, 'Новобарашковский');
-INSERT INTO warehouses (id, name) VALUES (3786, 'Сити');
-COMMIT TRANSACTION;
-
-SELECT * FROM warehouses;`,
-                7: `SELECT t.name, SUM(s.quantity) as количество
-FROM stock s
-JOIN goods g ON s.goods_id = g.id
-JOIN types t ON g.type_id = t.id
-WHERE t.name IN ('Обувь', 'Аксессуары для телефонов')
-GROUP BY t.name;`
-            };
-            
-            document.getElementById(`query${queryNumber}`).value = defaultQueries[queryNumber];
-            document.getElementById(`results${queryNumber}`).innerHTML = '';
-        }
-
-        // Функция для выполнения SQL-запроса
-        function executeQuery(queryNumber) {
-            const query = document.getElementById(`query${queryNumber}`).value;
-            const resultsDiv = document.getElementById(`results${queryNumber}`);
-            
-            // Очищаем предыдущие результаты
-            resultsDiv.innerHTML = '<div class="success-message"><i class="fas fa-spinner fa-spin"></i> Выполнение запроса...</div>';
-            
-            // Имитация выполнения запроса с задержкой
-            setTimeout(() => {
-                try {
-                    const result = simulateSQLExecution(query, queryNumber);
-                    displayResults(resultsDiv, result);
-                    
-                    // Обновляем отображение таблиц, так как данные могли измениться
-                    renderTableData(currentTable);
-                } catch (error) {
-                    resultsDiv.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-circle"></i> Ошибка: ${error.message}</div>`;
-                }
-            }, 500);
-        }
-
-        // Функция для имитации выполнения SQL-запроса
-        function simulateSQLExecution(query, queryNumber) {
-            // Упрощенная имитация SQL-запросов
-            const queries = query.split(';').filter(q => q.trim() !== '');
-            let result = [];
-            let dataChanged = false;
-            
-            for (let q of queries) {
-                q = q.trim();
-                
-                // Убираем комментарии
-                q = q.replace(/--.*$/gm, '');
-                
-                if (q.toUpperCase().startsWith('SELECT')) {
-                    // Обработка SELECT запросов
-                    if (q.includes('COUNT(DISTINCT id)') && q.includes("brand = 'Xiaomi'")) {
-                        // Запрос 1
-                        const xiaomiCount = database.goods.filter(g => g.brand === 'Xiaomi').length;
-                        result.push({
-                            columns: ['brand', 'количество'],
-                            data: [{brand: 'Xiaomi', количество: xiaomiCount}]
-                        });
-                    } else if (q.includes("brand IN ('Xiaomi', 'Adidas')")) {
-                        // Запрос 2
-                        const filteredGoods = database.goods.filter(g => g.brand === 'Xiaomi' || g.brand === 'Adidas');
-                        result.push({
-                            columns: ['name', 'brand'],
-                            data: filteredGoods.map(g => ({name: g.name, brand: g.brand}))
-                        });
-                    } else if (q.includes('WHERE brand = \'Huawei\'')) {
-                        // Запрос 3 (после UPDATE)
-                        const huaweiGoods = database.goods.filter(g => g.brand === 'Huawei');
-                        result.push({
-                            columns: ['id', 'name', 'type_id', 'brand'],
-                            data: huaweiGoods
-                        });
-                    } else if (q.includes('FROM warehouses') && !q.includes('JOIN')) {
-                        // Запрос 4 и 6
-                        result.push({
-                            columns: ['id', 'name', 'address'],
-                            data: [...database.warehouses]
-                        });
-                    } else if (q.includes('w.name IN (\'Варшавка\', \'Пушкино\')')) {
-                        // Запрос 5
-                        const warehouseData = [];
-                        for (let s of database.stock) {
-                            const warehouse = database.warehouses.find(w => w.id === s.warehouse_id);
-                            if (warehouse && (warehouse.name === 'Варшавка' || warehouse.name === 'Пушкино')) {
-                                const good = database.goods.find(g => g.id === s.goods_id);
-                                warehouseData.push({
-                                    name: warehouse.name,
-                                    'name_1': good.name,
-                                    quantity: s.quantity
-                                });
-                            }
-                        }
-                        result.push({
-                            columns: ['name', 'name', 'quantity'],
-                            data: warehouseData
-                        });
-                    } else if (q.includes('t.name IN (\'Обувь\', \'Аксессуары для телефонов\')')) {
-                        // Запрос 7
-                        const typeQuantities = {};
-                        
-                        for (let s of database.stock) {
-                            const good = database.goods.find(g => g.id === s.goods_id);
-                            if (good) {
-                                const type = database.types.find(t => t.id === good.type_id);
-                                if (type && (type.name === 'Обувь' || type.name === 'Аксессуары для телефонов')) {
-                                    if (!typeQuantities[type.name]) {
-                                        typeQuantities[type.name] = 0;
-                                    }
-                                    typeQuantities[type.name] += s.quantity;
-                                }
-                            }
-                        }
-                        
-                        const typeData = Object.keys(typeQuantities).map(typeName => ({
-                            name: typeName,
-                            количество: typeQuantities[typeName]
-                        }));
-                        
-                        result.push({
-                            columns: ['name', 'количество'],
-                            data: typeData
-                        });
-                    }
-                } else if (q.toUpperCase().startsWith('UPDATE')) {
-                    // Обработка UPDATE запросов
-                    dataChanged = true;
-                    if (q.includes("name = 'Наушники беспроводные Huawei Airdots'")) {
-                        // Запрос 3
-                        const index = database.goods.findIndex(g => g.name === 'Наушники беспроводные Xiaomi Airdots 2');
-                        if (index !== -1) {
-                            database.goods[index].name = 'Наушники беспроводные Huawei Airdots';
-                            database.goods[index].brand = 'Huawei';
-                        }
-                    }
-                } else if (q.toUpperCase().startsWith('TRUNCATE') || q.toUpperCase().startsWith('DELETE')) {
-                    // Обработка TRUNCATE/DELETE запросов
-                    dataChanged = true;
-                    if (q.includes('warehouses')) {
-                        // Запрос 4
-                        database.warehouses = [];
-                    }
-                } else if (q.toUpperCase().includes('BEGIN TRANSACTION') || q.toUpperCase().includes('INSERT INTO')) {
-                    // Обработка INSERT запросов
-                    dataChanged = true;
-                    if (q.includes('INSERT INTO warehouses')) {
-                        // Запрос 6
-                        const insertRegex = /INSERT INTO warehouses \(id, name\) VALUES \((\d+), '([^']+)'\)/g;
-                        let match;
-                        while ((match = insertRegex.exec(q)) !== null) {
-                            database.warehouses.push({
-                                id: parseInt(match[1]),
-                                name: match[2],
-                                address: ''
-                            });
-                        }
-                    }
-                }
-            }
-            
-            return { results: result, dataChanged };
-        }
-
-        // Функция для отображения результатов
-        function displayResults(resultsDiv, result) {
-            if (result.results.length === 0) {
-                resultsDiv.innerHTML = '<div class="success-message"><i class="fas fa-check-circle"></i> Запрос выполнен успешно. Нет данных для отображения.</div>';
-                return;
-            }
-            
-            let html = '';
-            
-            // Отображаем все результаты запроса (могут быть несколько, если в скрипте несколько SELECT)
-            result.results.forEach((resultSet, index) => {
-                if (resultSet.data.length === 0) {
-                    html += `<div class="success-message"><i class="fas fa-check-circle"></i> Запрос выполнен успешно. Нет данных для отображения.</div>`;
-                    return;
-                }
-                
-                html += `<h3>Результат ${result.results.length > 1 ? index + 1 : ''}</h3>`;
-                html += `<div class="table-data-container">`;
-                html += `<table>`;
-                html += `<thead><tr>`;
-                
-                // Заголовки таблицы
-                resultSet.columns.forEach(column => {
-                    html += `<th>${column}</th>`;
-                });
-                html += `</tr></thead>`;
-                
-                // Данные таблицы
-                html += `<tbody>`;
-                resultSet.data.forEach(row => {
-                    html += `<tr>`;
-                    resultSet.columns.forEach(column => {
-                        html += `<td>${row[column] !== undefined ? row[column] : ''}</td>`;
-                    });
-                    html += `</tr>`;
-                });
-                html += `</tbody>`;
-                html += `</table>`;
-                html += `<div class="row-count"><i class="fas fa-list"></i> Найдено записей: ${resultSet.data.length}</div>`;
-                html += `</div>`;
-            });
-            
-            // Добавляем сообщение, если данные были изменены
-            if (result.dataChanged) {
-                html += `<div class="success-message"><i class="fas fa-sync-alt"></i> Данные в таблицах обновлены. Проверьте вкладку "Данные таблиц".</div>`;
-            }
-            
-            resultsDiv.innerHTML = html;
-        }
-
-        // Инициализация при загрузке страницы
-        document.addEventListener('DOMContentLoaded', function() {
-            // Инициализируем отображение данных таблицы goods
-            renderTableData('goods');
-            
-            // Добавляем обработчики кликов на вкладки таблиц
-            document.querySelectorAll('.table-tab').forEach(tab => {
-                tab.addEventListener('click', function() {
-                    switchTable(this.dataset.table);
-                });
-            });
-            
-            // Добавляем возможность выполнения запросов по нажатию Ctrl+Enter
-            const textareas = document.querySelectorAll('textarea');
-            textareas.forEach((textarea, index) => {
-                textarea.addEventListener('keydown', function(e) {
-                    if (e.ctrlKey && e.key === 'Enter') {
-                        executeQuery(index + 1);
-                    }
-                });
-            });
-            
-            // Показываем начальные данные в первой таблице
-            executeQuery(1);
-        });
-    </script>
 </body>
 </html>
