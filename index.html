@@ -1,511 +1,264 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SQL Database Explorer | Главная</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="auth.js" defer></script>
-    <style>
-        :root {
-            --primary: #4361ee;
-            --primary-dark: #3a56d4;
-            --secondary: #7209b7;
-            --success: #4cc9f0;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --gray: #6c757d;
-            --gray-light: #e9ecef;
-            --border-radius: 10px;
-            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --transition: all 0.3s ease;
-        }
+// auth.js - Упрощенная система авторизации
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+class AuthSystem {
+    constructor() {
+        this.currentUser = null;
+        this.users = [];
+        this.init();
+    }
 
-        body {
-            background-color: #f5f7fb;
-            color: var(--dark);
-            line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+    async init() {
+        await this.loadUsers();
+        this.checkSession();
+        this.updateAllAuthUI();
+    }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 1.5rem 0;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-        }
-
-        .subtitle {
-            font-size: 1rem;
-            opacity: 0.9;
-            margin-top: 5px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo i {
-            font-size: 2.2rem;
-        }
-
-        .auth-section {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .auth-info {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-        }
-
-        .auth-status {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-
-        .auth-buttons {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-            text-decoration: none;
-        }
-
-        .btn-login {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .btn-login:hover {
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .btn-logout {
-            background-color: #f72585;
-            color: white;
-        }
-
-        .btn-logout:hover {
-            background-color: #d41a6f;
-        }
-
-        .user-info-mini {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 5px 10px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: var(--border-radius);
-        }
-
-        .user-avatar-mini {
-            width: 30px;
-            height: 30px;
-            background: linear-gradient(135deg, #4cc9f0, #4361ee);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            color: white;
-            font-size: 0.9rem;
-        }
-
-        .user-name-mini {
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        .hero {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem 0;
-        }
-
-        .hero-content {
-            text-align: center;
-            max-width: 800px;
-            margin-bottom: 2rem;
-        }
-
-        .hero h2 {
-            font-size: 2rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-
-        .auth-message {
-            background-color: white;
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin-bottom: 25px;
-            box-shadow: var(--box-shadow);
-            border-left: 4px solid var(--primary);
-        }
-
-        .auth-message p {
-            margin: 0;
-            font-size: 1.1rem;
-        }
-
-        .features {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-top: 2rem;
-            padding: 1.5rem;
-            background: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-        }
-
-        .feature {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 16px;
-        }
-
-        .feature i {
-            color: var(--primary);
-            font-size: 1.1rem;
-        }
-
-        .options-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 25px;
-            width: 100%;
-            margin-bottom: 3rem;
-        }
-
-        .option-card {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 30px;
-            box-shadow: var(--box-shadow);
-            border-top: 5px solid var(--primary);
-            transition: var(--transition);
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100%;
-        }
-
-        .option-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        .option-card:nth-child(1) { border-top-color: #4361ee; }
-        .option-card:nth-child(2) { border-top-color: #7209b7; }
-        .option-card:nth-child(3) { border-top-color: #4cc9f0; }
-        .option-card:nth-child(4) { border-top-color: #f72585; }
-
-        .option-icon {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .option-card:nth-child(1) .option-icon { background: linear-gradient(135deg, #4361ee, #3a56d4); }
-        .option-card:nth-child(2) .option-icon { background: linear-gradient(135deg, #7209b7, #5a0a9c); }
-        .option-card:nth-child(3) .option-icon { background: linear-gradient(135deg, #4cc9f0, #3aa8d4); }
-        .option-card:nth-child(4) .option-icon { background: linear-gradient(135deg, #f72585, #d41a6f); }
-
-        .option-icon i {
-            font-size: 2rem;
-            color: white;
-        }
-
-        .option-card h3 {
-            font-size: 1.5rem;
-            color: var(--primary);
-            margin-bottom: 12px;
-        }
-
-        .option-card:nth-child(1) h3 { color: #4361ee; }
-        .option-card:nth-child(2) h3 { color: #7209b7; }
-        .option-card:nth-child(3) h3 { color: #4cc9f0; }
-        .option-card:nth-child(4) h3 { color: #f72585; }
-
-        .option-card p {
-            color: var(--gray);
-            margin-bottom: 20px;
-            line-height: 1.6;
-            flex-grow: 1;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
-        }
-
-        .btn-secondary {
-            background-color: var(--secondary);
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background-color: #5a0a9c;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(114, 9, 183, 0.3);
-        }
-
-        .btn-success {
-            background-color: #4cc9f0;
-            color: white;
-        }
-
-        .btn-success:hover {
-            background-color: #3aa8d4;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(76, 201, 240, 0.3);
-        }
-
-        .btn-danger {
-            background-color: #f72585;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background-color: #d41a6f;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(247, 37, 133, 0.3);
-        }
-
-        footer {
-            margin-top: 30px;
-            text-align: center;
-            color: var(--gray);
-            font-size: 0.9rem;
-            padding: 15px 0;
-            border-top: 1px solid var(--gray-light);
-        }
-
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-                gap: 15px;
-            }
-            
-            .auth-section {
-                flex-direction: column;
-                gap: 10px;
-                width: 100%;
-            }
-            
-            .auth-info {
-                align-items: center;
-            }
-            
-            h1 {
-                font-size: 1.8rem;
-            }
-            
-            .hero h2 {
-                font-size: 1.6rem;
-            }
-            
-            .options-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .option-card {
-                max-width: 100%;
-                padding: 25px 15px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <i class="fas fa-database"></i>
-                    <div>
-                        <h1>SQL Database Explorer</h1>
-                        <p class="subtitle">Интерактивная работа с базами данных123</p>
-                    </div>
-                </div>
-                
-                <div class="auth-section">
-                    <div class="auth-info">
-                        <div class="auth-status">
-                            <i class="fas fa-user"></i> Не авторизован
-                        </div>
-                    </div>
-                    <div class="auth-buttons">
-                        <a href="login.html" class="btn btn-login">
-                            <i class="fas fa-sign-in-alt"></i>
-                            Войти
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <main class="container">
-        <section class="hero">
-            <div class="hero-content">
-                <h2>Выберите вариант базы данных для изучения</h2>
-                
-                <div class="auth-message" id="mainAuthMessage">
-                    <p>Доступ к заданиям открыт для всех. Для просмотра ответов на вопросы требуется авторизация.</p>
-                </div>
-                
-                <div class="features">
-                    <div class="feature">
-                        <i class="fas fa-check-circle"></i>
-                        <span>Интерактивные запросы</span>
-                    </div>
-                    <div class="feature">
-                        <i class="fas fa-table"></i>
-                        <span>Просмотр данных</span>
-                    </div>
-                    <div class="feature">
-                        <i class="fas fa-unlock"></i>
-                        <span>Доступ к заданиям для всех</span>
-                    </div>
-                    <div class="feature">
-                        <i class="fas fa-lock"></i>
-                        <span>Ответы только для авторизованных</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="options-container">
-                <div class="option-card">
-                    <div class="option-icon">
-                        <i class="fas fa-box"></i>
-                    </div>
-                    <h3>Вариант 1</h3>
-                    <p>База данных товаров и складов. Изучайте работу с товарами, остатками на складах, типами товаров. Включает 4 таблицы и 7 практических запросов.</p>
-                    <a href="variant1.html" class="btn btn-primary">
-                        <i class="fas fa-play"></i>
-                        Открыть вариант 1
-                    </a>
-                </div>
-                
-                <div class="option-card">
-                    <div class="option-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h3>Вариант 2</h3>
-                    <p>База данных сотрудников и проектов. Изучайте работу с сотрудниками, проектами, отделами и назначениями. Включает 4 таблицы и 7 практических запросов.</p>
-                    <a href="variant2.html" class="btn btn-secondary">
-                        <i class="fas fa-play"></i>
-                        Открыть вариант 2
-                    </a>
-                </div>
-                
-                <div class="option-card">
-                    <div class="option-icon">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <h3>Вариант 3</h3>
-                    <p>База данных университета. Изучайте работу со студентами, курсами, оценками и преподавателями. Включает 4 таблицы и 7 практических запросов.</p>
-                    <a href="variant3.html" class="btn btn-success">
-                        <i class="fas fa-play"></i>
-                        Открыть вариант 3
-                    </a>
-                </div>
-                
-                <div class="option-card">
-                    <div class="option-icon">
-                        <i class="fas fa-shopping-cart"></i>
-                    </div>
-                    <h3>Вариант 4</h3>
-                    <p>База данных интернет-магазина. Изучайте работу с заказами, клиентами, товарами и категориями. Включает 4 таблицы и 7 практических запросов.</p>
-                    <a href="variant4.html" class="btn btn-danger">
-                        <i class="fas fa-play"></i>
-                        Открыть вариант 4
-                    </a>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="container">
-        <p>SQL Database Explorer &copy; 2023 | Практическое изучение SQL и баз данных</p>
-        <p class="auth-status" style="margin-top: 5px; font-size: 0.8rem;">
-            <i class="fas fa-user"></i> Не авторизован
-        </p>
-    </footer>
-
-    <script>
-        // Добавляем обработчик для обновления UI после авторизации
-        document.addEventListener('DOMContentLoaded', function() {
-            // Обновляем UI через 100мс после загрузки страницы
-            setTimeout(() => {
-                if (window.authSystem && window.authSystem.updatePageAuthUI) {
-                    window.authSystem.updatePageAuthUI();
+    async loadUsers() {
+        try {
+            const response = await fetch('users.json');
+            this.users = await response.json();
+        } catch (error) {
+            console.error('Ошибка загрузки пользователей:', error);
+            this.users = [
+                {
+                    id: 1,
+                    username: 'admin',
+                    password: 'admin123',
+                    email: 'admin@example.com',
+                    fullName: 'Администратор',
+                    role: 'admin',
+                    createdAt: '2023-01-01'
+                },
+                {
+                    id: 2,
+                    username: 'student',
+                    password: 'student123',
+                    email: 'student@example.com',
+                    fullName: 'Студент',
+                    role: 'student',
+                    createdAt: '2023-01-01'
+                },
+                {
+                    id: 3,
+                    username: 'teacher',
+                    password: 'teacher123',
+                    email: 'teacher@example.com',
+                    fullName: 'Преподаватель',
+                    role: 'teacher',
+                    createdAt: '2023-02-01'
+                },
+                {
+                    id: 4,
+                    username: 'test',
+                    password: 'test123',
+                    email: 'test@example.com',
+                    fullName: 'Тестовый Пользователь',
+                    role: 'student',
+                    createdAt: '2023-02-15'
                 }
-            }, 100);
+            ];
+        }
+    }
+
+    async login(username, password) {
+        const user = this.users.find(u => u.username === username && u.password === password);
+        
+        if (user) {
+            this.currentUser = {
+                id: user.id,
+                username: user.username,
+                fullName: user.fullName,
+                role: user.role,
+                email: user.email
+            };
+            
+            localStorage.setItem('sqlUser', JSON.stringify(this.currentUser));
+            
+            // Обновляем UI на всех страницах
+            this.updateAllAuthUI();
+            
+            return { success: true, user: this.currentUser };
+        }
+        
+        return { success: false, message: 'Неверное имя пользователя или пароль' };
+    }
+
+    logout() {
+        this.currentUser = null;
+        localStorage.removeItem('sqlUser');
+        this.updateAllAuthUI();
+        return { success: true };
+    }
+
+    checkSession() {
+        const userData = localStorage.getItem('sqlUser');
+        if (userData) {
+            this.currentUser = JSON.parse(userData);
+            return true;
+        }
+        return false;
+    }
+
+    isAuthenticated() {
+        return this.currentUser !== null;
+    }
+
+    getCurrentUser() {
+        return this.currentUser;
+    }
+
+    updateAllAuthUI() {
+        // Обновляем UI на текущей странице
+        this.updatePageAuthUI();
+        
+        // Отправляем событие для обновления других вкладок
+        if (typeof BroadcastChannel !== 'undefined') {
+            const channel = new BroadcastChannel('auth_channel');
+            channel.postMessage({ type: 'auth_update', user: this.currentUser });
+        }
+        
+        // Сохраняем в sessionStorage для обновления текущей вкладки
+        sessionStorage.setItem('authUpdate', Date.now().toString());
+    }
+
+    updatePageAuthUI() {
+        const isAuthenticated = this.isAuthenticated();
+        const user = this.currentUser;
+        const isHomePage = window.location.pathname.includes('index.html') || 
+                          window.location.pathname.endsWith('/') ||
+                          window.location.pathname === '';
+        
+        // Обновляем статус в заголовке
+        const authStatusElements = document.querySelectorAll('.auth-status');
+        authStatusElements.forEach(el => {
+            if (isAuthenticated) {
+                el.innerHTML = `<i class="fas fa-user-check" style="color: #2e7d32;"></i> Авторизован как <strong>${user.fullName}</strong>`;
+            } else {
+                if (isHomePage) {
+                    el.innerHTML = '<i class="fas fa-user" style="color: #6c757d;"></i> Не авторизован';
+                } else {
+                    el.innerHTML = ''; // Убираем статус для неавторизованных на страницах вариантов
+                }
+            }
         });
-    </script>
-</body>
-</html>
+        
+        // Обновляем кнопки входа/выхода
+        const authButtons = document.querySelectorAll('.auth-buttons');
+        authButtons.forEach(container => {
+            if (isAuthenticated) {
+                // Для авторизованных пользователей
+                if (isHomePage) {
+                    // На главной странице показываем инфо пользователя и кнопку выхода
+                    container.innerHTML = `
+                        <div class="user-info-mini">
+                            <span class="user-avatar-mini">${user.fullName.charAt(0)}</span>
+                            <span class="user-name-mini">${user.fullName}</span>
+                        </div>
+                        <button class="btn btn-logout" onclick="window.authSystem.logout()">
+                            <i class="fas fa-sign-out-alt"></i> Выйти
+                        </button>
+                    `;
+                } else {
+                    // На страницах вариантов показываем инфо пользователя, кнопку на главную и выход
+                    container.innerHTML = `
+                        <div class="user-info-mini">
+                            <span class="user-avatar-mini">${user.fullName.charAt(0)}</span>
+                            <span class="user-name-mini">${user.fullName}</span>
+                        </div>
+                        <a href="index.html" class="btn btn-back">
+                            <i class="fas fa-arrow-left"></i>
+                            На главную
+                        </a>
+                        <button class="btn btn-logout" onclick="window.authSystem.logout()">
+                            <i class="fas fa-sign-out-alt"></i> Выйти
+                        </button>
+                    `;
+                }
+            } else {
+                // Для неавторизованных пользователей
+                if (isHomePage) {
+                    // На главной странице показываем только кнопку входа
+                    container.innerHTML = `
+                        <a href="login.html" class="btn btn-login">
+                            <i class="fas fa-sign-in-alt"></i> Войти
+                        </a>
+                    `;
+                } else {
+                    // На страницах вариантов показываем кнопку на главную и кнопку входа
+                    container.innerHTML = `
+                        <a href="index.html" class="btn btn-back">
+                            <i class="fas fa-arrow-left"></i>
+                            На главную
+                        </a>
+                        <a href="login.html" class="btn btn-login">
+                            <i class="fas fa-sign-in-alt"></i> Войти
+                        </a>
+                    `;
+                }
+            }
+        });
+        
+        // Обновляем сообщения о доступе к ответам
+        const answerAccessElements = document.querySelectorAll('.answer-access-message');
+        answerAccessElements.forEach(el => {
+            if (isAuthenticated) {
+                el.innerHTML = `<i class="fas fa-check-circle" style="color: #2e7d32;"></i> Ответы доступны (вы авторизованы как ${user.fullName})`;
+                el.style.display = 'block';
+            } else {
+                el.style.display = 'none'; // Скрываем сообщение для неавторизованных
+            }
+        });
+        
+        // Обновляем поля для SQL-запросов
+        if (window.updateQueryFields) {
+            window.updateQueryFields(isAuthenticated);
+        }
+        
+        // Обновляем сообщения на главной странице
+        const mainMessage = document.getElementById('mainAuthMessage');
+        if (mainMessage) {
+            if (isAuthenticated) {
+                mainMessage.innerHTML = `Добро пожаловать, <strong>${user.fullName}</strong>! У вас есть доступ ко всем ответам на задания.`;
+            } else {
+                mainMessage.innerHTML = 'Доступ к заданиям открыт для всех. Для просмотра ответов на вопросы требуется авторизация.';
+            }
+        }
+    }
+}
+
+// Создаем глобальный экземпляр
+window.authSystem = new AuthSystem();
+
+// Функции для удобного доступа
+window.checkAuth = () => window.authSystem.isAuthenticated();
+window.getCurrentUser = () => window.authSystem.getCurrentUser();
+window.logout = () => {
+    window.authSystem.logout();
+    window.location.reload();
+};
+
+// Обработка сообщений между вкладками
+if (typeof BroadcastChannel !== 'undefined') {
+    const authChannel = new BroadcastChannel('auth_channel');
+    authChannel.onmessage = (event) => {
+        if (event.data.type === 'auth_update') {
+            window.authSystem.currentUser = event.data.user;
+            window.authSystem.updatePageAuthUI();
+        }
+    };
+}
+
+// Проверяем обновления аутентификации
+setInterval(() => {
+    const lastUpdate = sessionStorage.getItem('authUpdate');
+    if (lastUpdate && Date.now() - parseInt(lastUpdate) < 1000) {
+        window.authSystem.updatePageAuthUI();
+    }
+}, 500);
+
+// Обновляем UI при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        window.authSystem.updatePageAuthUI();
+    }, 100);
+});
