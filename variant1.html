@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SQL Table Explorer | Работа с базой данных</title>
+    <title>SQL Database Explorer | Вариант 1 - Товары и склады</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="auth.js" defer></script>
     <style>
         :root {
             --primary: #4361ee;
             --primary-dark: #3a56d4;
             --secondary: #7209b7;
-            --success: #4cc9f0;
             --light: #f8f9fa;
             --dark: #212529;
             --gray: #6c757d;
@@ -43,7 +43,7 @@
         header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            padding: 2rem 0;
+            padding: 1.5rem 0;
             margin-bottom: 2rem;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
@@ -55,12 +55,12 @@
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 700;
         }
 
         .subtitle {
-            font-size: 1.2rem;
+            font-size: 1rem;
             opacity: 0.9;
             margin-top: 5px;
         }
@@ -72,7 +72,69 @@
         }
 
         .logo i {
-            font-size: 2.8rem;
+            font-size: 2rem;
+        }
+
+        .back-btn {
+            padding: 8px 16px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .back-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-left: auto;
+            margin-right: 15px;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #4cc9f0, #4361ee);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .auth-alert {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            border-left: 4px solid #ffc107;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .auth-alert i {
+            color: #ffc107;
         }
 
         .schema-diagram {
@@ -364,6 +426,13 @@
             background-color: #d1d9e0;
         }
 
+        .btn-disabled {
+            background-color: var(--gray-light);
+            color: var(--gray);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
         .results-section {
             margin-top: 20px;
             overflow-x: auto;
@@ -405,7 +474,7 @@
             .header-content {
                 flex-direction: column;
                 text-align: center;
-                gap: 20px;
+                gap: 15px;
             }
             
             .tables-container {
@@ -418,7 +487,7 @@
             }
             
             h1 {
-                font-size: 2rem;
+                font-size: 1.6rem;
             }
             
             .table-selector {
@@ -434,18 +503,35 @@
                 <div class="logo">
                     <i class="fas fa-database"></i>
                     <div>
-                        <h1>SQL Table Explorer</h1>
-                        <p class="subtitle">Интерактивная работа с базой данных товаров и складов</p>
+                        <h1>SQL Database Explorer</h1>
+                        <p class="subtitle">Вариант 1 - База данных товаров и складов</p>
                     </div>
                 </div>
-                <div class="db-info">
-                    <p><i class="fas fa-table"></i> 4 таблицы | <i class="fas fa-list"></i> 7 запросов</p>
+                
+                <div id="userInfo" class="user-info" style="display: none;">
+                    <div class="user-avatar" id="userAvatar">?</div>
+                    <div class="user-name" id="userName">Пользователь</div>
                 </div>
+                
+                <a href="index.html" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    На главную
+                </a>
             </div>
         </div>
     </header>
 
     <main class="container">
+        <div id="authAlert" class="auth-alert" style="display: none;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div>
+                <strong>Внимание!</strong> Вы не авторизованы. Для доступа к ответам на задания выполните вход в систему.
+                <a href="login.html" style="color: #856404; text-decoration: underline; margin-left: 10px;">
+                    Войти сейчас
+                </a>
+            </div>
+        </div>
+
         <section class="schema-diagram">
             <h2><i class="fas fa-project-diagram"></i> Схема базы данных</h2>
             <p>Таблицы связаны между собой через ключи: goods.id → stock.goods_id, warehouses.id → stock.warehouse_id, types.id → goods.type_id</p>
@@ -533,7 +619,6 @@
             </div>
         </section>
 
-        <!-- Новая секция: данные таблиц -->
         <section class="table-data-section">
             <h2><i class="fas fa-table"></i> Данные таблиц</h2>
             
@@ -562,6 +647,9 @@
 
         <section class="queries-section">
             <h2><i class="fas fa-code"></i> SQL Запросы к базе данных</h2>
+            <p id="authMessage" style="color: var(--gray); margin-bottom: 20px;">
+                Для просмотра ответов на задания требуется авторизация
+            </p>
             
             <div class="query-item">
                 <div class="query-question">
@@ -569,10 +657,7 @@
                     Вывести количество артикулов (уникальных единиц товара) бренда Xiaomi. Столбцы «бренд», «количество».
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query1">SELECT brand, COUNT(DISTINCT id) as количество
-FROM goods
-WHERE brand = 'Xiaomi'
-GROUP BY brand;</textarea>
+                    <textarea id="query1" placeholder="Для просмотра ответа авторизуйтесь в системе"></textarea>
                     <div class="query-actions">
                         <button class="btn btn-secondary" onclick="resetQuery(1)">
                             <i class="fas fa-redo"></i> Сбросить
@@ -591,9 +676,7 @@ GROUP BY brand;</textarea>
                     Вывести все товары брендов Xiaomi и Adidas. Вывести колонки имя_товара, бренд_товара.
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query2">SELECT name, brand
-FROM goods
-WHERE brand IN ('Xiaomi', 'Adidas');</textarea>
+                    <textarea id="query2" placeholder="Для просмотра ответа авторизуйтесь в системе"></textarea>
                     <div class="query-actions">
                         <button class="btn btn-secondary" onclick="resetQuery(2)">
                             <i class="fas fa-redo"></i> Сбросить
@@ -612,11 +695,7 @@ WHERE brand IN ('Xiaomi', 'Adidas');</textarea>
                     Заменить имя товара «Наушники беспроводные Xiaomi Airdots 2» на «Наушники беспроводные Huawei Airdots» и бренд на «Huawei».
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query3">UPDATE goods
-SET name = 'Наушники беспроводные Huawei Airdots', brand = 'Huawei'
-WHERE name = 'Наушники беспроводные Xiaomi Airdots 2';
-
-SELECT * FROM goods WHERE brand = 'Huawei';</textarea>
+                    <textarea id="query3" placeholder="Для просмотра ответа авторизуйтесь в системе"></textarea>
                     <div class="query-actions">
                         <button class="btn btn-secondary" onclick="resetQuery(3)">
                             <i class="fas fa-redo"></i> Сбросить
@@ -635,11 +714,7 @@ SELECT * FROM goods WHERE brand = 'Huawei';</textarea>
                     Очистить полностью таблицу «warehouses».
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query4">-- Два варианта:
--- DELETE FROM warehouses;
-TRUNCATE TABLE warehouses;
-
-SELECT * FROM warehouses;</textarea>
+                    <textarea id="query4" placeholder="Для просмотра ответа авторизуйтесь в системе"></textarea>
                     <div class="query-actions">
                         <button class="btn btn-secondary" onclick="resetQuery(4)">
                             <i class="fas fa-redo"></i> Сбросить
@@ -658,11 +733,7 @@ SELECT * FROM warehouses;</textarea>
                     Вывести все товары, которые лежат на складах: Варшавка, Пушкино. Вывести колонки имя_склада, имя_товара, кол-во_товара.
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query5">SELECT w.name, g.name, s.quantity
-FROM warehouses w
-JOIN stock s ON w.id = s.warehouse_id
-JOIN goods g ON s.goods_id = g.id
-WHERE w.name IN ('Варшавка', 'Пушкино');</textarea>
+                    <textarea id="query5" placeholder="Для просмотра ответа авторизуйтесь в системе"></textarea>
                     <div class="query-actions">
                         <button class="btn btn-secondary" onclick="resetQuery(5)">
                             <i class="fas fa-redo"></i> Сбросить
@@ -681,13 +752,7 @@ WHERE w.name IN ('Варшавка', 'Пушкино');</textarea>
                     Наполнить таблицу «warehouses» данными, используя транзакцию.
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query6">BEGIN TRANSACTION;
-INSERT INTO warehouses (id, name) VALUES (1765, 'Варшавский');
-INSERT INTO warehouses (id, name) VALUES (2908, 'Новобарашковский');
-INSERT INTO warehouses (id, name) VALUES (3786, 'Сити');
-COMMIT TRANSACTION;
-
-SELECT * FROM warehouses;</textarea>
+                    <textarea id="query6" placeholder="Для просмотра ответа авторизуйтесь в системе"></textarea>
                     <div class="query-actions">
                         <button class="btn btn-secondary" onclick="resetQuery(6)">
                             <i class="fas fa-redo"></i> Сбросить
@@ -706,12 +771,7 @@ SELECT * FROM warehouses;</textarea>
                     Вывести количество товаров на всех складах с типами «Обувь» и «Аксессуары для телефонов». Столбцы «тип товара» и «количество».
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query7">SELECT t.name, SUM(s.quantity) as количество
-FROM stock s
-JOIN goods g ON s.goods_id = g.id
-JOIN types t ON g.type_id = t.id
-WHERE t.name IN ('Обувь', 'Аксессуары для телефонов')
-GROUP BY t.name;</textarea>
+                    <textarea id="query7" placeholder="Для просмотра ответа авторизуйтесь в системе"></textarea>
                     <div class="query-actions">
                         <button class="btn btn-secondary" onclick="resetQuery(7)">
                             <i class="fas fa-redo"></i> Сбросить
@@ -727,384 +787,195 @@ GROUP BY t.name;</textarea>
     </main>
 
     <footer class="container">
-        <p>SQL Table Explorer &copy; 2023 | Демонстрация работы с базой данных товаров и складов</p>
+        <p>SQL Database Explorer &copy; 2023 | Вариант 1 - База данных товаров и складов</p>
+        <p id="footerAuthStatus" style="font-size: 0.8rem; margin-top: 5px;">Статус: не авторизован</p>
     </footer>
 
     <script>
-        // Инициализация данных базы данных
-        const initDatabase = () => {
-            return {
-                goods: [
-                    {id: 746589, name: '15.6 Ноутбук Xiaomi RedmiBook Pro 15 2022', type_id: 1, brand: 'Xiaomi'},
-                    {id: 917364, name: 'Складная подставка для ноутбука охлаждающая', type_id: 2, brand: 'Lemleo'},
-                    {id: 887012, name: 'МФУ Лазерное Brother DCPL2540DW', type_id: 3, brand: 'Brother'},
-                    {id: 772041, name: 'Кроссовки adidas', type_id: 4, brand: 'Adidas'},
-                    {id: 923478, name: 'Косметичка Toplash', type_id: 5, brand: 'Toplash'},
-                    {id: 134789, name: 'Сухой корм для щенков миниатюрных пород до 10 мес', type_id: 6, brand: 'Royal canin'},
-                    {id: 299293, name: 'Наушники беспроводные Xiaomi Airdots 2', type_id: 7, brand: 'Xiaomi'}
-                ],
-                stock: [
-                    {goods_id: 746589, warehouse_id: 1238, quantity: 1},
-                    {goods_id: 917364, warehouse_id: 1311, quantity: 8},
-                    {goods_id: 887012, warehouse_id: 1384, quantity: 7},
-                    {goods_id: 887012, warehouse_id: 1299, quantity: 2},
-                    {goods_id: 887012, warehouse_id: 1311, quantity: 5},
-                    {goods_id: 299293, warehouse_id: 1299, quantity: 9}
-                ],
-                warehouses: [
-                    {id: 1238, name: 'Варшавка', address: 'Варшавское шоссе, 125с13'},
-                    {id: 1299, name: 'Барашкино', address: 'Открытое шоссе, 6Ас2'},
-                    {id: 1311, name: 'Тестовский', address: 'Пресненская набережная, 10с1'},
-                    {id: 1384, name: 'Пушкино', address: 'Крыловская улица, 3'}
-                ],
-                types: [
-                    {id: 1, name: 'Ноутбуки'},
-                    {id: 2, name: 'Аксессуары для ноутбуков'},
-                    {id: 3, name: 'Принтеры'},
-                    {id: 4, name: 'Обувь'},
-                    {id: 5, name: 'Косметика'},
-                    {id: 6, name: 'Корм для собак'},
-                    {id: 7, name: 'Аксессуары для телефонов'}
-                ]
-            };
-        };
-
-        let database = initDatabase();
-        let currentTable = 'goods'; // По умолчанию показываем таблицу goods
-
-        // Функция для отображения содержимого таблицы
-        function renderTableData(tableName) {
-            const container = document.getElementById('table-data-container');
+        // Проверяем авторизацию при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthAndSetup();
+        });
+        
+        function checkAuthAndSetup() {
+            const isAuthenticated = checkAuth();
+            const authAlert = document.getElementById('authAlert');
+            const userInfo = document.getElementById('userInfo');
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+            const authMessage = document.getElementById('authMessage');
+            const footerAuthStatus = document.getElementById('footerAuthStatus');
             
-            if (tableName === 'all') {
-                // Показать все таблицы
-                let html = '';
+            if (isAuthenticated) {
+                // Пользователь авторизован
+                const user = getCurrentUser();
+                authAlert.style.display = 'none';
+                userInfo.style.display = 'flex';
+                userAvatar.textContent = user.fullName.charAt(0);
+                userName.textContent = user.fullName;
+                authMessage.innerHTML = `<i class="fas fa-check-circle" style="color: #2e7d32;"></i> Вы авторизованы как ${user.fullName}. Ответы на задания доступны.`;
+                footerAuthStatus.innerHTML = `Статус: авторизован как <strong>${user.fullName}</strong>`;
                 
-                ['goods', 'stock', 'warehouses', 'types'].forEach(tblName => {
-                    const tableData = database[tblName];
-                    const tableColumns = Object.keys(tableData[0] || {});
-                    
-                    html += `<div class="table-data-container" style="margin-bottom: 30px;">`;
-                    html += `<h3 style="color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-table"></i> Таблица ${tblName}</h3>`;
-                    html += `<table>`;
-                    html += `<thead><tr>`;
-                    
-                    // Заголовки таблицы
-                    tableColumns.forEach(column => {
-                        html += `<th>${column}</th>`;
-                    });
-                    html += `</tr></thead>`;
-                    
-                    // Данные таблицы
-                    html += `<tbody>`;
-                    tableData.forEach(row => {
-                        html += `<tr>`;
-                        tableColumns.forEach(column => {
-                            html += `<td>${row[column]}</td>`;
-                        });
-                        html += `</tr>`;
-                    });
-                    html += `</tbody>`;
-                    html += `</table>`;
-                    html += `<div class="row-count"><i class="fas fa-list"></i> Всего записей: ${tableData.length}</div>`;
-                    html += `</div>`;
-                });
+                // Загружаем ответы для авторизованного пользователя
+                loadAnswers();
                 
-                container.innerHTML = html;
-                return;
+                // Инициализируем страницу
+                initPage();
+            } else {
+                // Пользователь не авторизован
+                authAlert.style.display = 'flex';
+                userInfo.style.display = 'none';
+                authMessage.innerHTML = '<i class="fas fa-exclamation-circle" style="color: #d32f2f;"></i> Для просмотра ответов на задания требуется авторизация.';
+                footerAuthStatus.innerHTML = 'Статус: не авторизован';
+                
+                // Инициализируем страницу без ответов
+                initPageWithoutAnswers();
             }
-            
-            const tableData = database[tableName];
-            const tableColumns = Object.keys(tableData[0] || {});
-            
-            let html = `<div class="table-data-container">`;
-            html += `<table>`;
-            html += `<thead><tr>`;
-            
-            // Заголовки таблицы
-            tableColumns.forEach(column => {
-                html += `<th>${column}</th>`;
-            });
-            html += `</tr></thead>`;
-            
-            // Данные таблицы
-            html += `<tbody>`;
-            tableData.forEach(row => {
-                html += `<tr>`;
-                tableColumns.forEach(column => {
-                    html += `<td>${row[column]}</td>`;
-                });
-                html += `</tr>`;
-            });
-            html += `</tbody>`;
-            html += `</table>`;
-            html += `<div class="row-count"><i class="fas fa-list"></i> Всего записей: ${tableData.length}</div>`;
-            html += `</div>`;
-            
-            container.innerHTML = html;
         }
-
-        // Функция для переключения вкладок таблиц
-        function switchTable(tableName) {
-            currentTable = tableName;
-            
-            // Обновляем активную вкладку
-            document.querySelectorAll('.table-tab').forEach(tab => {
-                if (tab.dataset.table === tableName) {
-                    tab.classList.add('active');
-                } else {
-                    tab.classList.remove('active');
-                }
-            });
-            
-            // Отображаем данные выбранной таблицы
-            renderTableData(tableName);
-        }
-
-        // Функция для сброса запроса к исходному виду
-        function resetQuery(queryNumber) {
+        
+        function loadAnswers() {
+            // Ответы на задания для авторизованных пользователей
             const defaultQueries = {
-                1: `SELECT brand, COUNT(DISTINCT id) as количество
-FROM goods
-WHERE brand = 'Xiaomi'
-GROUP BY brand;`,
-                2: `SELECT name, brand
-FROM goods
-WHERE brand IN ('Xiaomi', 'Adidas');`,
-                3: `UPDATE goods
-SET name = 'Наушники беспроводные Huawei Airdots', brand = 'Huawei'
-WHERE name = 'Наушники беспроводные Xiaomi Airdots 2';
-
-SELECT * FROM goods WHERE brand = 'Huawei';`,
-                4: `-- Два варианта:
--- DELETE FROM warehouses;
-TRUNCATE TABLE warehouses;
-
-SELECT * FROM warehouses;`,
-                5: `SELECT w.name, g.name, s.quantity
-FROM warehouses w
-JOIN stock s ON w.id = s.warehouse_id
-JOIN goods g ON s.goods_id = g.id
-WHERE w.name IN ('Варшавка', 'Пушкино');`,
-                6: `BEGIN TRANSACTION;
-INSERT INTO warehouses (id, name) VALUES (1765, 'Варшавский');
-INSERT INTO warehouses (id, name) VALUES (2908, 'Новобарашковский');
-INSERT INTO warehouses (id, name) VALUES (3786, 'Сити');
-COMMIT TRANSACTION;
-
-SELECT * FROM warehouses;`,
-                7: `SELECT t.name, SUM(s.quantity) as количество
-FROM stock s
-JOIN goods g ON s.goods_id = g.id
-JOIN types t ON g.type_id = t.id
-WHERE t.name IN ('Обувь', 'Аксессуары для телефонов')
-GROUP BY t.name;`
+                1: `SELECT brand, COUNT(DISTINCT id) as количество\nFROM goods\nWHERE brand = 'Xiaomi'\nGROUP BY brand;`,
+                2: `SELECT name, brand\nFROM goods\nWHERE brand IN ('Xiaomi', 'Adidas');`,
+                3: `UPDATE goods\nSET name = 'Наушники беспроводные Huawei Airdots', brand = 'Huawei'\nWHERE name = 'Наушники беспроводные Xiaomi Airdots 2';\n\nSELECT * FROM goods WHERE brand = 'Huawei';`,
+                4: `-- Два варианта:\n-- DELETE FROM warehouses;\nTRUNCATE TABLE warehouses;\n\nSELECT * FROM warehouses;`,
+                5: `SELECT w.name, g.name, s.quantity\nFROM warehouses w\nJOIN stock s ON w.id = s.warehouse_id\nJOIN goods g ON s.goods_id = g.id\nWHERE w.name IN ('Варшавка', 'Пушкино');`,
+                6: `BEGIN TRANSACTION;\nINSERT INTO warehouses (id, name) VALUES (1765, 'Варшавский');\nINSERT INTO warehouses (id, name) VALUES (2908, 'Новобарашковский');\nINSERT INTO warehouses (id, name) VALUES (3786, 'Сити');\nCOMMIT TRANSACTION;\n\nSELECT * FROM warehouses;`,
+                7: `SELECT t.name, SUM(s.quantity) as количество\nFROM stock s\nJOIN goods g ON s.goods_id = g.id\nJOIN types t ON g.type_id = t.id\nWHERE t.name IN ('Обувь', 'Аксессуары для телефонов')\nGROUP BY t.name;`
             };
             
-            document.getElementById(`query${queryNumber}`).value = defaultQueries[queryNumber];
-            document.getElementById(`results${queryNumber}`).innerHTML = '';
+            window.defaultQueries = defaultQueries;
+            
+            // Заполняем textarea ответами
+            for (let i = 1; i <= 7; i++) {
+                const textarea = document.getElementById(`query${i}`);
+                if (textarea && defaultQueries[i]) {
+                    textarea.value = defaultQueries[i];
+                    textarea.placeholder = '';
+                }
+            }
         }
+        
+        function initPage() {
+            // Инициализация данных базы данных
+            const initDatabase = () => {
+                return {
+                    goods: [
+                        {id: 746589, name: '15.6 Ноутбук Xiaomi RedmiBook Pro 15 2022', type_id: 1, brand: 'Xiaomi'},
+                        {id: 917364, name: 'Складная подставка для ноутбука охлаждающая', type_id: 2, brand: 'Lemleo'},
+                        {id: 887012, name: 'МФУ Лазерное Brother DCPL2540DW', type_id: 3, brand: 'Brother'},
+                        {id: 772041, name: 'Кроссовки adidas', type_id: 4, brand: 'Adidas'},
+                        {id: 923478, name: 'Косметичка Toplash', type_id: 5, brand: 'Toplash'},
+                        {id: 134789, name: 'Сухой корм для щенков миниатюрных пород до 10 мес', type_id: 6, brand: 'Royal canin'},
+                        {id: 299293, name: 'Наушники беспроводные Xiaomi Airdots 2', type_id: 7, brand: 'Xiaomi'}
+                    ],
+                    stock: [
+                        {goods_id: 746589, warehouse_id: 1238, quantity: 1},
+                        {goods_id: 917364, warehouse_id: 1311, quantity: 8},
+                        {goods_id: 887012, warehouse_id: 1384, quantity: 7},
+                        {goods_id: 887012, warehouse_id: 1299, quantity: 2},
+                        {goods_id: 887012, warehouse_id: 1311, quantity: 5},
+                        {goods_id: 299293, warehouse_id: 1299, quantity: 9}
+                    ],
+                    warehouses: [
+                        {id: 1238, name: 'Варшавка', address: 'Варшавское шоссе, 125с13'},
+                        {id: 1299, name: 'Барашкино', address: 'Открытое шоссе, 6Ас2'},
+                        {id: 1311, name: 'Тестовский', address: 'Пресненская набережная, 10с1'},
+                        {id: 1384, name: 'Пушкино', address: 'Крыловская улица, 3'}
+                    ],
+                    types: [
+                        {id: 1, name: 'Ноутбуки'},
+                        {id: 2, name: 'Аксессуары для ноутбуков'},
+                        {id: 3, name: 'Принтеры'},
+                        {id: 4, name: 'Обувь'},
+                        {id: 5, name: 'Косметика'},
+                        {id: 6, name: 'Корм для собак'},
+                        {id: 7, name: 'Аксессуары для телефонов'}
+                    ]
+                };
+            };
 
-        // Функция для выполнения SQL-запроса
-        function executeQuery(queryNumber) {
-            const query = document.getElementById(`query${queryNumber}`).value;
-            const resultsDiv = document.getElementById(`results${queryNumber}`);
+            let database = initDatabase();
+            let currentTable = 'goods';
             
-            // Очищаем предыдущие результаты
-            resultsDiv.innerHTML = '<div class="success-message"><i class="fas fa-spinner fa-spin"></i> Выполнение запроса...</div>';
+            window.database = database;
+            window.currentTable = currentTable;
             
-            // Имитация выполнения запроса с задержкой
-            setTimeout(() => {
-                try {
-                    const result = simulateSQLExecution(query, queryNumber);
-                    displayResults(resultsDiv, result);
+            // Функция для отображения содержимого таблицы
+            function renderTableData(tableName) {
+                const container = document.getElementById('table-data-container');
+                
+                if (tableName === 'all') {
+                    let html = '';
                     
-                    // Обновляем отображение таблиц, так как данные могли измениться
-                    renderTableData(currentTable);
-                } catch (error) {
-                    resultsDiv.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-circle"></i> Ошибка: ${error.message}</div>`;
-                }
-            }, 500);
-        }
-
-        // Функция для имитации выполнения SQL-запроса
-        function simulateSQLExecution(query, queryNumber) {
-            // Упрощенная имитация SQL-запросов
-            const queries = query.split(';').filter(q => q.trim() !== '');
-            let result = [];
-            let dataChanged = false;
-            
-            for (let q of queries) {
-                q = q.trim();
-                
-                // Убираем комментарии
-                q = q.replace(/--.*$/gm, '');
-                
-                if (q.toUpperCase().startsWith('SELECT')) {
-                    // Обработка SELECT запросов
-                    if (q.includes('COUNT(DISTINCT id)') && q.includes("brand = 'Xiaomi'")) {
-                        // Запрос 1
-                        const xiaomiCount = database.goods.filter(g => g.brand === 'Xiaomi').length;
-                        result.push({
-                            columns: ['brand', 'количество'],
-                            data: [{brand: 'Xiaomi', количество: xiaomiCount}]
-                        });
-                    } else if (q.includes("brand IN ('Xiaomi', 'Adidas')")) {
-                        // Запрос 2
-                        const filteredGoods = database.goods.filter(g => g.brand === 'Xiaomi' || g.brand === 'Adidas');
-                        result.push({
-                            columns: ['name', 'brand'],
-                            data: filteredGoods.map(g => ({name: g.name, brand: g.brand}))
-                        });
-                    } else if (q.includes('WHERE brand = \'Huawei\'')) {
-                        // Запрос 3 (после UPDATE)
-                        const huaweiGoods = database.goods.filter(g => g.brand === 'Huawei');
-                        result.push({
-                            columns: ['id', 'name', 'type_id', 'brand'],
-                            data: huaweiGoods
-                        });
-                    } else if (q.includes('FROM warehouses') && !q.includes('JOIN')) {
-                        // Запрос 4 и 6
-                        result.push({
-                            columns: ['id', 'name', 'address'],
-                            data: [...database.warehouses]
-                        });
-                    } else if (q.includes('w.name IN (\'Варшавка\', \'Пушкино\')')) {
-                        // Запрос 5
-                        const warehouseData = [];
-                        for (let s of database.stock) {
-                            const warehouse = database.warehouses.find(w => w.id === s.warehouse_id);
-                            if (warehouse && (warehouse.name === 'Варшавка' || warehouse.name === 'Пушкино')) {
-                                const good = database.goods.find(g => g.id === s.goods_id);
-                                warehouseData.push({
-                                    name: warehouse.name,
-                                    'name_1': good.name,
-                                    quantity: s.quantity
-                                });
-                            }
-                        }
-                        result.push({
-                            columns: ['name', 'name', 'quantity'],
-                            data: warehouseData
-                        });
-                    } else if (q.includes('t.name IN (\'Обувь\', \'Аксессуары для телефонов\')')) {
-                        // Запрос 7
-                        const typeQuantities = {};
+                    ['goods', 'stock', 'warehouses', 'types'].forEach(tblName => {
+                        const tableData = database[tblName];
+                        const tableColumns = Object.keys(tableData[0] || {});
                         
-                        for (let s of database.stock) {
-                            const good = database.goods.find(g => g.id === s.goods_id);
-                            if (good) {
-                                const type = database.types.find(t => t.id === good.type_id);
-                                if (type && (type.name === 'Обувь' || type.name === 'Аксессуары для телефонов')) {
-                                    if (!typeQuantities[type.name]) {
-                                        typeQuantities[type.name] = 0;
-                                    }
-                                    typeQuantities[type.name] += s.quantity;
-                                }
-                            }
-                        }
+                        html += `<div class="table-data-container" style="margin-bottom: 30px;">`;
+                        html += `<h3 style="color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-table"></i> Таблица ${tblName}</h3>`;
+                        html += `<table>`;
+                        html += `<thead><tr>`;
                         
-                        const typeData = Object.keys(typeQuantities).map(typeName => ({
-                            name: typeName,
-                            количество: typeQuantities[typeName]
-                        }));
-                        
-                        result.push({
-                            columns: ['name', 'количество'],
-                            data: typeData
+                        tableColumns.forEach(column => {
+                            html += `<th>${column}</th>`;
                         });
-                    }
-                } else if (q.toUpperCase().startsWith('UPDATE')) {
-                    // Обработка UPDATE запросов
-                    dataChanged = true;
-                    if (q.includes("name = 'Наушники беспроводные Huawei Airdots'")) {
-                        // Запрос 3
-                        const index = database.goods.findIndex(g => g.name === 'Наушники беспроводные Xiaomi Airdots 2');
-                        if (index !== -1) {
-                            database.goods[index].name = 'Наушники беспроводные Huawei Airdots';
-                            database.goods[index].brand = 'Huawei';
-                        }
-                    }
-                } else if (q.toUpperCase().startsWith('TRUNCATE') || q.toUpperCase().startsWith('DELETE')) {
-                    // Обработка TRUNCATE/DELETE запросов
-                    dataChanged = true;
-                    if (q.includes('warehouses')) {
-                        // Запрос 4
-                        database.warehouses = [];
-                    }
-                } else if (q.toUpperCase().includes('BEGIN TRANSACTION') || q.toUpperCase().includes('INSERT INTO')) {
-                    // Обработка INSERT запросов
-                    dataChanged = true;
-                    if (q.includes('INSERT INTO warehouses')) {
-                        // Запрос 6
-                        const insertRegex = /INSERT INTO warehouses \(id, name\) VALUES \((\d+), '([^']+)'\)/g;
-                        let match;
-                        while ((match = insertRegex.exec(q)) !== null) {
-                            database.warehouses.push({
-                                id: parseInt(match[1]),
-                                name: match[2],
-                                address: ''
+                        html += `</tr></thead>`;
+                        
+                        html += `<tbody>`;
+                        tableData.forEach(row => {
+                            html += `<tr>`;
+                            tableColumns.forEach(column => {
+                                html += `<td>${row[column]}</td>`;
                             });
-                        }
-                    }
-                }
-            }
-            
-            return { results: result, dataChanged };
-        }
-
-        // Функция для отображения результатов
-        function displayResults(resultsDiv, result) {
-            if (result.results.length === 0) {
-                resultsDiv.innerHTML = '<div class="success-message"><i class="fas fa-check-circle"></i> Запрос выполнен успешно. Нет данных для отображения.</div>';
-                return;
-            }
-            
-            let html = '';
-            
-            // Отображаем все результаты запроса (могут быть несколько, если в скрипте несколько SELECT)
-            result.results.forEach((resultSet, index) => {
-                if (resultSet.data.length === 0) {
-                    html += `<div class="success-message"><i class="fas fa-check-circle"></i> Запрос выполнен успешно. Нет данных для отображения.</div>`;
+                            html += `</tr>`;
+                        });
+                        html += `</tbody>`;
+                        html += `</table>`;
+                        html += `<div class="row-count"><i class="fas fa-list"></i> Всего записей: ${tableData.length}</div>`;
+                        html += `</div>`;
+                    });
+                    
+                    container.innerHTML = html;
                     return;
                 }
                 
-                html += `<h3>Результат ${result.results.length > 1 ? index + 1 : ''}</h3>`;
-                html += `<div class="table-data-container">`;
+                const tableData = database[tableName];
+                const tableColumns = Object.keys(tableData[0] || {});
+                
+                let html = `<div class="table-data-container">`;
                 html += `<table>`;
                 html += `<thead><tr>`;
                 
-                // Заголовки таблицы
-                resultSet.columns.forEach(column => {
+                tableColumns.forEach(column => {
                     html += `<th>${column}</th>`;
                 });
                 html += `</tr></thead>`;
                 
-                // Данные таблицы
                 html += `<tbody>`;
-                resultSet.data.forEach(row => {
+                tableData.forEach(row => {
                     html += `<tr>`;
-                    resultSet.columns.forEach(column => {
-                        html += `<td>${row[column] !== undefined ? row[column] : ''}</td>`;
+                    tableColumns.forEach(column => {
+                        html += `<td>${row[column]}</td>`;
                     });
                     html += `</tr>`;
                 });
                 html += `</tbody>`;
                 html += `</table>`;
-                html += `<div class="row-count"><i class="fas fa-list"></i> Найдено записей: ${resultSet.data.length}</div>`;
+                html += `<div class="row-count"><i class="fas fa-list"></i> Всего записей: ${tableData.length}</div>`;
                 html += `</div>`;
-            });
-            
-            // Добавляем сообщение, если данные были изменены
-            if (result.dataChanged) {
-                html += `<div class="success-message"><i class="fas fa-sync-alt"></i> Данные в таблицах обновлены. Проверьте вкладку "Данные таблиц".</div>`;
+                
+                container.innerHTML = html;
             }
-            
-            resultsDiv.innerHTML = html;
-        }
 
-        // Инициализация при загрузке страницы
-        document.addEventListener('DOMContentLoaded', function() {
+            window.renderTableData = renderTableData;
+            window.switchTable = switchTable;
+            window.resetQuery = resetQuery;
+            window.executeQuery = executeQuery;
+            window.simulateSQLExecution = simulateSQLExecution;
+            window.displayResults = displayResults;
+            
             // Инициализируем отображение данных таблицы goods
             renderTableData('goods');
             
@@ -1127,7 +998,345 @@ GROUP BY t.name;`
             
             // Показываем начальные данные в первой таблице
             executeQuery(1);
-        });
+        }
+        
+        function initPageWithoutAnswers() {
+            // Базовая инициализация без ответов
+            const initDatabase = () => {
+                return {
+                    goods: [
+                        {id: 746589, name: '15.6 Ноутбук Xiaomi RedmiBook Pro 15 2022', type_id: 1, brand: 'Xiaomi'},
+                        {id: 917364, name: 'Складная подставка для ноутбука охлаждающая', type_id: 2, brand: 'Lemleo'},
+                        {id: 887012, name: 'МФУ Лазерное Brother DCPL2540DW', type_id: 3, brand: 'Brother'},
+                        {id: 772041, name: 'Кроссовки adidas', type_id: 4, brand: 'Adidas'},
+                        {id: 923478, name: 'Косметичка Toplash', type_id: 5, brand: 'Toplash'},
+                        {id: 134789, name: 'Сухой корм для щенков миниатюрных пород до 10 мес', type_id: 6, brand: 'Royal canin'},
+                        {id: 299293, name: 'Наушники беспроводные Xiaomi Airdots 2', type_id: 7, brand: 'Xiaomi'}
+                    ],
+                    stock: [
+                        {goods_id: 746589, warehouse_id: 1238, quantity: 1},
+                        {goods_id: 917364, warehouse_id: 1311, quantity: 8},
+                        {goods_id: 887012, warehouse_id: 1384, quantity: 7},
+                        {goods_id: 887012, warehouse_id: 1299, quantity: 2},
+                        {goods_id: 887012, warehouse_id: 1311, quantity: 5},
+                        {goods_id: 299293, warehouse_id: 1299, quantity: 9}
+                    ],
+                    warehouses: [
+                        {id: 1238, name: 'Варшавка', address: 'Варшавское шоссе, 125с13'},
+                        {id: 1299, name: 'Барашкино', address: 'Открытое шоссе, 6Ас2'},
+                        {id: 1311, name: 'Тестовский', address: 'Пресненская набережная, 10с1'},
+                        {id: 1384, name: 'Пушкино', address: 'Крыловская улица, 3'}
+                    ],
+                    types: [
+                        {id: 1, name: 'Ноутбуки'},
+                        {id: 2, name: 'Аксессуары для ноутбуков'},
+                        {id: 3, name: 'Принтеры'},
+                        {id: 4, name: 'Обувь'},
+                        {id: 5, name: 'Косметика'},
+                        {id: 6, name: 'Корм для собак'},
+                        {id: 7, name: 'Аксессуары для телефонов'}
+                    ]
+                };
+            };
+
+            let database = initDatabase();
+            let currentTable = 'goods';
+            
+            window.database = database;
+            window.currentTable = currentTable;
+            
+            function renderTableData(tableName) {
+                const container = document.getElementById('table-data-container');
+                
+                if (tableName === 'all') {
+                    let html = '';
+                    
+                    ['goods', 'stock', 'warehouses', 'types'].forEach(tblName => {
+                        const tableData = database[tblName];
+                        const tableColumns = Object.keys(tableData[0] || {});
+                        
+                        html += `<div class="table-data-container" style="margin-bottom: 30px;">`;
+                        html += `<h3 style="color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-table"></i> Таблица ${tblName}</h3>`;
+                        html += `<table>`;
+                        html += `<thead><tr>`;
+                        
+                        tableColumns.forEach(column => {
+                            html += `<th>${column}</th>`;
+                        });
+                        html += `</tr></thead>`;
+                        
+                        html += `<tbody>`;
+                        tableData.forEach(row => {
+                            html += `<tr>`;
+                            tableColumns.forEach(column => {
+                                html += `<td>${row[column]}</td>`;
+                            });
+                            html += `</tr>`;
+                        });
+                        html += `</tbody>`;
+                        html += `</table>`;
+                        html += `<div class="row-count"><i class="fas fa-list"></i> Всего записей: ${tableData.length}</div>`;
+                        html += `</div>`;
+                    });
+                    
+                    container.innerHTML = html;
+                    return;
+                }
+                
+                const tableData = database[tableName];
+                const tableColumns = Object.keys(tableData[0] || {});
+                
+                let html = `<div class="table-data-container">`;
+                html += `<table>`;
+                html += `<thead><tr>`;
+                
+                tableColumns.forEach(column => {
+                    html += `<th>${column}</th>`;
+                });
+                html += `</tr></thead>`;
+                
+                html += `<tbody>`;
+                tableData.forEach(row => {
+                    html += `<tr>`;
+                    tableColumns.forEach(column => {
+                        html += `<td>${row[column]}</td>`;
+                    });
+                    html += `</tr>`;
+                });
+                html += `</tbody>`;
+                html += `</table>`;
+                html += `<div class="row-count"><i class="fas fa-list"></i> Всего записей: ${tableData.length}</div>`;
+                html += `</div>`;
+                
+                container.innerHTML = html;
+            }
+
+            window.renderTableData = renderTableData;
+            window.switchTable = switchTable;
+            window.resetQuery = resetQuery;
+            window.executeQuery = executeQuery;
+            window.simulateSQLExecution = simulateSQLExecution;
+            window.displayResults = displayResults;
+            
+            // Инициализируем отображение данных таблицы goods
+            renderTableData('goods');
+            
+            // Добавляем обработчики кликов на вкладки таблиц
+            document.querySelectorAll('.table-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    switchTable(this.dataset.table);
+                });
+            });
+        }
+        
+        // Функция для переключения вкладок таблиц
+        function switchTable(tableName) {
+            window.currentTable = tableName;
+            
+            document.querySelectorAll('.table-tab').forEach(tab => {
+                if (tab.dataset.table === tableName) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            window.renderTableData(tableName);
+        }
+
+        // Функция для сброса запроса к исходному виду
+        function resetQuery(queryNumber) {
+            if (checkAuth() && window.defaultQueries && window.defaultQueries[queryNumber]) {
+                document.getElementById(`query${queryNumber}`).value = window.defaultQueries[queryNumber];
+            } else {
+                document.getElementById(`query${queryNumber}`).value = '';
+            }
+            document.getElementById(`results${queryNumber}`).innerHTML = '';
+        }
+
+        // Функция для выполнения SQL-запроса
+        function executeQuery(queryNumber) {
+            if (!checkAuth()) {
+                const resultsDiv = document.getElementById(`results${queryNumber}`);
+                resultsDiv.innerHTML = '<div class="error-message"><i class="fas fa-exclamation-circle"></i> Для выполнения запросов необходимо авторизоваться</div>';
+                return;
+            }
+            
+            const query = document.getElementById(`query${queryNumber}`).value;
+            const resultsDiv = document.getElementById(`results${queryNumber}`);
+            
+            resultsDiv.innerHTML = '<div class="success-message"><i class="fas fa-spinner fa-spin"></i> Выполнение запроса...</div>';
+            
+            setTimeout(() => {
+                try {
+                    const result = simulateSQLExecution(query, queryNumber);
+                    displayResults(resultsDiv, result);
+                    
+                    // Обновляем отображение таблиц, так как данные могли измениться
+                    renderTableData(window.currentTable);
+                } catch (error) {
+                    resultsDiv.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-circle"></i> Ошибка: ${error.message}</div>`;
+                }
+            }, 500);
+        }
+
+        // Функция для имитации выполнения SQL-запроса
+        function simulateSQLExecution(query, queryNumber) {
+            // Упрощенная имитация SQL-запросов
+            const queries = query.split(';').filter(q => q.trim() !== '');
+            let result = [];
+            let dataChanged = false;
+            
+            for (let q of queries) {
+                q = q.trim();
+                q = q.replace(/--.*$/gm, '');
+                
+                if (q.toUpperCase().startsWith('SELECT')) {
+                    // Обработка SELECT запросов
+                    if (q.includes('COUNT(DISTINCT id)') && q.includes("brand = 'Xiaomi'")) {
+                        const xiaomiCount = window.database.goods.filter(g => g.brand === 'Xiaomi').length;
+                        result.push({
+                            columns: ['brand', 'количество'],
+                            data: [{brand: 'Xiaomi', количество: xiaomiCount}]
+                        });
+                    } else if (q.includes("brand IN ('Xiaomi', 'Adidas')")) {
+                        const filteredGoods = window.database.goods.filter(g => g.brand === 'Xiaomi' || g.brand === 'Adidas');
+                        result.push({
+                            columns: ['name', 'brand'],
+                            data: filteredGoods.map(g => ({name: g.name, brand: g.brand}))
+                        });
+                    } else if (q.includes('WHERE brand = \'Huawei\'')) {
+                        const huaweiGoods = window.database.goods.filter(g => g.brand === 'Huawei');
+                        result.push({
+                            columns: ['id', 'name', 'type_id', 'brand'],
+                            data: huaweiGoods
+                        });
+                    } else if (q.includes('FROM warehouses') && !q.includes('JOIN')) {
+                        result.push({
+                            columns: ['id', 'name', 'address'],
+                            data: [...window.database.warehouses]
+                        });
+                    } else if (q.includes('w.name IN (\'Варшавка\', \'Пушкиino\')')) {
+                        const warehouseData = [];
+                        for (let s of window.database.stock) {
+                            const warehouse = window.database.warehouses.find(w => w.id === s.warehouse_id);
+                            if (warehouse && (warehouse.name === 'Варшавка' || warehouse.name === 'Пушкино')) {
+                                const good = window.database.goods.find(g => g.id === s.goods_id);
+                                warehouseData.push({
+                                    name: warehouse.name,
+                                    'name_1': good.name,
+                                    quantity: s.quantity
+                                });
+                            }
+                        }
+                        result.push({
+                            columns: ['name', 'name', 'quantity'],
+                            data: warehouseData
+                        });
+                    } else if (q.includes('t.name IN (\'Обувь\', \'Аксессуары для телефонов\')')) {
+                        const typeQuantities = {};
+                        
+                        for (let s of window.database.stock) {
+                            const good = window.database.goods.find(g => g.id === s.goods_id);
+                            if (good) {
+                                const type = window.database.types.find(t => t.id === good.type_id);
+                                if (type && (type.name === 'Обувь' || type.name === 'Аксессуары для телефонов')) {
+                                    if (!typeQuantities[type.name]) {
+                                        typeQuantities[type.name] = 0;
+                                    }
+                                    typeQuantities[type.name] += s.quantity;
+                                }
+                            }
+                        }
+                        
+                        const typeData = Object.keys(typeQuantities).map(typeName => ({
+                            name: typeName,
+                            количество: typeQuantities[typeName]
+                        }));
+                        
+                        result.push({
+                            columns: ['name', 'количество'],
+                            data: typeData
+                        });
+                    }
+                } else if (q.toUpperCase().startsWith('UPDATE')) {
+                    dataChanged = true;
+                    if (q.includes("name = 'Наушники беспроводные Huawei Airdots'")) {
+                        const index = window.database.goods.findIndex(g => g.name === 'Наушники беспроводные Xiaomi Airdots 2');
+                        if (index !== -1) {
+                            window.database.goods[index].name = 'Наушники беспроводные Huawei Airdots';
+                            window.database.goods[index].brand = 'Huawei';
+                        }
+                    }
+                } else if (q.toUpperCase().startsWith('TRUNCATE') || q.toUpperCase().startsWith('DELETE')) {
+                    dataChanged = true;
+                    if (q.includes('warehouses')) {
+                        window.database.warehouses = [];
+                    }
+                } else if (q.toUpperCase().includes('BEGIN TRANSACTION') || q.toUpperCase().includes('INSERT INTO')) {
+                    dataChanged = true;
+                    if (q.includes('INSERT INTO warehouses')) {
+                        const insertRegex = /INSERT INTO warehouses \(id, name\) VALUES \((\d+), '([^']+)'\)/g;
+                        let match;
+                        while ((match = insertRegex.exec(q)) !== null) {
+                            window.database.warehouses.push({
+                                id: parseInt(match[1]),
+                                name: match[2],
+                                address: ''
+                            });
+                        }
+                    }
+                }
+            }
+            
+            return { results: result, dataChanged };
+        }
+
+        // Функция для отображения результатов
+        function displayResults(resultsDiv, result) {
+            if (result.results.length === 0) {
+                resultsDiv.innerHTML = '<div class="success-message"><i class="fas fa-check-circle"></i> Запрос выполнен успешно. Нет данных для отображения.</div>';
+                return;
+            }
+            
+            let html = '';
+            
+            result.results.forEach((resultSet, index) => {
+                if (resultSet.data.length === 0) {
+                    html += `<div class="success-message"><i class="fas fa-check-circle"></i> Запрос выполнен успешно. Нет данных для отображения.</div>`;
+                    return;
+                }
+                
+                html += `<h3>Результат ${result.results.length > 1 ? index + 1 : ''}</h3>`;
+                html += `<div class="table-data-container">`;
+                html += `<table>`;
+                html += `<thead><tr>`;
+                
+                resultSet.columns.forEach(column => {
+                    html += `<th>${column}</th>`;
+                });
+                html += `</tr></thead>`;
+                
+                html += `<tbody>`;
+                resultSet.data.forEach(row => {
+                    html += `<tr>`;
+                    resultSet.columns.forEach(column => {
+                        html += `<td>${row[column] !== undefined ? row[column] : ''}</td>`;
+                    });
+                    html += `</tr>`;
+                });
+                html += `</tbody>`;
+                html += `</table>`;
+                html += `<div class="row-count"><i class="fas fa-list"></i> Найдено записей: ${resultSet.data.length}</div>`;
+                html += `</div>`;
+            });
+            
+            if (result.dataChanged) {
+                html += `<div class="success-message"><i class="fas fa-sync-alt"></i> Данные в таблицах обновлены. Проверьте вкладку "Данные таблиц".</div>`;
+            }
+            
+            resultsDiv.innerHTML = html;
+        }
     </script>
 </body>
 </html>
