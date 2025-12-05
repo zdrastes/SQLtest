@@ -144,12 +144,20 @@ class AuthSystem {
                         <span class="user-avatar-mini">${user.fullName.charAt(0)}</span>
                         <span class="user-name-mini">${user.fullName}</span>
                     </div>
+                    <a href="index.html" class="btn btn-back">
+                        <i class="fas fa-arrow-left"></i>
+                        На главную
+                    </a>
                     <button class="btn btn-logout" onclick="window.authSystem.logout()">
                         <i class="fas fa-sign-out-alt"></i> Выйти
                     </button>
                 `;
             } else {
                 container.innerHTML = `
+                    <a href="index.html" class="btn btn-back">
+                        <i class="fas fa-arrow-left"></i>
+                        На главную
+                    </a>
                     <a href="login.html" class="btn btn-login">
                         <i class="fas fa-sign-in-alt"></i> Войти
                     </a>
