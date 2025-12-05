@@ -78,37 +78,21 @@
             font-size: 2.2rem;
         }
 
-        .user-info {
+        .auth-section {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
         }
 
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #4cc9f0, #4361ee);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            color: white;
-        }
-
-        .user-details {
+        .auth-info {
             display: flex;
             flex-direction: column;
+            align-items: flex-end;
         }
 
-        .user-name {
-            font-weight: 600;
+        .auth-status {
             font-size: 0.9rem;
-        }
-
-        .user-role {
-            font-size: 0.8rem;
-            opacity: 0.8;
+            opacity: 0.9;
         }
 
         .auth-buttons {
@@ -149,6 +133,33 @@
             background-color: #d41a6f;
         }
 
+        .user-info-mini {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+        }
+
+        .user-avatar-mini {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #4cc9f0, #4361ee);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .user-name-mini {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
         .hero {
             flex: 1;
             display: flex;
@@ -170,10 +181,42 @@
             margin-bottom: 1rem;
         }
 
-        .hero p {
+        .auth-message {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: var(--box-shadow);
+            border-left: 4px solid var(--primary);
+        }
+
+        .auth-message p {
+            margin: 0;
             font-size: 1.1rem;
-            color: var(--gray);
-            margin-bottom: 2rem;
+        }
+
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+        }
+
+        .feature i {
+            color: var(--primary);
+            font-size: 1.1rem;
         }
 
         .options-container {
@@ -196,7 +239,6 @@
             flex-direction: column;
             align-items: center;
             height: 100%;
-            position: relative;
         }
 
         .option-card:hover {
@@ -208,18 +250,6 @@
         .option-card:nth-child(2) { border-top-color: #7209b7; }
         .option-card:nth-child(3) { border-top-color: #4cc9f0; }
         .option-card:nth-child(4) { border-top-color: #f72585; }
-
-        .auth-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #f72585;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.7rem;
-            font-weight: 600;
-        }
 
         .option-icon {
             width: 70px;
@@ -304,37 +334,6 @@
             box-shadow: 0 5px 15px rgba(247, 37, 133, 0.3);
         }
 
-        .btn-disabled {
-            background-color: var(--gray-light);
-            color: var(--gray);
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-
-        .features {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-top: 2rem;
-            padding: 1.5rem;
-            background: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-        }
-
-        .feature {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 16px;
-        }
-
-        .feature i {
-            color: var(--primary);
-            font-size: 1.1rem;
-        }
-
         footer {
             margin-top: 30px;
             text-align: center;
@@ -349,6 +348,16 @@
                 flex-direction: column;
                 text-align: center;
                 gap: 15px;
+            }
+            
+            .auth-section {
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+            }
+            
+            .auth-info {
+                align-items: center;
             }
             
             h1 {
@@ -382,25 +391,18 @@
                     </div>
                 </div>
                 
-                <div id="userSection" class="user-info" style="display: none;">
-                    <div class="user-avatar" id="userAvatar">?</div>
-                    <div class="user-details">
-                        <div class="user-name" id="userName">Пользователь</div>
-                        <div class="user-role" id="userRole">Гость</div>
+                <div class="auth-section">
+                    <div class="auth-info">
+                        <div class="auth-status">
+                            <i class="fas fa-user"></i> Не авторизован
+                        </div>
                     </div>
                     <div class="auth-buttons">
-                        <button class="btn btn-logout" onclick="logout()">
-                            <i class="fas fa-sign-out-alt"></i>
-                            Выйти
-                        </button>
+                        <a href="login.html" class="btn btn-login">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Войти
+                        </a>
                     </div>
-                </div>
-                
-                <div id="guestSection" class="auth-buttons">
-                    <a href="login.html" class="btn btn-login">
-                        <i class="fas fa-sign-in-alt"></i>
-                        Войти
-                    </a>
                 </div>
             </div>
         </div>
@@ -410,7 +412,10 @@
         <section class="hero">
             <div class="hero-content">
                 <h2>Выберите вариант базы данных для изучения</h2>
-                <p id="authMessage">Для доступа к заданиям и ответам необходимо авторизоваться</p>
+                
+                <div class="auth-message" id="mainAuthMessage">
+                    <p>Доступ к заданиям открыт для всех. Для просмотра ответов на вопросы требуется авторизация.</p>
+                </div>
                 
                 <div class="features">
                     <div class="feature">
@@ -422,12 +427,12 @@
                         <span>Просмотр данных</span>
                     </div>
                     <div class="feature">
-                        <i class="fas fa-lock"></i>
-                        <span>Защищенные ответы</span>
+                        <i class="fas fa-unlock"></i>
+                        <span>Доступ к заданиям для всех</span>
                     </div>
                     <div class="feature">
-                        <i class="fas fa-play-circle"></i>
-                        <span>Выполнение SQL в браузере</span>
+                        <i class="fas fa-lock"></i>
+                        <span>Ответы только для авторизованных</span>
                     </div>
                 </div>
             </div>
@@ -439,7 +444,7 @@
                     </div>
                     <h3>Вариант 1</h3>
                     <p>База данных товаров и складов. Изучайте работу с товарами, остатками на складах, типами товаров. Включает 4 таблицы и 7 практических запросов.</p>
-                    <a href="#" class="btn btn-primary" id="variant1Btn">
+                    <a href="variant1.html" class="btn btn-primary">
                         <i class="fas fa-play"></i>
                         Открыть вариант 1
                     </a>
@@ -451,7 +456,7 @@
                     </div>
                     <h3>Вариант 2</h3>
                     <p>База данных сотрудников и проектов. Изучайте работу с сотрудниками, проектами, отделами и назначениями. Включает 4 таблицы и 7 практических запросов.</p>
-                    <a href="#" class="btn btn-secondary" id="variant2Btn">
+                    <a href="variant2.html" class="btn btn-secondary">
                         <i class="fas fa-play"></i>
                         Открыть вариант 2
                     </a>
@@ -463,7 +468,7 @@
                     </div>
                     <h3>Вариант 3</h3>
                     <p>База данных университета. Изучайте работу со студентами, курсами, оценками и преподавателями. Включает 4 таблицы и 7 практических запросов.</p>
-                    <a href="#" class="btn btn-success" id="variant3Btn">
+                    <a href="variant3.html" class="btn btn-success">
                         <i class="fas fa-play"></i>
                         Открыть вариант 3
                     </a>
@@ -475,7 +480,7 @@
                     </div>
                     <h3>Вариант 4</h3>
                     <p>База данных интернет-магазина. Изучайте работу с заказами, клиентами, товарами и категориями. Включает 4 таблицы и 7 практических запросов.</p>
-                    <a href="#" class="btn btn-danger" id="variant4Btn">
+                    <a href="variant4.html" class="btn btn-danger">
                         <i class="fas fa-play"></i>
                         Открыть вариант 4
                     </a>
@@ -486,75 +491,21 @@
 
     <footer class="container">
         <p>SQL Database Explorer &copy; 2023 | Практическое изучение SQL и баз данных</p>
-        <p id="authStatus">Статус: не авторизован</p>
+        <p class="auth-status" style="margin-top: 5px; font-size: 0.8rem;">
+            <i class="fas fa-user"></i> Не авторизован
+        </p>
     </footer>
 
     <script>
-        // Обработка загрузки страницы
+        // Добавляем обработчик для обновления UI после авторизации
         document.addEventListener('DOMContentLoaded', function() {
-            updateAuthUI();
-            
-            // Добавляем обработчики для кнопок вариантов
-            setupVariantButtons();
-        });
-        
-        function updateAuthUI() {
-            const isAuthenticated = checkAuth();
-            const userSection = document.getElementById('userSection');
-            const guestSection = document.getElementById('guestSection');
-            const authMessage = document.getElementById('authMessage');
-            const authStatus = document.getElementById('authStatus');
-            
-            if (isAuthenticated) {
-                const user = getCurrentUser();
-                userSection.style.display = 'flex';
-                guestSection.style.display = 'none';
-                
-                // Обновляем информацию о пользователе
-                document.getElementById('userName').textContent = user.fullName;
-                document.getElementById('userRole').textContent = user.role === 'admin' ? 'Администратор' : 
-                                                                  user.role === 'teacher' ? 'Преподаватель' : 'Студент';
-                document.getElementById('userAvatar').textContent = user.fullName.charAt(0);
-                
-                authMessage.textContent = `Добро пожаловать, ${user.fullName}! Теперь у вас есть доступ ко всем заданиям и ответам.`;
-                authStatus.textContent = `Статус: авторизован как ${user.fullName}`;
-            } else {
-                userSection.style.display = 'none';
-                guestSection.style.display = 'flex';
-                authMessage.textContent = 'Для доступа к заданиям и ответам необходимо авторизоваться';
-                authStatus.textContent = 'Статус: не авторизован';
-            }
-        }
-        
-        function setupVariantButtons() {
-            const variantButtons = [
-                { id: 'variant1Btn', page: 'variant1.html' },
-                { id: 'variant2Btn', page: 'variant2.html' },
-                { id: 'variant3Btn', page: 'variant3.html' },
-                { id: 'variant4Btn', page: 'variant4.html' }
-            ];
-            
-            variantButtons.forEach(btn => {
-                const button = document.getElementById(btn.id);
-                const isAuthenticated = checkAuth();
-                
-                if (isAuthenticated) {
-                    button.href = btn.page;
-                    button.classList.remove('btn-disabled');
-                } else {
-                    button.href = 'login.html';
-                    button.classList.add('btn-disabled');
-                    button.innerHTML = '<i class="fas fa-lock"></i> Требуется вход';
-                    
-                    button.addEventListener('click', function(e) {
-                        if (!isAuthenticated) {
-                            e.preventDefault();
-                            window.location.href = 'login.html';
-                        }
-                    });
+            // Обновляем UI через 100мс после загрузки страницы
+            setTimeout(() => {
+                if (window.authSystem && window.authSystem.updatePageAuthUI) {
+                    window.authSystem.updatePageAuthUI();
                 }
-            });
-        }
+            }, 100);
+        });
     </script>
 </body>
 </html>
