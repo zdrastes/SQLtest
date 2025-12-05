@@ -124,6 +124,9 @@ class AuthSystem {
     updatePageAuthUI() {
         const isAuthenticated = this.isAuthenticated();
         const user = this.currentUser;
+        const isHomePage = window.location.pathname.includes('index.html') || 
+                          window.location.pathname.endsWith('/') ||
+                          window.location.pathname === '';
         
         // Обновляем статус в заголовке
         const authStatusElements = document.querySelectorAll('.auth-status');
@@ -131,7 +134,11 @@ class AuthSystem {
             if (isAuthenticated) {
                 el.innerHTML = `<i class="fas fa-user-check" style="color: #2e7d32;"></i> Авторизован как <strong>${user.fullName}</strong>`;
             } else {
-                el.innerHTML = ''; // Убираем статус для неавторизованных
+                if (isHomePage) {
+                    el.innerHTML = '<i class="fas fa-user" style="color: #6c757d;"></i> Не авторизован';
+                } else {
+                    el.innerHTML = ''; // Убираем статус для неавторизованных на страницах вариантов
+                }
             }
         });
         
@@ -139,26 +146,55 @@ class AuthSystem {
         const authButtons = document.querySelectorAll('.auth-buttons');
         authButtons.forEach(container => {
             if (isAuthenticated) {
-                container.innerHTML = `
-                    <div class="user-info-mini">
-                        <span class="user-avatar-mini">${user.fullName.charAt(0)}</span>
-                        <span class="user-name-mini">${user.fullName}</span>
-                    </div>
-                    <a href="index.html" class="btn btn-back">
-                        <i class="fas fa-arrow-left"></i>
-                        На главную
-                    </a>
-                    <button class="btn btn-logout" onclick="window.authSystem.logout()">
-                        <i class="fas fa-sign-out-alt"></i> Выйти
-                    </button>
-                `;
+                // Для авторизованных пользователей
+                if (isHomePage) {
+                    // На главной странице показываем инфо пользователя и кнопку выхода
+                    container.innerHTML = `
+                        <div class="user-info-mini">
+                            <span class="user-avatar-mini">${user.fullName.charAt(0)}</span>
+                            <span class="user-name-mini">${user.fullName}</span>
+                        </div>
+                        <button class="btn btn-logout" onclick="window.authSystem.logout()">
+                            <i class="fas fa-sign-out-alt"></i> Выйти
+                        </button>
+                    `;
+                } else {
+                    // На страницах вариантов показываем инфо пользователя, кнопку на главную и выход
+                    container.innerHTML = `
+                        <div class="user-info-mini">
+                            <span class="user-avatar-mini">${user.fullName.charAt(0)}</span>
+                            <span class="user-name-mini">${user.fullName}</span>
+                        </div>
+                        <a href="index.html" class="btn btn-back">
+                            <i class="fas fa-arrow-left"></i>
+                            На главную
+                        </a>
+                        <button class="btn btn-logout" onclick="window.authSystem.logout()">
+                            <i class="fas fa-sign-out-alt"></i> Выйти
+                        </button>
+                    `;
+                }
             } else {
-                container.innerHTML = `
-                    <a href="index.html" class="btn btn-back">
-                        <i class="fas fa-arrow-left"></i>
-                        На главную
-                    </a>
-                `;
+                // Для неавторизованных пользователей
+                if (isHomePage) {
+                    // На главной странице показываем только кнопку входа
+                    container.innerHTML = `
+                        <a href="login.html" class="btn btn-login">
+                            <i class="fas fa-sign-in-alt"></i> Войти
+                        </a>
+                    `;
+                } else {
+                    // На страницах вариантов показываем кнопку на главную и кнопку входа
+                    container.innerHTML = `
+                        <a href="index.html" class="btn btn-back">
+                            <i class="fas fa-arrow-left"></i>
+                            На главную
+                        </a>
+                        <a href="login.html" class="btn btn-login">
+                            <i class="fas fa-sign-in-alt"></i> Войти
+                        </a>
+                    `;
+                }
             }
         });
         
