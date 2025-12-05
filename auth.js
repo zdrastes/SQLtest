@@ -1,4 +1,4 @@
-// auth.js - Упрощенная система авторизации
+// auth.js - Упрощенная система авторизации - Версия 2.0
 
 class AuthSystem {
     constructor() {
@@ -11,6 +11,7 @@ class AuthSystem {
         await this.loadUsers();
         this.checkSession();
         this.updateAllAuthUI();
+        console.log('AuthSystem инициализирован. Версия: 2.0');
     }
 
     async loadUsers() {
@@ -125,10 +126,12 @@ class AuthSystem {
         const isAuthenticated = this.isAuthenticated();
         const user = this.currentUser;
         const currentPath = window.location.pathname;
-        const isHomePage = currentPath.endsWith('index.html') || 
-                          currentPath.endsWith('/') ||
-                          currentPath === '' ||
-                          currentPath.includes('index.html');
+        const currentPage = currentPath.split('/').pop() || '';
+        const isHomePage = currentPage === 'index.html' || 
+                          currentPage === '' ||
+                          currentPath.endsWith('/');
+        
+        console.log('Текущая страница:', currentPage, 'Это главная?', isHomePage);
         
         // Обновляем статус в заголовке
         const authStatusElements = document.querySelectorAll('.auth-status');
@@ -186,7 +189,7 @@ class AuthSystem {
                         </a>
                     `;
                 } else {
-                    // На страницах вариантов показываем ТОЛЬКО кнопку на главную (без кнопки "Войти")
+                    // На страницах вариантов показываем ТОЛЬКО кнопку на главную
                     container.innerHTML = `
                         <a href="index.html" class="btn btn-back">
                             <i class="fas fa-arrow-left"></i>
