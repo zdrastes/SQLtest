@@ -532,7 +532,7 @@
                 <div class="auth-section">
                     <div class="auth-info">
                         <div class="auth-status">
-                            <i class="fas fa-user"></i> Не авторизован
+                            <!-- Пусто для неавторизованных -->
                         </div>
                     </div>
                     <div class="auth-buttons">
@@ -548,7 +548,7 @@
 
     <main class="container">
         <div class="answer-access-message" id="answerAccessMessage">
-            Для просмотра ответов требуется авторизация
+            <!-- Сообщение скрыто для неавторизованных -->
         </div>
 
         <section class="schema-diagram">
@@ -668,7 +668,7 @@
             <h2><i class="fas fa-code"></i> SQL Запросы к базе данных</h2>
             
             <div class="answer-access-message" id="queryAccessMessage">
-                Для просмотра ответов требуется авторизация
+                <!-- Сообщение скрыто для неавторизованных -->
             </div>
             
             <div class="query-item">
@@ -677,7 +677,7 @@
                     Вывести количество артикулов (уникальных единиц товара) бренда Xiaomi. Столбцы «бренд», «количество».
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query1" placeholder="Для просмотра ответа авторизуйтесь в системе"></textarea>
+                    <textarea id="query1" placeholder=""></textarea>
                     <div class="query-actions">
                         <button class="btn btn-secondary" onclick="resetQuery(1)">
                             <i class="fas fa-redo"></i> Сбросить
@@ -696,7 +696,7 @@
                     Вывести все товары брендов Xiaomi и Adidas. Вывести колонки имя_товара, бренд_товара.
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query2" placeholder="Для просмотра ответа авторизуйтесь в системе"></textarea>
+                    <textarea id="query2" placeholder=""></textarea>
                     <div class="query-actions">
                         <button class="btn btn-secondary" onclick="resetQuery(2)">
                             <i class="fas fa-redo"></i> Сбросить
@@ -715,7 +715,7 @@
                     Заменить имя товара «Наушники беспроводные Xiaomi Airdots 2» на «Наушники беспроводные Huawei Airdots» и бренд на «Huawei».
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query3" placeholder="Для просмотра ответа авторизуйтесь в системе"></textarea>
+                    <textarea id="query3" placeholder=""></textarea>
                     <div class="query-actions">
                         <button class="btn btn-secondary" onclick="resetQuery(3)">
                             <i class="fas fa-redo"></i> Сбросить
@@ -734,7 +734,7 @@
                     Очистить полностью таблицу «warehouses».
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query4" placeholder="Для просмотра ответа авторизуйтесь в системе"></textarea>
+                    <textarea id="query4" placeholder=""></textarea>
                     <div class="query-actions">
                         <button class="btn btn-secondary" onclick="resetQuery(4)">
                             <i class="fas fa-redo"></i> Сбросить
@@ -753,7 +753,7 @@
                     Вывести все товары, которые лежат на складах: Варшавка, Пушкино. Вывести колонки имя_склада, имя_товара, кол-во_товара.
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query5" placeholder="Для просмотра ответа авторизуйтесь в системе"></textarea>
+                    <textarea id="query5" placeholder=""></textarea>
                     <div class="query-actions">
                         <button class="btn btn-secondary" onclick="resetQuery(5)">
                             <i class="fas fa-redo"></i> Сбросить
@@ -772,7 +772,7 @@
                     Наполнить таблицу «warehouses» данными, используя транзакцию.
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query6" placeholder="Для просмотра ответа авторизуйтесь в системе"></textarea>
+                    <textarea id="query6" placeholder=""></textarea>
                     <div class="query-actions">
                         <button class="btn btn-secondary" onclick="resetQuery(6)">
                             <i class="fas fa-redo"></i> Сбросить
@@ -791,7 +791,7 @@
                     Вывести количество товаров на всех складах с типами «Обувь» и «Аксессуары для телефонов». Столбцы «тип товара» и «количество».
                 </div>
                 <div class="query-input-area">
-                    <textarea id="query7" placeholder="Для просмотра ответа авторизуйтесь в системе"></textarea>
+                    <textarea id="query7" placeholder=""></textarea>
                     <div class="query-actions">
                         <button class="btn btn-secondary" onclick="resetQuery(7)">
                             <i class="fas fa-redo"></i> Сбросить
@@ -808,9 +808,6 @@
 
     <footer class="container">
         <p>SQL Database Explorer &copy; 2023 | Вариант 1 - База данных товаров и складов</p>
-        <p class="auth-status" style="margin-top: 5px; font-size: 0.8rem;">
-            <i class="fas fa-user"></i> Не авторизован
-        </p>
     </footer>
 
     <script>
@@ -865,12 +862,12 @@ GROUP BY t.name;`
                     }
                 }
             } else {
-                // Очищаем поля и устанавливаем placeholder
+                // Для неавторизованных - просто пустые поля без placeholder
                 for (let i = 1; i <= 7; i++) {
                     const textarea = document.getElementById(`query${i}`);
                     if (textarea) {
                         textarea.value = '';
-                        textarea.placeholder = 'Для просмотра ответа авторизуйтесь в системе';
+                        textarea.placeholder = ''; // Пустой placeholder
                     }
                 }
             }
@@ -1007,7 +1004,7 @@ GROUP BY t.name;`
                 document.getElementById(`query${queryNumber}`).value = defaultQueries[queryNumber];
             } else {
                 document.getElementById(`query${queryNumber}`).value = '';
-                document.getElementById(`query${queryNumber}`).placeholder = 'Для просмотра ответа авторизуйтесь в системе';
+                document.getElementById(`query${queryNumber}`).placeholder = ''; // Пустой placeholder
             }
             document.getElementById(`results${queryNumber}`).innerHTML = '';
         }
@@ -1018,7 +1015,7 @@ GROUP BY t.name;`
             const resultsDiv = document.getElementById(`results${queryNumber}`);
             
             if (!query.trim()) {
-                resultsDiv.innerHTML = '<div class="error-message"><i class="fas fa-exclamation-circle"></i> Запрос пуст. Введите SQL запрос или авторизуйтесь для просмотра ответов.</div>';
+                resultsDiv.innerHTML = '<div class="error-message"><i class="fas fa-exclamation-circle"></i> Запрос пуст. Введите SQL запрос.</div>';
                 return;
             }
             
