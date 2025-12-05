@@ -105,19 +105,17 @@
         }
 
         .options-container {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 30px;
-            flex-wrap: wrap;
-            justify-content: center;
             width: 100%;
+            margin-bottom: 3rem;
         }
 
         .option-card {
             background: white;
             border-radius: var(--border-radius);
             padding: 40px;
-            width: 100%;
-            max-width: 500px;
             box-shadow: var(--box-shadow);
             border-top: 5px solid var(--primary);
             transition: var(--transition);
@@ -125,12 +123,18 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            height: 100%;
         }
 
         .option-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
         }
+
+        .option-card:nth-child(1) { border-top-color: #4361ee; }
+        .option-card:nth-child(2) { border-top-color: #7209b7; }
+        .option-card:nth-child(3) { border-top-color: #4cc9f0; }
+        .option-card:nth-child(4) { border-top-color: #f72585; }
 
         .option-icon {
             width: 80px;
@@ -143,6 +147,11 @@
             margin-bottom: 25px;
         }
 
+        .option-card:nth-child(1) .option-icon { background: linear-gradient(135deg, #4361ee, #3a56d4); }
+        .option-card:nth-child(2) .option-icon { background: linear-gradient(135deg, #7209b7, #5a0a9c); }
+        .option-card:nth-child(3) .option-icon { background: linear-gradient(135deg, #4cc9f0, #3aa8d4); }
+        .option-card:nth-child(4) .option-icon { background: linear-gradient(135deg, #f72585, #d41a6f); }
+
         .option-icon i {
             font-size: 2.5rem;
             color: white;
@@ -154,10 +163,16 @@
             margin-bottom: 15px;
         }
 
+        .option-card:nth-child(1) h3 { color: #4361ee; }
+        .option-card:nth-child(2) h3 { color: #7209b7; }
+        .option-card:nth-child(3) h3 { color: #4cc9f0; }
+        .option-card:nth-child(4) h3 { color: #f72585; }
+
         .option-card p {
             color: var(--gray);
             margin-bottom: 25px;
             line-height: 1.6;
+            flex-grow: 1;
         }
 
         .btn {
@@ -197,6 +212,28 @@
             box-shadow: 0 5px 15px rgba(114, 9, 183, 0.3);
         }
 
+        .btn-success {
+            background-color: #4cc9f0;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #3aa8d4;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(76, 201, 240, 0.3);
+        }
+
+        .btn-danger {
+            background-color: #f72585;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #d41a6f;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(247, 37, 133, 0.3);
+        }
+
         .features {
             display: flex;
             justify-content: center;
@@ -219,26 +256,6 @@
         .feature i {
             color: var(--primary);
             font-size: 1.2rem;
-        }
-
-        .back-btn {
-            margin-top: 2rem;
-            padding: 10px 25px;
-            background-color: var(--gray-light);
-            color: var(--dark);
-            border: none;
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-        }
-
-        .back-btn:hover {
-            background-color: #d1d9e0;
         }
 
         footer {
@@ -266,8 +283,7 @@
             }
             
             .options-container {
-                flex-direction: column;
-                align-items: center;
+                grid-template-columns: 1fr;
             }
             
             .option-card {
@@ -289,7 +305,7 @@
                     </div>
                 </div>
                 <div class="db-info">
-                    <p><i class="fas fa-laptop-code"></i> 2 варианта баз данных</p>
+                    <p><i class="fas fa-laptop-code"></i> 4 варианта баз данных</p>
                 </div>
             </div>
         </div>
@@ -298,7 +314,8 @@
     <main class="container">
         <section class="hero">
             <div class="hero-content">
-                <h2>Выберите вариант задания по работе с SQL </h2>
+                <h2>Выберите вариант задания</h2>
+                <p>В каждом варианте 7 заданий  и 4 таблицы для составления запросов SQL</p>
             </div>
             
             <div class="options-container">
@@ -308,7 +325,7 @@
                     </div>
                     <h3>Вариант 1</h3>
                     <p>База данных товаров и складов.
-                    Включает 4 таблицы и 7 практических заданий.</p>
+                    Включает 4 таблицы и 7 практических запросов.</p>
                     <a href="variant1.html" class="btn btn-primary">
                         <i class="fas fa-play"></i>
                         Открыть вариант 1
@@ -321,10 +338,36 @@
                     </div>
                     <h3>Вариант 2</h3>
                     <p>База данных сотрудников и проектов.
-                    Включает 4 таблицы и 7 практических заданий.</p>
+                    Включает 4 таблицы и 7 практических запросов.</p>
                     <a href="variant2.html" class="btn btn-secondary">
                         <i class="fas fa-play"></i>
                         Открыть вариант 2
+                    </a>
+                </div>
+                
+                <div class="option-card">
+                    <div class="option-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>Вариант 3</h3>
+                    <p>База данных университета.
+                    Включает 4 таблицы и 7 практических запросов.</p>
+                    <a href="variant3.html" class="btn btn-success">
+                        <i class="fas fa-play"></i>
+                        Открыть вариант 3
+                    </a>
+                </div>
+                
+                <div class="option-card">
+                    <div class="option-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <h3>Вариант 4</h3>
+                    <p>База данных интернет-магазина.
+                    Включает 4 таблицы и 7 практических запросов.</p>
+                    <a href="variant4.html" class="btn btn-danger">
+                        <i class="fas fa-play"></i>
+                        Открыть вариант 4
                     </a>
                 </div>
             </div>
@@ -332,7 +375,7 @@
     </main>
 
     <footer class="container">
-        <p>SQL Database Explorer &copy; 2025 | Практическое задания SQL и баз данных для кандидатов в L2 WB</p>
+        <p>SQL Database Explorer &copy; 2025 | Практическое изучение SQL и баз данных</p>
     </footer>
 </body>
 </html>
