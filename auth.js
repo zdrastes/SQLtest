@@ -131,7 +131,7 @@ class AuthSystem {
             if (isAuthenticated) {
                 el.innerHTML = `<i class="fas fa-user-check" style="color: #2e7d32;"></i> Авторизован как <strong>${user.fullName}</strong>`;
             } else {
-                el.innerHTML = '<i class="fas fa-user" style="color: #6c757d;"></i> Не авторизован';
+                el.innerHTML = ''; // Убираем статус для неавторизованных
             }
         });
         
@@ -158,9 +158,6 @@ class AuthSystem {
                         <i class="fas fa-arrow-left"></i>
                         На главную
                     </a>
-                    <a href="login.html" class="btn btn-login">
-                        <i class="fas fa-sign-in-alt"></i> Войти
-                    </a>
                 `;
             }
         });
@@ -172,8 +169,7 @@ class AuthSystem {
                 el.innerHTML = `<i class="fas fa-check-circle" style="color: #2e7d32;"></i> Ответы доступны (вы авторизованы как ${user.fullName})`;
                 el.style.display = 'block';
             } else {
-                el.innerHTML = '<i class="fas fa-exclamation-circle" style="color: #d32f2f;"></i> Для просмотра ответов требуется авторизация';
-                el.style.display = 'block';
+                el.style.display = 'none'; // Скрываем сообщение для неавторизованных
             }
         });
         
