@@ -222,7 +222,7 @@ class AuthSystem {
             if (isAuthenticated) {
                 mainMessage.innerHTML = `Добро пожаловать, <strong>${user.fullName}</strong>! У вас есть доступ ко всем ответам на задания.`;
             } else {
-                mainMessage.innerHTML = 'Доступ к заданиям открыт для всех. Для просмотра ответов на вопросы требуется авторизация.';
+                mainMessage.innerHTML = 'Задания все одинаковой сложности и уровня знаний.';
             }
         }
     }
