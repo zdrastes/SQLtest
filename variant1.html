@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Database Explorer | Вариант 1 - Товары и склады</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="auth.js" defer></script>
+    <script src="table-manager.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-database"></i>
+                    <div>
+                        <h1>SQL Database Explorer</h1>
+                        <p class="subtitle">Вариант 1 - База данных товаров и складов</p>
+                    </div>
+                </div>
+                
+                <div class="auth-section">
+                    <div class="auth-info">
+                        <div class="auth-status">
+                            <!-- Будет заполнено через auth.js -->
+                        </div>
+                    </div>
+                    <div class="auth-buttons">
+                        <!-- Кнопки будут заполнены через auth.js -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="answer-access-message" id="answerAccessMessage">
+            <!-- Сообщение скрыто для неавторизованных -->
+        </div>
+
+        <section class="schema-diagram">
+            <h2><i class="fas fa-project-diagram"></i> Схема базы данных</h2>
+            
+            <div class="tables-container">
+                <div class="table-card">
+                    <h3><i class="fas fa-box"></i> goods</h3>
+                    <p>Таблица товаров</p>
+                    <div class="fields">
+                        <div class="field">
+                            <span class="field-name">id</span>
+                            <span class="field-type">INT PRIMARY KEY</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">name</span>
+                            <span class="field-type">VARCHAR(100)</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">type_id</span>
+                            <span class="field-type">INT</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">brand</span>
+                            <span class="field-type">VARCHAR(100)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-card">
+                    <h3><i class="fas fa-warehouse"></i> stock</h3>
+                    <p>Таблица остатков на складах</p>
+                    <div class="fields">
+                        <div class="field">
+                            <span class="field-name">goods_id</span>
+                            <span class="field-type">INT</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">warehouse_id</span>
+                            <span class="field-type">INT</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">quantity</span>
+                            <span class="field-type">INT</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-card">
+                    <h3><i class="fas fa-building"></i> warehouses</h3>
+                    <p>Таблица складов</p>
+                    <div class="fields">
+                        <div class="field">
+                            <span class="field-name">id</span>
+                            <span class="field-type">INT PRIMARY KEY</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">name</span>
+                            <span class="field-type">VARCHAR(100)</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">address</span>
+                            <span class="field-type">VARCHAR(100)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-card">
+                    <h3><i class="fas fa-tags"></i> types</h3>
+                    <p>Таблица типов товаров</p>
+                    <div class="fields">
+                        <div class="field">
+                            <span class="field-name">id</span>
+                            <span class="field-type">INT PRIMARY KEY</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">name</span>
+                            <span class="field-type">VARCHAR(100)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="relationships">
+                <p><i class="fas fa-link"></i> Таблицы связаны между собой через ключи: goods.id → stock.goods_id, warehouses.id → stock.warehouse_id, types.id → goods.type_id</p>
+            </div>
+        </section>
+
+        <section class="table-data-section">
+            <h2><i class="fas fa-table"></i> Данные таблиц</h2>
+            
+            <div class="table-selector">
+                <div class="table-tab active" data-table="goods">
+                    <i class="fas fa-box"></i> goods
+                </div>
+                <div class="table-tab" data-table="stock">
+                    <i class="fas fa-warehouse"></i> stock
+                </div>
+                <div class="table-tab" data-table="warehouses">
+                    <i class="fas fa-building"></i> warehouses
+                </div>
+                <div class="table-tab" data-table="types">
+                    <i class="fas fa-tags"></i> types
+                </div>
+                <div class="table-tab" data-table="all">
+                    <i class="fas fa-list"></i> Все таблицы
+                </div>
+            </div>
+            
+            <div id="table-data-container">
+                <!-- Здесь будет отображаться содержимое выбранной таблицы -->
+            </div>
+        </section>
+
+        <section class="queries-section">
+            <h2><i class="fas fa-code"></i> SQL Запросы к базе данных</h2>
+            
+            <div class="answer-access-message" id="queryAccessMessage">
+                <!-- Сообщение скрыто для неавторизованных -->
+            </div>
+            
+            <div class="query-item">
+                <div class="query-question">
+                    <span class="query-number">1</span>
+                    Вывести количество артикулов (уникальных единиц товара) бренда Xiaomi. Столбцы «бренд», «количество».
+                </div>
+                <div class="query-input-area">
+                    <textarea id="query1"></textarea>
+                </div>
+            </div>
+            
+            <div class="query-item">
+                <div class="query-question">
+                    <span class="query-number">2</span>
+                    Вывести все товары брендов Xiaomi и Adidas. Вывести колонки имя_товара, бренд_товара.
+                </div>
+                <div class="query-input-area">
+                    <textarea id="query2"></textarea>
+                </div>
+            </div>
+            
+            <div class="query-item">
+                <div class="query-question">
+                    <span class="query-number">3</span>
+                    Заменить имя товара «Наушники беспроводные Xiaomi Airdots 2» на «Наушники беспроводные Huawei Airdots» и бренд на «Huawei».
+                </div>
+                <div class="query-input-area">
+                    <textarea id="query3"></textarea>
+                </div>
+            </div>
+            
+            <div class="query-item">
+                <div class="query-question">
+                    <span class="query-number">4</span>
+                    Очистить полностью таблицу «warehouses».
+                </div>
+                <div class="query-input-area">
+                    <textarea id="query4"></textarea>
+                </div>
+            </div>
+            
+            <div class="query-item">
+                <div class="query-question">
+                    <span class="query-number">5</span>
+                    Вывести все товары, которые лежат на складах: Варшавка, Пушкино. Вывести колонки имя_склада, имя_товара, кол-во_товара.
+                </div>
+                <div class="query-input-area">
+                    <textarea id="query5"></textarea>
+                </div>
+            </div>
+            
+            <div class="query-item">
+                <div class="query-question">
+                    <span class="query-number">6</span>
+                    Наполнить таблицу «warehouses» данными, используя транзакцию.
+                </div>
+                <div class="query-input-area">
+                    <textarea id="query6"></textarea>
+                </div>
+            </div>
+            
+            <div class="query-item">
+                <div class="query-question">
+                    <span class="query-number">7</span>
+                    Вывести количество товаров на всех складах с типами «Обувь» и «Аксессуары для телефонов». Столбцы «тип товара» и «количество».
+                </div>
+                <div class="query-input-area">
+                    <textarea id="query7"></textarea>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="container">
+        <p>SQL Database Explorer &copy; 2023 | Вариант 1 - База данных товаров и складов</p>
+    </footer>
+
+    <script>
+        // Ответы на задания для авторизованных пользователей
+        const defaultQueries = {
+            1: `SELECT brand, COUNT(DISTINCT id) as количество
+FROM goods
+WHERE brand = 'Xiaomi'
+GROUP BY brand;`,
+            2: `SELECT name, brand
+FROM goods
+WHERE brand IN ('Xiaomi', 'Adidas');`,
+            3: `UPDATE goods
+SET name = 'Наушники беспроводные Huawei Airdots', brand = 'Huawei'
+WHERE name = 'Наушники беспроводные Xiaomi Airdots 2';
+
+SELECT * FROM goods WHERE brand = 'Huawei';`,
+            4: `-- Два варианта:
+-- DELETE FROM warehouses;
+TRUNCATE TABLE warehouses;
+
+SELECT * FROM warehouses;`,
+            5: `SELECT w.name, g.name, s.quantity
+FROM warehouses w
+JOIN stock s ON w.id = s.warehouse_id
+JOIN goods g ON s.goods_id = g.id
+WHERE w.name IN ('Варшавка', 'Пушкино');`,
+            6: `BEGIN TRANSACTION;
+INSERT INTO warehouses (id, name) VALUES (1765, 'Варшавский');
+INSERT INTO warehouses (id, name) VALUES (2908, 'Новобарашковский');
+INSERT INTO warehouses (id, name) VALUES (3786, 'Сити');
+COMMIT TRANSACTION;
+
+SELECT * FROM warehouses;`,
+            7: `SELECT t.name, SUM(s.quantity) as количество
+FROM stock s
+JOIN goods g ON s.goods_id = g.id
+JOIN types t ON g.type_id = t.id
+WHERE t.name IN ('Обувь', 'Аксессуары для телефонов')
+GROUP BY t.name;`
+        };
+
+        // Данные для отображения таблиц
+        const database = {
+            goods: [
+                {id: 746589, name: '15.6 Ноутбук Xiaomi RedmiBook Pro 15 2022', type_id: 1, brand: 'Xiaomi'},
+                {id: 917364, name: 'Складная подставка для ноутбука охлаждающая', type_id: 2, brand: 'Lemleo'},
+                {id: 887012, name: 'МФУ Лазерное Brother DCPL2540DW', type_id: 3, brand: 'Brother'},
+                {id: 772041, name: 'Кроссовки adidas', type_id: 4, brand: 'Adidas'},
+                {id: 923478, name: 'Косметичка Toplash', type_id: 5, brand: 'Toplash'},
+                {id: 134789, name: 'Сухой корм для щенков миниатюрных пород до 10 мес', type_id: 6, brand: 'Royal canin'},
+                {id: 299293, name: 'Наушники беспроводные Xiaomi Airdots 2', type_id: 7, brand: 'Xiaomi'}
+            ],
+            stock: [
+                {goods_id: 746589, warehouse_id: 1238, quantity: 1},
+                {goods_id: 917364, warehouse_id: 1311, quantity: 8},
+                {goods_id: 887012, warehouse_id: 1384, quantity: 7},
+                {goods_id: 887012, warehouse_id: 1299, quantity: 2},
+                {goods_id: 887012, warehouse_id: 1311, quantity: 5},
+                {goods_id: 299293, warehouse_id: 1299, quantity: 9}
+            ],
+            warehouses: [
+                {id: 1238, name: 'Варшавка', address: 'Варшавское шоссе, 125с13'},
+                {id: 1299, name: 'Барашкино', address: 'Открытое шоссе, 6Ас2'},
+                {id: 1311, name: 'Тестовский', address: 'Пресненская набережная, 10с1'},
+                {id: 1384, name: 'Пушкино', address: 'Крыловская улица, 3'}
+            ],
+            types: [
+                {id: 1, name: 'Ноутбуки'},
+                {id: 2, name: 'Аксессуары для ноутбуков'},
+                {id: 3, name: 'Принтеры'},
+                {id: 4, name: 'Обувь'},
+                {id: 5, name: 'Косметика'},
+                {id: 6, name: 'Корм для собак'},
+                {id: 7, name: 'Аксессуары для телефонов'}
+            ]
+        };
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Инициализируем менеджер таблиц
+            window.initTableManager(database, ['goods', 'stock', 'warehouses', 'types', 'all'], defaultQueries);
+            
+            // Обновляем UI через 100мс после загрузки страницы
+            setTimeout(() => {
+                if (window.authSystem && window.authSystem.updatePageAuthUI) {
+                    window.authSystem.updatePageAuthUI();
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>

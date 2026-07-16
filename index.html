@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Database Explorer | Главная</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="auth.js" defer></script>
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+        }
+
+        .logo i {
+            font-size: 2.2rem;
+        }
+
+        .hero {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 0;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            margin-bottom: 2rem;
+        }
+
+        .hero h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .auth-message {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: var(--box-shadow);
+            border-left: 4px solid var(--primary);
+        }
+
+        .auth-message p {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+        }
+
+        .feature i {
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            width: 100%;
+            margin-bottom: 3rem;
+        }
+
+        .option-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--box-shadow);
+            border-top: 5px solid var(--primary);
+            transition: var(--transition);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+        }
+
+        .option-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .option-card:nth-child(1) { border-top-color: #4361ee; }
+        .option-card:nth-child(2) { border-top-color: #7209b7; }
+        .option-card:nth-child(3) { border-top-color: #4cc9f0; }
+        .option-card:nth-child(4) { border-top-color: #f72585; }
+
+        .option-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .option-card:nth-child(1) .option-icon { background: linear-gradient(135deg, #4361ee, #3a56d4); }
+        .option-card:nth-child(2) .option-icon { background: linear-gradient(135deg, #7209b7, #5a0a9c); }
+        .option-card:nth-child(3) .option-icon { background: linear-gradient(135deg, #4cc9f0, #3aa8d4); }
+        .option-card:nth-child(4) .option-icon { background: linear-gradient(135deg, #f72585, #d41a6f); }
+
+        .option-icon i {
+            font-size: 2rem;
+            color: white;
+        }
+
+        .option-card h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .option-card:nth-child(1) h3 { color: #4361ee; }
+        .option-card:nth-child(2) h3 { color: #7209b7; }
+        .option-card:nth-child(3) h3 { color: #4cc9f0; }
+        .option-card:nth-child(4) h3 { color: #f72585; }
+
+        .option-card p {
+            color: var(--gray);
+            margin-bottom: 20px;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .hero h2 {
+                font-size: 1.6rem;
+            }
+            
+            .options-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .option-card {
+                max-width: 100%;
+                padding: 25px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-database"></i>
+                <div>
+                    <h1>SQL Database Explorer</h1>
+                    <p class="subtitle">Задания по SQL</p>
+                </div>
+            </div>
+            
+            <div class="auth-section">
+                <div class="auth-info">
+                    <div class="auth-status">
+                        <i class="fas fa-user"></i> Не авторизован
+                    </div>
+                </div>
+                <div class="auth-buttons">
+                    <!-- Кнопки будут заполняться через auth.js -->
+                    <a href="login.html" class="btn btn-login">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Войти
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <main class="container">
+        <section class="hero">
+            <div class="hero-content">
+                <h2>Выберите вариант задания</h2>
+                <div class="auth-message" id="mainAuthMessage">
+                    <p>Задания все одинаковой сложности и уровня знаний </p>
+                </div>
+                              
+                
+            
+            <div class="options-container">
+                <div class="option-card">
+                    <div class="option-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <h3>Вариант 1</h3>
+                    <p>База данных товаров и складов. Включает 4 таблицы и 7 практических запросов.</p>
+                    <a href="variant1.html" class="btn btn-primary">
+                        <i class="fas fa-play"></i>
+                        Открыть вариант 1
+                    </a>
+                </div>
+                
+                <div class="option-card">
+                    <div class="option-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Вариант 2</h3>
+                    <p>База данных сотрудников и проектов. Включает 4 таблицы и 7 практических запросов.</p>
+                    <a href="variant2.html" class="btn btn-secondary">
+                        <i class="fas fa-play"></i>
+                        Открыть вариант 2
+                    </a>
+                </div>
+                
+                <div class="option-card">
+                    <div class="option-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>Вариант 3</h3>
+                    <p>База данных университета. Включает 4 таблицы и 7 практических запросов.</p>
+                    <a href="variant3.html" class="btn btn-success">
+                        <i class="fas fa-play"></i>
+                        Открыть вариант 3
+                    </a>
+                </div>
+                
+                <div class="option-card">
+                    <div class="option-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <h3>Вариант 4</h3>
+                    <p>База данных интернет-магазина. Включает 4 таблицы и 7 практических запросов.</p>
+                    <a href="variant4.html" class="btn btn-danger">
+                        <i class="fas fa-play"></i>
+                        Открыть вариант 4
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="container">
+        <p>SQL Database Explorer &copy; 2025 | Практическое изучение SQL и баз данных</p>
+        <p class="auth-status" style="margin-top: 5px; font-size: 0.8rem;">
+            <i class="fas fa-user"></i> Не авторизован
+        </p>
+    </footer>
+
+    <script>
+        // Добавляем обработчик для обновления UI после авторизации
+        document.addEventListener('DOMContentLoaded', function() {
+            // Обновляем UI через 100мс после загрузки страницы
+            setTimeout(() => {
+                if (window.authSystem && window.authSystem.updatePageAuthUI) {
+                    window.authSystem.updatePageAuthUI();
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>

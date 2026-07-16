@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Database Explorer | Вариант 4 - Интернет-магазин</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="auth.js" defer></script>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --border-radius: 10px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fb;
+            color: var(--dark);
+            line-height: 1.6;
+            padding-bottom: 50px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .auth-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .auth-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .auth-status {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+
+        .btn-back {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-back:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-logout {
+            background-color: #f72585;
+            color: white;
+        }
+
+        .btn-logout:hover {
+            background-color: #d41a6f;
+        }
+
+        .user-info-mini {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+        }
+
+        .user-avatar-mini {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #4cc9f0, #4361ee);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .user-name-mini {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .answer-access-message {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: var(--box-shadow);
+            border-left: 4px solid var(--primary);
+            display: none;
+        }
+
+        .schema-diagram {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .schema-diagram h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .schema-diagram h2 i {
+            color: var(--secondary);
+        }
+
+        .tables-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .table-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            flex: 1;
+            min-width: 250px;
+            max-width: 320px;
+            box-shadow: var(--box-shadow);
+            border-top: 5px solid var(--primary);
+            transition: var(--transition);
+        }
+
+        .table-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .table-card h3 i {
+            color: var(--secondary);
+        }
+
+        .fields {
+            margin-top: 15px;
+        }
+
+        .field {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed var(--gray-light);
+        }
+
+        .field-name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .field-type {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .relationships {
+            margin-top: 30px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .table-data-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .table-data-section h2 {
+            color: var(--primary);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .table-data-section h2 i {
+            color: var(--secondary);
+        }
+
+        .table-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .table-tab {
+            padding: 10px 20px;
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .table-tab.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .table-tab:hover:not(.active) {
+            background-color: var(--gray-light);
+        }
+
+        .table-data-container {
+            overflow-x: auto;
+            border-radius: var(--border-radius);
+            box-shadow: 0 0 0 1px var(--gray-light);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #e9f7fe;
+        }
+
+        .row-count {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .queries-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-top: 10px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .queries-section h2 {
+            color: var(--primary);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .queries-section h2 i {
+            color: var(--secondary);
+        }
+
+        .query-item {
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .query-question {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .query-question i {
+            color: var(--primary);
+        }
+
+        .query-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-size: 0.9rem;
+            margin-right: 10px;
+        }
+
+        .query-input-area {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--gray-light);
+            border-radius: var(--border-radius);
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+            transition: var(--transition);
+            background-color: white;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.9rem;
+            padding-top: 20px;
+            border-top: 1px solid var(--gray-light);
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .auth-section {
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+            }
+            
+            .auth-info {
+                align-items: center;
+            }
+            
+            .tables-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .table-card {
+                max-width: 100%;
+            }
+            
+            h1 {
+                font-size: 1.6rem;
+            }
+            
+            .table-selector {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-database"></i>
+                    <div>
+                        <h1>SQL Database Explorer</h1>
+                        <p class="subtitle">Вариант 4 - База данных интернет-магазина</p>
+                    </div>
+                </div>
+                
+                <div class="auth-section">
+                    <div class="auth-info">
+                        <div class="auth-status">
+                            <!-- Будет заполнено через auth.js -->
+                        </div>
+                    </div>
+                    <div class="auth-buttons">
+                        <!-- Кнопки будут заполнены через auth.js -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="answer-access-message" id="answerAccessMessage">
+            <!-- Сообщение скрыто для неавторизованных -->
+        </div>
+
+        <section class="schema-diagram">
+            <h2><i class="fas fa-project-diagram"></i> Схема базы данных</h2>
+            
+            <div class="tables-container">
+                <div class="table-card">
+                    <h3><i class="fas fa-users"></i> customers</h3>
+                    <p>Таблица клиентов</p>
+                    <div class="fields">
+                        <div class="field">
+                            <span class="field-name">id</span>
+                            <span class="field-type">INT PRIMARY KEY</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">full_name</span>
+                            <span class="field-type">VARCHAR(100)</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">email</span>
+                            <span class="field-type">VARCHAR(100)</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">phone</span>
+                            <span class="field-type">VARCHAR(20)</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">registration_date</span>
+                            <span class="field-type">DATE</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-card">
+                    <h3><i class="fas fa-shopping-cart"></i> orders</h3>
+                    <p>Таблица заказов</p>
+                    <div class="fields">
+                        <div class="field">
+                            <span class="field-name">id</span>
+                            <span class="field-type">INT PRIMARY KEY</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">customer_id</span>
+                            <span class="field-type">INT</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">order_date</span>
+                            <span class="field-type">DATE</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">total_amount</span>
+                            <span class="field-type">DECIMAL(10,2)</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">status</span>
+                            <span class="field-type">VARCHAR(20)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-card">
+                    <h3><i class="fas fa-box"></i> products</h3>
+                    <p>Таблица товаров</p>
+                    <div class="fields">
+                        <div class="field">
+                            <span class="field-name">id</span>
+                            <span class="field-type">INT PRIMARY KEY</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">product_name</span>
+                            <span class="field-type">VARCHAR(100)</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">category_id</span>
+                            <span class="field-type">INT</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">price</span>
+                            <span class="field-type">DECIMAL(10,2)</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">stock_quantity</span>
+                            <span class="field-type">INT</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-card">
+                    <h3><i class="fas fa-tags"></i> categories</h3>
+                    <p>Таблица категорий товаров</p>
+                    <div class="fields">
+                        <div class="field">
+                            <span class="field-name">id</span>
+                            <span class="field-type">INT PRIMARY KEY</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">category_name</span>
+                            <span class="field-type">VARCHAR(100)</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-name">parent_category_id</span>
+                            <span class="field-type">INT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="relationships">
+                <p><i class="fas fa-link"></i> Таблицы связаны между собой через ключи: customers.id → orders.customer_id, categories.id → products.category_id</p>
+            </div>
+        </section>
+
+        <!-- Секция: данные таблиц -->
+        <section class="table-data-section">
+            <h2><i class="fas fa-table"></i> Данные таблиц</h2>
+            
+            <div class="table-selector">
+                <div class="table-tab active" data-table="customers">
+                    <i class="fas fa-users"></i> customers
+                </div>
+                <div class="table-tab" data-table="orders">
+                    <i class="fas fa-shopping-cart"></i> orders
+                </div>
+                <div class="table-tab" data-table="products">
+                    <i class="fas fa-box"></i> products
+                </div>
+                <div class="table-tab" data-table="categories">
+                    <i class="fas fa-tags"></i> categories
+                </div>
+                <div class="table-tab" data-table="all">
+                    <i class="fas fa-list"></i> Все таблицы
+                </div>
+            </div>
+            
+            <div id="table-data-container">
+                <!-- Здесь будет отображаться содержимое выбранной таблицы -->
+            </div>
+        </section>
+
+        <section class="queries-section">
+            <h2><i class="fas fa-code"></i> SQL Запросы к базе данных</h2>
+            
+            <div class="answer-access-message" id="queryAccessMessage">
+                <!-- Сообщение скрыто для неавторизованных -->
+            </div>
+            
+            <div class="query-item">
+                <div class="query-question">
+                    <span class="query-number">1</span>
+                    Вывести количество заказов для каждого клиента. Столбцы «клиент», «количество заказов».
+                </div>
+                <div class="query-input-area">
+                    <textarea id="query1"></textarea>
+                </div>
+            </div>
+            
+            <div class="query-item">
+                <div class="query-question">
+                    <span class="query-number">2</span>
+                    Вывести всех клиентов, зарегистрированных после 2023-01-01. Столбцы «ФИО», «email», «дата регистрации».
+                </div>
+                <div class="query-input-area">
+                    <textarea id="query2"></textarea>
+                </div>
+            </div>
+            
+            <div class="query-item">
+                <div class="query-question">
+                    <span class="query-number">3</span>
+                    Изменить статус заказа с id=1001 на «доставлен» и увеличить общую сумму на 500.00.
+                </div>
+                <div class="query-input-area">
+                    <textarea id="query3"></textarea>
+                </div>
+            </div>
+            
+            <div class="query-item">
+                <div class="query-question">
+                    <span class="query-number">4</span>
+                    Очистить полностью таблицу «categories».
+                </div>
+                <div class="query-input-area">
+                    <textarea id="query4"></textarea>
+                </div>
+            </div>
+            
+            <div class="query-item">
+                <div class="query-question">
+                    <span class="query-number">5</span>
+                    Вывести все товары с ценой более 5000 и количеством на складе менее 10. Столбцы «товар», «цена», «количество на складе».
+                </div>
+                <div class="query-input-area">
+                    <textarea id="query5"></textarea>
+                </div>
+            </div>
+            
+            <div class="query-item">
+                <div class="query-question">
+                    <span class="query-number">6</span>
+                    Наполнить таблицу «products» новыми товарами, используя транзакцию.
+                </div>
+                <div class="query-input-area">
+                    <textarea id="query6"></textarea>
+                </div>
+            </div>
+            
+            <div class="query-item">
+                <div class="query-question">
+                    <span class="query-number">7</span>
+                    Вывести общую сумму заказов по каждому статусу. Столбцы «статус заказа», «общая сумма».
+                </div>
+                <div class="query-input-area">
+                    <textarea id="query7"></textarea>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="container">
+        <p>SQL Database Explorer &copy; 2025 | Вариант 4 - База данных интернет-магазина</p>
+    </footer>
+
+    <script>
+        // Ответы на задания для авторизованных пользователей
+        const defaultQueries = {
+            1: `SELECT c.full_name as клиент, COUNT(o.id) as количество_заказов
+FROM customers c
+LEFT JOIN orders o ON c.id = o.customer_id
+GROUP BY c.id, c.full_name;`,
+            2: `SELECT full_name as ФИО, email, registration_date as дата_регистрации
+FROM customers
+WHERE registration_date > '2023-01-01';`,
+            3: `UPDATE orders
+SET status = 'доставлен', total_amount = total_amount + 500.00
+WHERE id = 1001;
+
+SELECT * FROM orders WHERE id = 1001;`,
+            4: `TRUNCATE TABLE categories;
+
+SELECT * FROM categories;`,
+            5: `SELECT product_name as товар, price as цена, stock_quantity as количество_на_складе
+FROM products
+WHERE price > 5000 AND stock_quantity < 10;`,
+            6: `BEGIN TRANSACTION;
+INSERT INTO products (id, product_name, category_id, price, stock_quantity) VALUES (601, 'Игровая консоль PlayStation 5', 103, 59999.00, 5);
+INSERT INTO products (id, product_name, category_id, price, stock_quantity) VALUES (602, 'Беспроводные наушники Sony WH-1000XM4', 101, 24999.00, 15);
+COMMIT TRANSACTION;
+
+SELECT * FROM products;`,
+            7: `SELECT status as статус_заказа, SUM(total_amount) as общая_сумма
+FROM orders
+GROUP BY status;`
+        };
+
+        // Глобальная функция для обновления полей запросов
+        window.updateQueryFields = function(isAuthenticated) {
+            for (let i = 1; i <= 7; i++) {
+                const textarea = document.getElementById(`query${i}`);
+                if (textarea) {
+                    if (isAuthenticated) {
+                        // Для авторизованных: заполняем ответом
+                        textarea.value = defaultQueries[i] || '';
+                    } else {
+                        // Для неавторизованных: оставляем пустым (пользователь может ввести свой запрос)
+                        textarea.value = '';
+                    }
+                }
+            }
+        };
+
+        // Данные для отображения таблиц
+        const initDatabase = () => {
+            return {
+                customers: [
+                    {id: 1, full_name: 'Иванов Александр Сергеевич', email: 'ivanov@example.com', phone: '+7 (999) 123-45-67', registration_date: '2022-11-15'},
+                    {id: 2, full_name: 'Петрова Екатерина Викторовна', email: 'petrova@example.com', phone: '+7 (999) 234-56-78', registration_date: '2023-02-20'},
+                    {id: 3, full_name: 'Сидоров Дмитрий Игоревич', email: 'sidorov@example.com', phone: '+7 (999) 345-67-89', registration_date: '2023-05-10'},
+                    {id: 4, full_name: 'Козлова Мария Петровна', email: 'kozlova@example.com', phone: '+7 (999) 456-78-90', registration_date: '2022-12-05'},
+                    {id: 5, full_name: 'Федоров Алексей Николаевич', email: 'fedorov@example.com', phone: '+7 (999) 567-89-01', registration_date: '2023-03-18'}
+                ],
+                orders: [
+                    {id: 1001, customer_id: 1, order_date: '2023-06-15', total_amount: 45000.00, status: 'обработка'},
+                    {id: 1002, customer_id: 2, order_date: '2023-06-18', total_amount: 32500.00, status: 'доставлен'},
+                    {id: 1003, customer_id: 3, order_date: '2023-06-20', total_amount: 78000.00, status: 'в пути'},
+                    {id: 1004, customer_id: 1, order_date: '2023-06-22', total_amount: 21500.00, status: 'обработка'},
+                    {id: 1005, customer_id: 4, order_date: '2023-06-25', total_amount: 56000.00, status: 'доставлен'},
+                    {id: 1006, customer_id: 5, order_date: '2023-06-28', total_amount: 32000.00, status: 'в пути'}
+                ],
+                products: [
+                    {id: 101, product_name: 'Ноутбук ASUS ZenBook', category_id: 201, price: 89999.00, stock_quantity: 7},
+                    {id: 102, product_name: 'Смартфон iPhone 14', category_id: 202, price: 79999.00, stock_quantity: 5},
+                    {id: 103, product_name: 'Планшет Samsung Galaxy Tab', category_id: 201, price: 34999.00, stock_quantity: 12},
+                    {id: 104, product_name: 'Наушники Apple AirPods Pro', category_id: 203, price: 21999.00, stock_quantity: 8},
+                    {id: 105, product_name: 'Умные часы Apple Watch', category_id: 204, price: 32999.00, stock_quantity: 3},
+                    {id: 106, product_name: 'Фотоаппарат Canon EOS', category_id: 205, price: 65999.00, stock_quantity: 4}
+                ],
+                categories: [
+                    {id: 201, category_name: 'Компьютеры и ноутбуки', parent_category_id: null},
+                    {id: 202, category_name: 'Смартфоны', parent_category_id: null},
+                    {id: 203, category_name: 'Аудиотехника', parent_category_id: null},
+                    {id: 204, category_name: 'Гаджеты', parent_category_id: null},
+                    {id: 205, category_name: 'Фототехника', parent_category_id: null}
+                ]
+            };
+        };
+
+        let database = initDatabase();
+        let currentTable = 'customers';
+
+        // Функция для отображения содержимого таблицы
+        function renderTableData(tableName) {
+            const container = document.getElementById('table-data-container');
+            
+            if (tableName === 'all') {
+                let html = '';
+                
+                ['customers', 'orders', 'products', 'categories'].forEach(tblName => {
+                    const tableData = database[tblName];
+                    const tableColumns = Object.keys(tableData[0] || {});
+                    
+                    html += `<div class="table-data-container" style="margin-bottom: 30px;">`;
+                    html += `<h3 style="color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-table"></i> Таблица ${tblName}</h3>`;
+                    html += `<table>`;
+                    html += `<thead><tr>`;
+                    
+                    tableColumns.forEach(column => {
+                        html += `<th>${column}</th>`;
+                    });
+                    html += `</tr></thead>`;
+                    
+                    html += `<tbody>`;
+                    tableData.forEach(row => {
+                        html += `<tr>`;
+                        tableColumns.forEach(column => {
+                            html += `<td>${row[column]}</td>`;
+                        });
+                        html += `</tr>`;
+                    });
+                    html += `</tbody>`;
+                    html += `</table>`;
+                    html += `<div class="row-count"><i class="fas fa-list"></i> Всего записей: ${tableData.length}</div>`;
+                    html += `</div>`;
+                });
+                
+                container.innerHTML = html;
+                return;
+            }
+            
+            const tableData = database[tableName];
+            const tableColumns = Object.keys(tableData[0] || {});
+            
+            let html = `<div class="table-data-container">`;
+            html += `<table>`;
+            html += `<thead><tr>`;
+            
+            tableColumns.forEach(column => {
+                html += `<th>${column}</th>`;
+            });
+            html += `</tr></thead>`;
+            
+            html += `<tbody>`;
+            tableData.forEach(row => {
+                html += `<tr>`;
+                tableColumns.forEach(column => {
+                    html += `<td>${row[column]}</td>`;
+                });
+                html += `</tr>`;
+            });
+            html += `</tbody>`;
+            html += `</table>`;
+            html += `<div class="row-count"><i class="fas fa-list"></i> Всего записей: ${tableData.length}</div>`;
+            html += `</div>`;
+            
+            container.innerHTML = html;
+        }
+
+        // Функция для переключения вкладок таблиц
+        function switchTable(tableName) {
+            currentTable = tableName;
+            
+            document.querySelectorAll('.table-tab').forEach(tab => {
+                if (tab.dataset.table === tableName) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            renderTableData(tableName);
+        }
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Инициализируем отображение данных таблицы customers
+            renderTableData('customers');
+            
+            // Добавляем обработчики кликов на вкладки таблиц
+            document.querySelectorAll('.table-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    switchTable(this.dataset.table);
+                });
+            });
+            
+            // Обновляем UI через 100мс после загрузки страницы
+            setTimeout(() => {
+                if (window.authSystem && window.authSystem.updatePageAuthUI) {
+                    window.authSystem.updatePageAuthUI();
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>
