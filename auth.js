@@ -5,17 +5,37 @@
 class AuthSystem {
     constructor() {
         this.currentUser = null;
-        this.users = [];
+        this.users = [
+            {
+                id: 1,
+                username: "AnnaM",
+                password: "AnnaM123",
+                email: "admin@example.com",
+                fullName: "Администратор Системы",
+                role: "admin",
+                createdAt: "2025-12-12",
+                description: "Полный доступ ко всем заданиям"
+            },
+            {
+                id: 2,
+                username: "AntonT",
+                password: "AntonT123",
+                email: "admin@example.com",
+                fullName: "Администратор Системы",
+                role: "admin",
+                createdAt: "2025-12-12",
+                description: "Полный доступ ко всем заданиям"
+            }
+        ];
         this.authChannel = null;
         this.init();
     }
 
     async init() {
-        await this.loadUsers();
         this.checkSession();
         this.initAuthChannel();
         this.updateAllAuthUI();
-        console.log('AuthSystem инициализирован. Версия: 2.1');
+        console.log('AuthSystem инициализирован. Версия: 2.2');
     }
 
     initAuthChannel() {
@@ -30,16 +50,7 @@ class AuthSystem {
         }
     }
 
-    async loadUsers() {
-        try {
-            const response = await fetch('./users.json');
-            this.users = await response.json();
-        } catch (error) {
-            console.error('Ошибка загрузки пользователей:', error);
-            console.error('Пожалуйста, создайте файл users.json с учетными данными');
-            this.users = [];
-        }
-    }
+
 
     async login(username, password) {
         // Валидация входных данных
