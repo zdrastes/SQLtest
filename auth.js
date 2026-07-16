@@ -32,7 +32,7 @@ class AuthSystem {
 
     async loadUsers() {
         try {
-            const response = await fetch('/users.json');
+            const response = await fetch('./users.json');
             this.users = await response.json();
         } catch (error) {
             console.error('Ошибка загрузки пользователей:', error);
