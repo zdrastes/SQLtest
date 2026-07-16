@@ -8,5 +8,15 @@
         "role": "admin",
         "createdAt": "2025-12-12",
         "description": "Полный доступ ко всем заданиям"
+    },
+    {
+        "id": 2,
+        "username": "AntonT",
+        "password": "AntonT123",
+        "email": "admin@example.com",
+        "fullName": "Администратор Системы",
+        "role": "admin",
+        "createdAt": "2025-12-12",
+        "description": "Полный доступ ко всем заданиям"
     }
 ]
