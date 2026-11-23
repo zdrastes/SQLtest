@@ -176,7 +176,13 @@
             return { ok: false, code: 'column-count', gotColumns: gotRows[0].length, expectedColumns: expectedRows[0].length };
         }
         if (gotRows.length !== expectedRows.length) {
-            return { ok: false, code: 'row-count', gotRows: gotRows.length, expectedRows: expectedRows.length };
+            return {
+                ok: false,
+                code: 'row-count',
+                gotRows: gotRows.length,
+                expectedRows: expectedRows.length,
+                gotSample: gotRows.slice(0, MISMATCH_SAMPLE_SIZE)
+            };
         }
 
         var gotSorted = gotRows.slice().sort(function (a, b) {
@@ -396,17 +402,70 @@
         }).join(' | ');
     }
 
+    // «1 строка», «3 строки», «5 строк» — с учётом русских склонений
+    function pluralizeRows(count) {
+        var mod100 = count % 100;
+        var mod10 = count % 10;
+        if (mod10 === 1 && mod100 !== 11) {
+            return 'строка';
+        }
+        if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) {
+            return 'строки';
+        }
+        return 'строк';
+    }
+
+    function rowSampleHtml(rows) {
+        return rows.map(function (row) {
+            return '<code>' + escapeHtml(formatRowPreview(row)) + '</code>';
+        }).join('<br>');
+    }
+
+    // Если студент получил ровно столько строк, сколько в одной из базовых
+    // таблиц, скорее всего, он вывел таблицу целиком без фильтрации.
+    function findUnfilteredTableHint(rowCount) {
+        var data = window.SQL_DB_DATA || {};
+        var tableNames = Object.keys(data).filter(function (name) {
+            return Array.isArray(data[name]) && data[name].length === rowCount;
+        });
+        if (tableNames.length !== 1) {
+            return null;
+        }
+        return 'Похоже, ваш запрос вернул все ' + rowCount + ' ' + pluralizeRows(rowCount) +
+            ' таблицы ' + tableNames[0] + ' целиком.';
+    }
+
+    function buildRowCountAdvice(comparison) {
+        var lines = [
+            'Запрос вернул ' + comparison.gotRows + ' ' + pluralizeRows(comparison.gotRows) +
+                ', а ожидается ' + comparison.expectedRows + '.'
+        ];
+        var unfilteredTable = findUnfilteredTableHint(comparison.gotRows);
+        if (unfilteredTable) {
+            lines.push(unfilteredTable);
+        }
+        if (comparison.gotRows > comparison.expectedRows) {
+            lines.push('Лишние строки: проверьте условие отбора (WHERE / HAVING) и условие соединения (ON в JOIN) — без него строки таблиц склеиваются попарно.');
+        } else {
+            lines.push('Не хватает строк: возможно, условие отбора слишком строгое или соединение (JOIN) теряет записи — проверьте столбцы в ON и разницу между INNER и LEFT JOIN.');
+        }
+        if (!unfilteredTable && comparison.gotSample && comparison.gotSample.length > 0) {
+            lines.push('Начало вашего результата:');
+            lines.push(rowSampleHtml(comparison.gotSample));
+        }
+        return lines.join('<br>');
+    }
+
     function buildMismatchDetails(comparison) {
         if (comparison.code === 'column-count') {
             return 'Количество столбцов не совпадает: получено ' + comparison.gotColumns +
                 ', ожидается ' + comparison.expectedColumns + '. Убедитесь, что выводите именно те столбцы, которые указаны в задании.';
         }
         if (comparison.code === 'row-count') {
-            return 'Количество строк не совпадает: получено ' + comparison.gotRows +
-                ', ожидается ' + comparison.expectedRows + '.';
+            return buildRowCountAdvice(comparison);
         }
         if (comparison.code === 'row-values') {
-            var details = 'Значения не совпадают. Порядок строк и названия столбцов не важны, важен состав и значения столбцов.';
+            var details = 'Количество строк совпадает, но значения не те. Порядок строк и названия столбцов не важны, важен состав и значения столбцов.';
             if (comparison.gotRow && comparison.expectedRow) {
                 details += '<br>Ваша строка: <code>' + escapeHtml(formatRowPreview(comparison.gotRow)) + '</code>';
             }
@@ -417,18 +476,23 @@
 
     function buildTableMismatch(tableName, comparison) {
         if (comparison.code === 'column-count') {
-            return 'Таблица ' + tableName + ': количество столбцов не совпадает.';
+            return 'Таблица ' + tableName + ': количество столбцов не совпадает. Структуру таблицы менять не нужно — задания изменяют только данные.';
         }
         if (comparison.code === 'row-count') {
-            return 'Таблица ' + tableName + ': количество строк не совпадает — получено ' +
-                comparison.gotRows + ', ожидается ' + comparison.expectedRows + '.';
+            var lines = [
+                'В таблице ' + tableName + ' строк ' + (comparison.gotRows > comparison.expectedRows ? 'больше' : 'меньше') +
+                    ', чем ожидается: сейчас ' + comparison.gotRows + ', должно быть ' + comparison.expectedRows + '.',
+                'Проверьте условие WHERE в вашем запросе — оно определяет, какие строки изменятся или удалятся.'
+            ];
+            if (comparison.gotSample && comparison.gotSample.length > 0) {
+                lines.push('Таблица сейчас (первые строки):');
+                lines.push(rowSampleHtml(comparison.gotSample));
+            }
+            return lines.join('<br>');
         }
         var details = 'Таблица ' + tableName + ': содержимое не совпадает с ожидаемым.';
         if (comparison.index !== undefined && comparison.gotRow) {
-            var sample = comparison.gotRow.slice(0, MISMATCH_SAMPLE_SIZE).map(function (cell) {
-                return cell === null ? 'NULL' : String(cell);
-            }).join(' | ');
-            details += '<br>Пример вашей строки: <code>' + escapeHtml(sample) + '</code>';
+            details += '<br>Пример вашей строки: <code>' + escapeHtml(formatRowPreview(comparison.gotRow.slice(0, MISMATCH_SAMPLE_SIZE))) + '</code>';
         }
         return details;
     }
@@ -459,7 +523,7 @@
         }
 
         if (results.length === 0) {
-            return { ok: false, message: 'Запрос не вернул строк результата.' };
+            return { ok: false, message: 'Запрос не вернул ни одной строки — проверьте условие WHERE (возможно, оно слишком строгое) и условия JOIN.' };
         }
         if (results.length > 1) {
             return { ok: false, message: 'Выполнено несколько запросов — нужен ровно один запрос SELECT.' };
@@ -467,7 +531,7 @@
 
         var comparison = compareRowSets(results[0].values, expectedTask.rows);
         if (comparison.ok) {
-            return { ok: true, message: 'Результат совпадает с эталоном (' + expectedTask.rows.length + ' строк).' };
+            return { ok: true, message: 'Результат совпадает с эталоном (' + expectedTask.rows.length + ' ' + pluralizeRows(expectedTask.rows.length) + ').' };
         }
         return { ok: false, message: buildMismatchDetails(comparison) };
     }

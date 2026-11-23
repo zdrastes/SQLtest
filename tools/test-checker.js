@@ -96,6 +96,12 @@ function testCompareFunctions(checker) {
 
     assert(!checker.compareRowSets([[1, 2]], [[1, 2, 3]]).ok, 'лишний столбец фиксируется');
     assert(!checker.compareRowSets([[1]], [[1], [2]]).ok, 'лишняя строка фиксируется');
+
+    const rowCountMismatch = checker.compareRowSets([[1], [2], [3], [4]], [[1]]);
+    assert(!rowCountMismatch.ok && rowCountMismatch.code === 'row-count' &&
+        rowCountMismatch.gotRows === 4 && rowCountMismatch.expectedRows === 1 &&
+        Array.isArray(rowCountMismatch.gotSample) && rowCountMismatch.gotSample.length === 3,
+        'row-count возвращает gotSample (первые строки результата студента)');
     assert(!checker.compareRowSets([['Обувь']], [['обувь']]).ok, 'регистр строк важен');
 
     assert(checker.compareRowSets([[1.5, 'x']], [[1.5004, 'x']]).ok, 'внутри допуска');
@@ -182,6 +188,9 @@ async function main() {
         const variantExpected = expectedAll[variantName];
 
         assert(variantSolutions && variantExpected, `${variantName}: есть решения и эталоны`);
+        assert(Object.keys(variantSolutions).length === page.tasks.length &&
+            Object.keys(variantExpected).length === page.tasks.length,
+            `${variantName}: ровно ${page.tasks.length} решений и эталонов (без лишних ключей)`);
 
         for (const task of page.tasks) {
             const solution = variantSolutions[task.id];
