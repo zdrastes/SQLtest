@@ -397,9 +397,11 @@ textarea:focus {
     background-color: #5a0a9c;
 }
 
-.btn-solution.btn-locked {
-    background-color: var(--gray-light);
-    color: var(--gray);
+/* Кнопки «Подсказка»/«Показать решение» скрыты до авторизации администратора:
+   display: flex у .btn иначе перебивал бы атрибут hidden */
+.btn-hint[hidden],
+.btn-solution[hidden] {
+    display: none;
 }
 
 .hint-panel,
@@ -423,6 +425,13 @@ textarea:focus {
     background-color: #f0f4ff;
     border-left-color: var(--primary);
     display: block;
+}
+
+/* Атрибут hidden должен быть сильнее авторских display: иначе пустые панели
+   видны как цветные полосы между подсказкой и результатом проверки */
+.hint-panel[hidden],
+.solution-panel[hidden] {
+    display: none;
 }
 
 .solution-panel pre {

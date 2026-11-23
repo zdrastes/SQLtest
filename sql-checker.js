@@ -561,34 +561,44 @@
     }
 
     // ---------------------------------------------------------------- //
-    // Подсказки и решения                                               //
+    // Подсказки и решения (только для администраторов)                  //
     // ---------------------------------------------------------------- //
 
+    // Сейчас все учётные записи имеют роль admin; проверка роли оставлена,
+    // чтобы добавленные позже студенческие учётки не получали доступ.
+    function isAdmin() {
+        var user = window.authSystem && window.authSystem.isAuthenticated()
+            ? window.authSystem.getCurrentUser()
+            : null;
+        return Boolean(user && user.role === 'admin');
+    }
+
     function toggleHint(taskId) {
+        if (!isAdmin()) {
+            return;
+        }
         var panel = document.getElementById('hint' + taskId);
         if (panel) {
             panel.hidden = !panel.hidden;
         }
     }
 
-    function updateSolutionButtons() {
-        var isAuthenticated = window.authSystem && window.authSystem.isAuthenticated();
-        document.querySelectorAll('.btn-solution').forEach(function (button) {
-            button.classList.toggle('btn-locked', !isAuthenticated);
-            button.title = isAuthenticated ? 'Показать эталонное решение' : 'Доступно только преподавателю';
+    function updateTeacherControls() {
+        var admin = isAdmin();
+        document.querySelectorAll('.btn-hint, .btn-solution').forEach(function (button) {
+            button.hidden = !admin;
         });
     }
 
-    function hideSolutionPanels() {
-        document.querySelectorAll('.solution-panel').forEach(function (panel) {
+    function hideTeacherPanels() {
+        document.querySelectorAll('.hint-panel, .solution-panel').forEach(function (panel) {
             panel.hidden = true;
         });
     }
 
     function showSolution(taskId) {
-        var isAuthenticated = window.authSystem && window.authSystem.isAuthenticated();
-        if (!isAuthenticated) {
-            showResult(taskId, 'info', '<i class="fas fa-lock"></i> Эталонные решения доступны преподавателю после авторизации.');
+        if (!isAdmin()) {
+            showResult(taskId, 'info', '<i class="fas fa-lock"></i> Решения и подсказки доступны преподавателю после авторизации.');
             return;
         }
 
@@ -645,13 +655,13 @@
         });
 
         restoreSolvedMarks();
-        updateSolutionButtons();
+        updateTeacherControls();
 
         // auth.js вызывает этот хук при каждой смене состояния авторизации
         window.onAuthStateChanged = function (isAuthenticated) {
-            updateSolutionButtons();
+            updateTeacherControls();
             if (!isAuthenticated) {
-                hideSolutionPanels();
+                hideTeacherPanels();
             }
         };
     }

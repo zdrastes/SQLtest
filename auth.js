@@ -363,7 +363,7 @@ class AuthSystem {
         answerAccessElements.forEach(el => {
             if (isAuthenticated) {
                 const safeFullName = this.sanitizeInput(user.fullName);
-                el.innerHTML = `<i class="fas fa-check-circle" style="color: #2e7d32;"></i> Ответы доступны (вы авторизованы как ${safeFullName}). Рядом с каждым заданием есть кнопка «Показать решение».`;
+                el.innerHTML = `<i class="fas fa-check-circle" style="color: #2e7d32;"></i> Подсказки и эталонные решения доступны (вы авторизованы как ${safeFullName}). Рядом с каждым заданием есть кнопки «Подсказка» и «Показать решение».`;
                 el.style.display = 'block';
             } else {
                 el.style.display = 'none';
