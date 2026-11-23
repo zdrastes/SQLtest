@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="styles.css">
     <script src="auth.js" defer></script>
     <script src="table-manager.js" defer></script>
+    <script src="sql-checker.js" defer></script>
 </head>
 <body>
     <header>
@@ -20,15 +21,15 @@
                         <p class="subtitle">Вариант 1 - База данных товаров и складов</p>
                     </div>
                 </div>
-                
+
                 <div class="auth-section">
                     <div class="auth-info">
                         <div class="auth-status">
-                            <!-- Будет заполнено через auth.js -->
+                            <!-- Заполняется через auth.js -->
                         </div>
                     </div>
                     <div class="auth-buttons">
-                        <!-- Кнопки будут заполнены через auth.js -->
+                        <!-- Кнопки заполняются через auth.js -->
                     </div>
                 </div>
             </div>
@@ -42,85 +43,51 @@
 
         <section class="schema-diagram">
             <h2><i class="fas fa-project-diagram"></i> Схема базы данных</h2>
-            
+
             <div class="tables-container">
                 <div class="table-card">
                     <h3><i class="fas fa-box"></i> goods</h3>
                     <p>Таблица товаров</p>
                     <div class="fields">
-                        <div class="field">
-                            <span class="field-name">id</span>
-                            <span class="field-type">INT PRIMARY KEY</span>
-                        </div>
-                        <div class="field">
-                            <span class="field-name">name</span>
-                            <span class="field-type">VARCHAR(100)</span>
-                        </div>
-                        <div class="field">
-                            <span class="field-name">type_id</span>
-                            <span class="field-type">INT</span>
-                        </div>
-                        <div class="field">
-                            <span class="field-name">brand</span>
-                            <span class="field-type">VARCHAR(100)</span>
-                        </div>
+                        <div class="field"><span class="field-name">id</span><span class="field-type">INT PRIMARY KEY</span></div>
+                        <div class="field"><span class="field-name">name</span><span class="field-type">VARCHAR(100)</span></div>
+                        <div class="field"><span class="field-name">type_id</span><span class="field-type">INT</span></div>
+                        <div class="field"><span class="field-name">brand</span><span class="field-type">VARCHAR(100)</span></div>
+                        <div class="field"><span class="field-name">price</span><span class="field-type">DECIMAL(10,2)</span></div>
+                        <div class="field"><span class="field-name">receipt_date</span><span class="field-type">DATE</span></div>
                     </div>
                 </div>
-                
+
                 <div class="table-card">
                     <h3><i class="fas fa-warehouse"></i> stock</h3>
                     <p>Таблица остатков на складах</p>
                     <div class="fields">
-                        <div class="field">
-                            <span class="field-name">goods_id</span>
-                            <span class="field-type">INT</span>
-                        </div>
-                        <div class="field">
-                            <span class="field-name">warehouse_id</span>
-                            <span class="field-type">INT</span>
-                        </div>
-                        <div class="field">
-                            <span class="field-name">quantity</span>
-                            <span class="field-type">INT</span>
-                        </div>
+                        <div class="field"><span class="field-name">goods_id</span><span class="field-type">INT</span></div>
+                        <div class="field"><span class="field-name">warehouse_id</span><span class="field-type">INT</span></div>
+                        <div class="field"><span class="field-name">quantity</span><span class="field-type">INT</span></div>
                     </div>
                 </div>
-                
+
                 <div class="table-card">
                     <h3><i class="fas fa-building"></i> warehouses</h3>
                     <p>Таблица складов</p>
                     <div class="fields">
-                        <div class="field">
-                            <span class="field-name">id</span>
-                            <span class="field-type">INT PRIMARY KEY</span>
-                        </div>
-                        <div class="field">
-                            <span class="field-name">name</span>
-                            <span class="field-type">VARCHAR(100)</span>
-                        </div>
-                        <div class="field">
-                            <span class="field-name">address</span>
-                            <span class="field-type">VARCHAR(100)</span>
-                        </div>
+                        <div class="field"><span class="field-name">id</span><span class="field-type">INT PRIMARY KEY</span></div>
+                        <div class="field"><span class="field-name">name</span><span class="field-type">VARCHAR(100)</span></div>
+                        <div class="field"><span class="field-name">address</span><span class="field-type">VARCHAR(100)</span></div>
                     </div>
                 </div>
-                
+
                 <div class="table-card">
                     <h3><i class="fas fa-tags"></i> types</h3>
                     <p>Таблица типов товаров</p>
                     <div class="fields">
-                        <div class="field">
-                            <span class="field-name">id</span>
-                            <span class="field-type">INT PRIMARY KEY</span>
-                        </div>
-                        <div class="field">
-                            <span class="field-name">name</span>
-                            <span class="field-type">VARCHAR(100)</span>
-                        </div>
+                        <div class="field"><span class="field-name">id</span><span class="field-type">INT PRIMARY KEY</span></div>
+                        <div class="field"><span class="field-name">name</span><span class="field-type">VARCHAR(100)</span></div>
                     </div>
                 </div>
             </div>
-            
+
             <div class="relationships">
                 <p><i class="fas fa-link"></i> Таблицы связаны между собой через ключи: goods.id → stock.goods_id, warehouses.id → stock.warehouse_id, types.id → goods.type_id</p>
             </div>
@@ -128,177 +95,73 @@
 
         <section class="table-data-section">
             <h2><i class="fas fa-table"></i> Данные таблиц</h2>
-            
+
             <div class="table-selector">
-                <div class="table-tab active" data-table="goods">
-                    <i class="fas fa-box"></i> goods
-                </div>
-                <div class="table-tab" data-table="stock">
-                    <i class="fas fa-warehouse"></i> stock
-                </div>
-                <div class="table-tab" data-table="warehouses">
-                    <i class="fas fa-building"></i> warehouses
-                </div>
-                <div class="table-tab" data-table="types">
-                    <i class="fas fa-tags"></i> types
-                </div>
-                <div class="table-tab" data-table="all">
-                    <i class="fas fa-list"></i> Все таблицы
-                </div>
+                <div class="table-tab active" data-table="goods"><i class="fas fa-box"></i> goods</div>
+                <div class="table-tab" data-table="stock"><i class="fas fa-warehouse"></i> stock</div>
+                <div class="table-tab" data-table="warehouses"><i class="fas fa-building"></i> warehouses</div>
+                <div class="table-tab" data-table="types"><i class="fas fa-tags"></i> types</div>
+                <div class="table-tab" data-table="all"><i class="fas fa-list"></i> Все таблицы</div>
             </div>
-            
+
             <div id="table-data-container">
-                <!-- Здесь будет отображаться содержимое выбранной таблицы -->
+                <!-- Здесь отображается содержимое выбранной таблицы -->
             </div>
         </section>
 
         <section class="queries-section">
-            <h2><i class="fas fa-code"></i> SQL Запросы к базе данных</h2>
-            
-            <div class="answer-access-message" id="queryAccessMessage">
-                <!-- Сообщение скрыто для неавторизованных -->
+            <h2><i class="fas fa-code"></i> SQL Задания</h2>
+
+            <div id="task-progress">
+                <!-- Шкала прогресса строится через sql-checker.js -->
             </div>
-            
-            <div class="query-item">
-                <div class="query-question">
-                    <span class="query-number">1</span>
-                    Вывести количество артикулов (уникальных единиц товара) бренда Xiaomi. Столбцы «бренд», «количество».
-                </div>
-                <div class="query-input-area">
-                    <textarea id="query1"></textarea>
-                </div>
-            </div>
-            
-            <div class="query-item">
-                <div class="query-question">
-                    <span class="query-number">2</span>
-                    Вывести все товары брендов Xiaomi и Adidas. Вывести колонки имя_товара, бренд_товара.
-                </div>
-                <div class="query-input-area">
-                    <textarea id="query2"></textarea>
-                </div>
-            </div>
-            
-            <div class="query-item">
-                <div class="query-question">
-                    <span class="query-number">3</span>
-                    Заменить имя товара «Наушники беспроводные Xiaomi Airdots 2» на «Наушники беспроводные Huawei Airdots» и бренд на «Huawei».
-                </div>
-                <div class="query-input-area">
-                    <textarea id="query3"></textarea>
-                </div>
-            </div>
-            
-            <div class="query-item">
-                <div class="query-question">
-                    <span class="query-number">4</span>
-                    Очистить полностью таблицу «warehouses».
-                </div>
-                <div class="query-input-area">
-                    <textarea id="query4"></textarea>
-                </div>
-            </div>
-            
-            <div class="query-item">
-                <div class="query-question">
-                    <span class="query-number">5</span>
-                    Вывести все товары, которые лежат на складах: Варшавка, Пушкино. Вывести колонки имя_склада, имя_товара, кол-во_товара.
-                </div>
-                <div class="query-input-area">
-                    <textarea id="query5"></textarea>
-                </div>
-            </div>
-            
-            <div class="query-item">
-                <div class="query-question">
-                    <span class="query-number">6</span>
-                    Наполнить таблицу «warehouses» данными, используя транзакцию.
-                </div>
-                <div class="query-input-area">
-                    <textarea id="query6"></textarea>
-                </div>
-            </div>
-            
-            <div class="query-item">
-                <div class="query-question">
-                    <span class="query-number">7</span>
-                    Вывести количество товаров на всех складах с типами «Обувь» и «Аксессуары для телефонов». Столбцы «тип товара» и «количество».
-                </div>
-                <div class="query-input-area">
-                    <textarea id="query7"></textarea>
-                </div>
+
+            <div id="tasks-container">
+                <!-- Задания строятся через sql-checker.js -->
             </div>
         </section>
     </main>
 
     <footer class="container">
-        <p>SQL Database Explorer &copy; 2023 | Вариант 1 - База данных товаров и складов</p>
+        <p>SQL Database Explorer &copy; 2026 | Вариант 1 - База данных товаров и складов</p>
     </footer>
 
     <script>
-        // Ответы на задания для авторизованных пользователей
-        const defaultQueries = {
-            1: `SELECT brand, COUNT(DISTINCT id) as количество
-FROM goods
-WHERE brand = 'Xiaomi'
-GROUP BY brand;`,
-            2: `SELECT name, brand
-FROM goods
-WHERE brand IN ('Xiaomi', 'Adidas');`,
-            3: `UPDATE goods
-SET name = 'Наушники беспроводные Huawei Airdots', brand = 'Huawei'
-WHERE name = 'Наушники беспроводные Xiaomi Airdots 2';
+        /* DB-SCHEMA:START */
+        window.SQL_VARIANT = 'variant1';
+        window.SQL_DB_SCHEMA = `
+CREATE TABLE goods (id INTEGER PRIMARY KEY, name TEXT NOT NULL, type_id INTEGER, brand TEXT, price REAL, receipt_date TEXT);
+CREATE TABLE types (id INTEGER PRIMARY KEY, name TEXT NOT NULL);
+CREATE TABLE warehouses (id INTEGER PRIMARY KEY, name TEXT NOT NULL, address TEXT);
+CREATE TABLE stock (goods_id INTEGER, warehouse_id INTEGER, quantity INTEGER);
+`;
+        /* DB-SCHEMA:END */
 
-SELECT * FROM goods WHERE brand = 'Huawei';`,
-            4: `-- Два варианта:
--- DELETE FROM warehouses;
-TRUNCATE TABLE warehouses;
-
-SELECT * FROM warehouses;`,
-            5: `SELECT w.name, g.name, s.quantity
-FROM warehouses w
-JOIN stock s ON w.id = s.warehouse_id
-JOIN goods g ON s.goods_id = g.id
-WHERE w.name IN ('Варшавка', 'Пушкино');`,
-            6: `BEGIN TRANSACTION;
-INSERT INTO warehouses (id, name) VALUES (1765, 'Варшавский');
-INSERT INTO warehouses (id, name) VALUES (2908, 'Новобарашковский');
-INSERT INTO warehouses (id, name) VALUES (3786, 'Сити');
-COMMIT TRANSACTION;
-
-SELECT * FROM warehouses;`,
-            7: `SELECT t.name, SUM(s.quantity) as количество
-FROM stock s
-JOIN goods g ON s.goods_id = g.id
-JOIN types t ON g.type_id = t.id
-WHERE t.name IN ('Обувь', 'Аксессуары для телефонов')
-GROUP BY t.name;`
-        };
-
-        // Данные для отображения таблиц
+        /* DB-DATA:START */
         const database = {
             goods: [
-                {id: 746589, name: '15.6 Ноутбук Xiaomi RedmiBook Pro 15 2022', type_id: 1, brand: 'Xiaomi'},
-                {id: 917364, name: 'Складная подставка для ноутбука охлаждающая', type_id: 2, brand: 'Lemleo'},
-                {id: 887012, name: 'МФУ Лазерное Brother DCPL2540DW', type_id: 3, brand: 'Brother'},
-                {id: 772041, name: 'Кроссовки adidas', type_id: 4, brand: 'Adidas'},
-                {id: 923478, name: 'Косметичка Toplash', type_id: 5, brand: 'Toplash'},
-                {id: 134789, name: 'Сухой корм для щенков миниатюрных пород до 10 мес', type_id: 6, brand: 'Royal canin'},
-                {id: 299293, name: 'Наушники беспроводные Xiaomi Airdots 2', type_id: 7, brand: 'Xiaomi'}
-            ],
-            stock: [
-                {goods_id: 746589, warehouse_id: 1238, quantity: 1},
-                {goods_id: 917364, warehouse_id: 1311, quantity: 8},
-                {goods_id: 887012, warehouse_id: 1384, quantity: 7},
-                {goods_id: 887012, warehouse_id: 1299, quantity: 2},
-                {goods_id: 887012, warehouse_id: 1311, quantity: 5},
-                {goods_id: 299293, warehouse_id: 1299, quantity: 9}
-            ],
-            warehouses: [
-                {id: 1238, name: 'Варшавка', address: 'Варшавское шоссе, 125с13'},
-                {id: 1299, name: 'Барашкино', address: 'Открытое шоссе, 6Ас2'},
-                {id: 1311, name: 'Тестовский', address: 'Пресненская набережная, 10с1'},
-                {id: 1384, name: 'Пушкино', address: 'Крыловская улица, 3'}
+                {id: 746589, name: '15.6 Ноутбук Xiaomi RedmiBook Pro 15 2022', type_id: 1, brand: 'Xiaomi', price: 59990.00, receipt_date: '2023-09-12'},
+                {id: 746590, name: '14 Ноутбук Xiaomi RedmiBook 14', type_id: 1, brand: 'Xiaomi', price: 44990.00, receipt_date: '2023-10-01'},
+                {id: 746591, name: '13.3 Ноутбук Apple MacBook Air M1', type_id: 1, brand: 'Apple', price: 89990.00, receipt_date: '2023-08-20'},
+                {id: 746592, name: '15.6 Ноутбук Lenovo IdeaPad 3', type_id: 1, brand: 'Lenovo', price: 38990.00, receipt_date: '2023-11-05'},
+                {id: 917364, name: 'Складная подставка для ноутбука охлаждающая', type_id: 2, brand: 'Lemleo', price: 1290.00, receipt_date: '2023-07-14'},
+                {id: 917365, name: 'Сумка для ноутбука 15.6', type_id: 2, brand: 'Targus', price: 2450.00, receipt_date: '2023-07-20'},
+                {id: 917366, name: 'Мышь беспроводная Logitech M330', type_id: 2, brand: 'Logitech', price: 2190.00, receipt_date: '2023-09-30'},
+                {id: 887012, name: 'МФУ Лазерное Brother DCPL2540DW', type_id: 3, brand: 'Brother', price: 18990.00, receipt_date: '2023-06-11'},
+                {id: 887013, name: 'Принтер струйный Epson L3250', type_id: 3, brand: 'Epson', price: 15990.00, receipt_date: '2023-06-25'},
+                {id: 887014, name: 'Картридж для лазерного принтера Brother', type_id: 3, brand: 'Brother', price: 3450.00, receipt_date: '2023-08-08'},
+                {id: 772041, name: 'Кроссовки Adidas Duramo', type_id: 4, brand: 'Adidas', price: 4599.00, receipt_date: '2023-10-10'},
+                {id: 772042, name: 'Кроссовки Nike Air Zoom', type_id: 4, brand: 'Nike', price: 7999.00, receipt_date: '2023-10-11'},
+                {id: 772043, name: 'Кеды Adidas Grand Court', type_id: 4, brand: 'Adidas', price: 3999.00, receipt_date: '2023-10-15'},
+                {id: 772044, name: 'Ботинки Adidas Terrex', type_id: 4, brand: 'Adidas', price: 8999.00, receipt_date: '2023-11-01'},
+                {id: 923478, name: 'Косметичка Toplash', type_id: 5, brand: 'Toplash', price: 990.00, receipt_date: '2023-05-30'},
+                {id: 923479, name: 'Тушь для ресниц Toplash', type_id: 5, brand: 'Toplash', price: 1190.00, receipt_date: '2023-06-14'},
+                {id: 134789, name: 'Сухой корм для щенков миниатюрных пород', type_id: 6, brand: 'Royal Canin', price: 3450.00, receipt_date: '2023-09-01'},
+                {id: 134790, name: 'Сухой корм для кошек стерилизованных', type_id: 6, brand: 'Royal Canin', price: 4290.00, receipt_date: '2023-09-02'},
+                {id: 299293, name: 'Наушники беспроводные Xiaomi Airdots 2', type_id: 7, brand: 'Xiaomi', price: 2999.00, receipt_date: '2023-11-20'},
+                {id: 299294, name: 'Смартфон Xiaomi Redmi Note 12', type_id: 8, brand: 'Xiaomi', price: 19990.00, receipt_date: '2023-11-21'},
+                {id: 299295, name: 'Смартфон Samsung Galaxy A54', type_id: 8, brand: 'Samsung', price: 32990.00, receipt_date: '2023-11-22'},
+                {id: 299296, name: 'Смартфон Apple iPhone 14', type_id: 8, brand: 'Apple', price: 79990.00, receipt_date: '2023-11-23'}
             ],
             types: [
                 {id: 1, name: 'Ноутбуки'},
@@ -306,17 +169,134 @@ GROUP BY t.name;`
                 {id: 3, name: 'Принтеры'},
                 {id: 4, name: 'Обувь'},
                 {id: 5, name: 'Косметика'},
-                {id: 6, name: 'Корм для собак'},
-                {id: 7, name: 'Аксессуары для телефонов'}
+                {id: 6, name: 'Корм для животных'},
+                {id: 7, name: 'Аксессуары для телефонов'},
+                {id: 8, name: 'Смартфоны'}
+            ],
+            warehouses: [
+                {id: 1238, name: 'Варшавка', address: 'Варшавское шоссе, 125с13'},
+                {id: 1299, name: 'Барашкино', address: 'Открытое шоссе, 6Ас2'},
+                {id: 1311, name: 'Тестовский', address: 'Пресненская набережная, 10с1'},
+                {id: 1384, name: 'Пушкино', address: 'Крыловская улица, 3'},
+                {id: 1400, name: 'Химки', address: 'Ленинградское шоссе, 7'},
+                {id: 1401, name: 'Сити', address: 'Пресненская набережная, 12'}
+            ],
+            stock: [
+                {goods_id: 746589, warehouse_id: 1238, quantity: 2},
+                {goods_id: 746589, warehouse_id: 1311, quantity: 1},
+                {goods_id: 746590, warehouse_id: 1299, quantity: 3},
+                {goods_id: 746591, warehouse_id: 1311, quantity: 2},
+                {goods_id: 917364, warehouse_id: 1311, quantity: 8},
+                {goods_id: 917364, warehouse_id: 1384, quantity: 4},
+                {goods_id: 917365, warehouse_id: 1238, quantity: 6},
+                {goods_id: 887012, warehouse_id: 1384, quantity: 7},
+                {goods_id: 887012, warehouse_id: 1299, quantity: 2},
+                {goods_id: 887012, warehouse_id: 1311, quantity: 5},
+                {goods_id: 887013, warehouse_id: 1384, quantity: 3},
+                {goods_id: 887013, warehouse_id: 1238, quantity: 0},
+                {goods_id: 887014, warehouse_id: 1299, quantity: 12},
+                {goods_id: 772041, warehouse_id: 1238, quantity: 9},
+                {goods_id: 772041, warehouse_id: 1384, quantity: 2},
+                {goods_id: 772042, warehouse_id: 1384, quantity: 5},
+                {goods_id: 772043, warehouse_id: 1238, quantity: 4},
+                {goods_id: 772044, warehouse_id: 1299, quantity: 1},
+                {goods_id: 923478, warehouse_id: 1400, quantity: 15},
+                {goods_id: 134789, warehouse_id: 1400, quantity: 10},
+                {goods_id: 134789, warehouse_id: 1401, quantity: 6},
+                {goods_id: 134790, warehouse_id: 1401, quantity: 8},
+                {goods_id: 299293, warehouse_id: 1299, quantity: 9},
+                {goods_id: 299293, warehouse_id: 1401, quantity: 0},
+                {goods_id: 299294, warehouse_id: 1401, quantity: 4},
+                {goods_id: 299294, warehouse_id: 1400, quantity: 0},
+                {goods_id: 299295, warehouse_id: 1311, quantity: 2}
             ]
         };
+        window.SQL_DB_DATA = database;
+        /* DB-DATA:END */
+
+        /* SQL-TASKS:START */
+        window.SQL_TASKS = [
+            {
+                id: 1,
+                difficulty: 1,
+                type: 'select',
+                text: 'Выведите товары типа «Обувь», отсортированные по цене по убыванию. Столбцы: имя_товара, бренд, цена.',
+                hint: 'Соедините goods и types через type_id (JOIN ... ON), отфильтруйте по названию типа и добавьте ORDER BY price DESC.'
+            },
+            {
+                id: 2,
+                difficulty: 2,
+                type: 'select',
+                text: 'Выведите типы товаров, суммарный остаток которых на всех складах превышает 10 единиц. Столбцы: тип_товара, суммарный_остаток.',
+                hint: 'Соедините types, goods и stock, сгруппируйте по типу и примените HAVING SUM(quantity) > 10.'
+            },
+            {
+                id: 3,
+                difficulty: 2,
+                type: 'select',
+                text: 'Выведите товары, которых нет ни на одном складе (анти-соединение). Столбцы: имя_товара, бренд.',
+                hint: 'Используйте NOT EXISTS (или NOT IN) с подзапросом по таблице stock, проверяющим наличие остатков для каждого товара.'
+            },
+            {
+                id: 4,
+                difficulty: 2,
+                type: 'select',
+                text: 'Выведите склады, суммарный запас на которых выше среднего суммарного запаса по всем складам. Столбцы: склад, суммарный_запас.',
+                hint: 'Сначала посчитайте суммарный запас каждого склада (GROUP BY), затем во внешнем запросе сравните его со средним этих сумм через подзапрос с AVG.'
+            },
+            {
+                id: 5,
+                difficulty: 3,
+                type: 'select',
+                text: 'Постройте рейтинг типов товаров по суммарному остатку (по убыванию) с помощью оконной функции RANK(). Столбцы: тип_товара, суммарный_остаток, ранг.',
+                hint: 'Сгруппируйте остатки по типам, затем примените RANK() OVER (ORDER BY SUM(quantity) DESC).'
+            },
+            {
+                id: 6,
+                difficulty: 3,
+                type: 'select',
+                text: 'С помощью ROW_NUMBER() выведите три самых дорогих товара каждого бренда. Столбцы: бренд, имя_товара, цена, номер_в_рейтинге.',
+                hint: 'Оберните ROW_NUMBER() OVER (PARTITION BY brand ORDER BY price DESC) в подзапрос или CTE и во внешнем запросе оставьте строки с номером <= 3.'
+            },
+            {
+                id: 7,
+                difficulty: 3,
+                type: 'select',
+                text: 'С помощью CASE распределите товары по ценовым сегментам: «до 5000», «5000-19999», «20000-49999», «50000 и выше». Столбцы: сегмент, количество_товаров, средняя_цена.',
+                hint: 'CASE WHEN price < 5000 THEN ... END задайте сегмент, сгруппируйте по нему и посчитайте COUNT(*) и AVG(price).'
+            },
+            {
+                id: 8,
+                difficulty: 3,
+                type: 'dml',
+                checkTables: ['goods'],
+                text: 'Увеличьте на 10% цену товаров бренда Xiaomi, суммарный остаток которых на всех складах меньше 5. Проверяется итоговое состояние таблицы goods.',
+                hint: 'В подзапросе найдите id товаров Xiaomi с SUM(quantity) < 5 (JOIN goods-stock, GROUP BY, HAVING), затем выполните UPDATE ... WHERE id IN (подзапрос) с price = price * 1.1.'
+            },
+            {
+                id: 9,
+                difficulty: 2,
+                type: 'dml',
+                checkTables: ['stock'],
+                text: 'Удалите из таблицы stock все записи с нулевым остатком. Проверяется итоговое состояние таблицы stock.',
+                hint: 'Достаточно одного DELETE с условием WHERE quantity = 0.'
+            },
+            {
+                id: 10,
+                difficulty: 3,
+                type: 'transaction',
+                checkTables: ['warehouses', 'stock'],
+                text: 'В одной транзакции: добавьте склад «Люблино» (id 1402, адрес «Люблинская улица, 40») и переместите на него весь запас товара «Кроссовки Adidas Duramo» со склада «Варшавка» (измените warehouse_id у соответствующей строки таблицы stock). Завершите транзакцию командой COMMIT. Проверяются таблицы warehouses и stock.',
+                hint: 'BEGIN TRANSACTION; затем INSERT нового склада, UPDATE stock SET warehouse_id = ... WHERE ... (id товара и id склада найдите подзапросами по названиям) и COMMIT.'
+            }
+        ];
+        /* SQL-TASKS:END */
 
         // Инициализация при загрузке страницы
-        document.addEventListener('DOMContentLoaded', function() {
-            // Инициализируем менеджер таблиц
-            window.initTableManager(database, ['goods', 'stock', 'warehouses', 'types', 'all'], defaultQueries);
-            
-            // Обновляем UI через 100мс после загрузки страницы
+        document.addEventListener('DOMContentLoaded', function () {
+            window.initTableManager(database, ['goods', 'stock', 'warehouses', 'types', 'all']);
+            window.initSqlTasks();
+
             setTimeout(() => {
                 if (window.authSystem && window.authSystem.updatePageAuthUI) {
                     window.authSystem.updatePageAuthUI();

@@ -1,0 +1,1 @@
+{"name":"sqltest-tools","private":true,"description":"Dev tools: expected results generator and checker tests","dependencies":{"sql.js":"1.13.0"}}

@@ -255,11 +255,227 @@ textarea:focus {
     border-color: var(--primary);
 }
 
+/* ---------------------------------- */
+/* Задания: прогресс, сложность, проверка */
+/* ---------------------------------- */
+
+.progress-panel {
+    background-color: var(--light);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.progress-info {
+    font-weight: 600;
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.progress-info i {
+    color: var(--primary);
+}
+
+.progress-track {
+    flex: 1;
+    min-width: 200px;
+    height: 12px;
+    background-color: var(--gray-light);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, var(--primary), var(--success));
+    border-radius: 6px;
+    transition: width 0.4s ease;
+}
+
+.btn-progress-reset {
+    background: none;
+    border: none;
+    color: var(--gray);
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.btn-progress-reset:hover {
+    background-color: var(--gray-light);
+    color: var(--dark);
+}
+
+.task-item {
+    border-left-color: var(--secondary);
+}
+
+.task-item.task-solved {
+    border-left-color: #2e7d32;
+    background-color: #f2faf4;
+}
+
+.task-meta {
+    font-size: 0.85rem;
+    color: var(--gray);
+    margin: -8px 0 15px 38px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.task-meta i {
+    color: var(--secondary);
+}
+
+.difficulty-badge {
+    margin-left: auto;
+    color: #f5a623;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    white-space: nowrap;
+}
+
+.solved-badge {
+    color: #2e7d32;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.task-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-check {
+    background-color: var(--primary);
+    color: white;
+}
+
+.btn-check:hover {
+    background-color: var(--primary-dark);
+}
+
+.btn-check:disabled {
+    opacity: 0.7;
+    cursor: wait;
+}
+
+.btn-hint {
+    background-color: var(--gray-light);
+    color: var(--dark);
+}
+
+.btn-hint:hover {
+    background-color: #d1d9e0;
+}
+
+.btn-solution {
+    background-color: var(--secondary);
+    color: white;
+}
+
+.btn-solution:hover {
+    background-color: #5a0a9c;
+}
+
+.btn-solution.btn-locked {
+    background-color: var(--gray-light);
+    color: var(--gray);
+}
+
+.hint-panel,
+.solution-panel {
+    background-color: #fff8e6;
+    border-left: 4px solid #f5a623;
+    border-radius: var(--border-radius);
+    padding: 15px;
+    font-size: 0.95rem;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.hint-panel i {
+    color: #f5a623;
+    margin-top: 3px;
+}
+
+.solution-panel {
+    background-color: #f0f4ff;
+    border-left-color: var(--primary);
+    display: block;
+}
+
+.solution-panel pre {
+    margin: 0;
+    overflow-x: auto;
+}
+
+.solution-panel code {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    color: var(--dark);
+    white-space: pre;
+}
+
+.task-result {
+    border-radius: var(--border-radius);
+    padding: 15px;
+    font-size: 0.95rem;
+    display: none;
+}
+
+.task-result.ok,
+.task-result.err,
+.task-result.info {
+    display: block;
+}
+
+.task-result.ok {
+    background-color: #e6f7ee;
+    color: #2e7d32;
+    border-left: 4px solid #2e7d32;
+}
+
+.task-result.err {
+    background-color: #ffe6e6;
+    color: #b71c1c;
+    border-left: 4px solid #d32f2f;
+}
+
+.task-result.info {
+    background-color: #e8f1fd;
+    color: #1a4d8f;
+    border-left: 4px solid var(--primary);
+}
+
+.task-result code {
+    font-family: 'Courier New', monospace;
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
 @media (max-width: 768px) {
-    .tables-container {
-        flex-direction: column;
-        align-items: center;
-    }
     
     .table-card {
         max-width: 100%;
