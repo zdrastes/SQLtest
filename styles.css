@@ -359,6 +359,13 @@ textarea:focus {
     gap: 5px;
 }
 
+/* Атрибут hidden должен быть сильнее авторского display: inline-flex,
+   иначе бейдж «решено» виден на всех карточках ещё до первого решённого
+   задания (авторские стили всегда перебивают браузерный [hidden]) */
+.solved-badge[hidden] {
+    display: none;
+}
+
 .task-buttons {
     display: flex;
     gap: 10px;
